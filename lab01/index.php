@@ -11,6 +11,16 @@ spl_autoload_register(function ($class) {
     require str_replace('\\', '/', $class) . '.php';
 });
 
+function play(Duck $duck)
+{
+    $duck->display();
+    $duck->performFly();
+    $duck->performQuack();
+    $duck->performDance();
+    print_r(PHP_EOL);
+
+}
+
 $mallardDuck = new MallardDuck();
 $redHeadDuck = new RedHeadDuck();
 $rubberDuck = new RubberDuck();
@@ -24,13 +34,3 @@ play($decoyDuck);
 $decoyDuck->setFlyBehavior(new FlyWithWings());
 play($decoyDuck);
 play($decoyDuck);
-
-function play(Duck $duck)
-{
-    $duck->display();
-    $duck->performFly();
-    $duck->performQuack();
-    $duck->performDance();
-    print_r(PHP_EOL);
-
-}
