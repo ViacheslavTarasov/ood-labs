@@ -1,34 +1,20 @@
 <?php
 
-function duck(callable $display, callable $fly, callable $quack)
+function duck(callable $display)
 {
-    return function () use ($display, $fly, $quack) {
+    return function (callable $fly, callable $quack) use ($display) {
         $display();
         $fly();
         $quack();
     };
 }
 
-$getCounter = function ($amount) {
-    return function () use (&$amount) {
-        return ++$amount;
-    };
-};
-
-$getFlyWings = function () use ($getCounter) {
-    $counter = $getCounter(0);
-    return function () use ($counter) {
-        echo 'fly #' . $counter() . PHP_EOL;
-        echo 'FlyWithWings' . PHP_EOL;
-    };
-};
-
-
 $flyWithWings = function () {
     echo 'FlyWithWings' . PHP_EOL;
 };
 
 $flyNoWay = function () {
+    echo 'I don\'t fly' . PHP_EOL;
 };
 
 $quack = function () {
@@ -41,34 +27,28 @@ $squeack = function () {
 $mallardDuck = duck(
     function () {
         echo 'I am MallardDuck' . PHP_EOL;
-    },
-    $getFlyWings(),
-    $quack
+    }
 );
 
 $redHeadDuck = duck(
     function () {
         echo 'I am RedHeadDuck' . PHP_EOL;
-    },
-    $getFlyWings(),
-    $quack
+    }
 );
 
 $rubberDuck = duck(
     function () {
         echo 'I am RubberDuck' . PHP_EOL;
-    },
-    $flyNoWay,
-    $squeack
+    }
 );
 
-function play(callable $concreteDuck)
+function play(callable $concreteDuck, callable $fly, callable $quack)
 {
-    $concreteDuck();
+    $concreteDuck($fly, $quack);
     echo PHP_EOL;
 }
 
-play($mallardDuck);
-play($mallardDuck);
-play($redHeadDuck);
-play($rubberDuck);
+play($mallardDuck, $flyWithWings, $quack);
+play($redHeadDuck, $flyNoWay, $quack);
+play($redHeadDuck, $flyWithWings, $quack);
+play($rubberDuck, $flyNoWay, $squeack);
