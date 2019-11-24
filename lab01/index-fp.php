@@ -1,12 +1,23 @@
 <?php
 
-function duck(callable $display)
+use SimUDuckFP\Duck\DecoyDuck;
+use SimUDuckFP\Duck\Duck;
+use SimUDuckFP\Duck\MallardDuck;
+use SimUDuckFP\Duck\RedHeadDuck;
+use SimUDuckFP\Duck\RubberDuck;
+
+spl_autoload_register(function ($class) {
+    require str_replace('\\', '/', $class) . '.php';
+});
+
+function play(Duck $duck)
 {
-    return function (callable $fly, callable $quack) use ($display) {
-        $display();
-        $fly();
-        $quack();
-    };
+    $duck->display();
+    $duck->performFly();
+    $duck->performQuack();
+    $duck->performDance();
+    print_r(PHP_EOL);
+
 }
 
 $flyWithWings = function () {
@@ -20,35 +31,31 @@ $flyNoWay = function () {
 $quack = function () {
     echo 'Quack' . PHP_EOL;
 };
+$muteQuack = function () {
+    echo 'muteQuack' . PHP_EOL;
+};
 $squeack = function () {
     echo 'Squeack' . PHP_EOL;
 };
+$waltzDance = function () {
+    echo 'WaltzDance' . PHP_EOL;
+};
+$minuetDance = function () {
+    echo 'MinuetDance' . PHP_EOL;
+};
+$danceNoWay = function () {
+    echo 'DanceNoWay' . PHP_EOL;
+};
 
-$mallardDuck = duck(
-    function () {
-        echo 'I am MallardDuck' . PHP_EOL;
-    }
-);
+$mallardDuck = new MallardDuck($flyWithWings, $quack, $waltzDance);
+$redHeadDuck = new RedHeadDuck($flyWithWings, $quack, $minuetDance);
+$rubberDuck = new RubberDuck($flyNoWay, $squeack, $danceNoWay);
+$decoyDuck = new DecoyDuck($flyNoWay, $muteQuack, $danceNoWay);
 
-$redHeadDuck = duck(
-    function () {
-        echo 'I am RedHeadDuck' . PHP_EOL;
-    }
-);
+play($mallardDuck);
+play($redHeadDuck);
+play($rubberDuck);
+play($decoyDuck);
 
-$rubberDuck = duck(
-    function () {
-        echo 'I am RubberDuck' . PHP_EOL;
-    }
-);
-
-function play(callable $concreteDuck, callable $fly, callable $quack)
-{
-    $concreteDuck($fly, $quack);
-    echo PHP_EOL;
-}
-
-play($mallardDuck, $flyWithWings, $quack);
-play($redHeadDuck, $flyNoWay, $quack);
-play($redHeadDuck, $flyWithWings, $quack);
-play($rubberDuck, $flyNoWay, $squeack);
+$decoyDuck->setDanceBehavior($waltzDance);
+play($decoyDuck);
