@@ -10,11 +10,11 @@ use SimUDuck\Behavior\QuackBehavior;
 abstract class Duck
 {
     /** @var DanceBehavior */
-    protected $danceBehavior;
+    private $danceBehavior;
     /** @var FlyBehavior */
-    protected $flyBehavior;
+    private $flyBehavior;
     /** @var QuackBehavior */
-    protected $quackBehavior;
+    private $quackBehavior;
 
     public function setDanceBehavior(DanceBehavior $danceBehavior)
     {

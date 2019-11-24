@@ -7,7 +7,7 @@ namespace SimUDuck\Behavior;
 abstract class RealFlyBehavior implements FlyBehavior
 {
 
-    protected $amountFights = 0;
+    private $amountFights = 0;
 
     public function fly()
     {
