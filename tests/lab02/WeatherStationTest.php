@@ -1,12 +1,27 @@
 <?php
 
-use Lab02\WeatherStation\Observable;
-use Lab02\WeatherStation\Observer;
+use Lab02\Common\InsideStatistics;
+use Lab02\Common\ObservableInterface;
+use Lab02\Common\ObserverInterface;
+use Lab02\WeatherStation\StatisticsDisplay;
 use Lab02\WeatherStation\WeatherData;
 use PHPUnit\Framework\TestCase;
+use Tests\Lab02\NotifiedList;
+use Tests\Lab02\SpyDisplay;
 
 class WeatherStationTest extends TestCase
 {
+    public function test()
+    {
+        $weatherData = new WeatherData();
+        $insideStatistics = new InsideStatistics();
+        $display = new StatisticsDisplay($weatherData, $insideStatistics);
+        $weatherData->setMeasurements(15, 0.65, 750);
+        $this->assertEquals($insideStatistics->getTemperatureStatistics()->getMin(), 15);
+        $this->assertEquals($insideStatistics->getHumidityStatistics()->getMin(), 0.65);
+        $this->assertEquals($insideStatistics->getPressureStatistics()->getMin(), 750);
+    }
+
     public function testNotifyWhenObserverRemoveSelf()
     {
         $weatherData = new WeatherData();
@@ -28,52 +43,19 @@ class WeatherStationTest extends TestCase
     }
 }
 
-class SpyDisplay implements Observer
-{
-    private $notifiedList;
-    private $name;
 
-    public function __construct(NotifiedList $notifiedList, string $name)
-    {
-        $this->notifiedList = $notifiedList;
-        $this->name = $name;
-    }
-
-    public function update(Observable $observable)
-    {
-        $this->notifiedList->add($this->name);
-    }
-}
-
-class NotifiedList
-{
-    private $list;
-
-    public function getList()
-    {
-        return $this->list;
-    }
-
-    public function add($item): void
-    {
-        $this->list[] = $item;
-    }
-
-}
-
-class selfDeleteDisplay implements Observer
+class selfDeleteDisplay implements ObserverInterface
 {
     private $weatherData;
 
-    public function __construct(Observable $weatherData)
+    public function __construct(ObservableInterface $weatherData)
     {
-        $weatherData->removeObserver($this);
+        $weatherData->registerObserver($this);
         $this->weatherData = $weatherData;
     }
 
-    public function update(Observable $observable)
+    public function update(ObservableInterface $observable)
     {
-        var_dump('sdsgd');
         $observable->removeObserver($this);
     }
 

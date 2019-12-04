@@ -3,7 +3,12 @@
 
 namespace Lab02\WeatherStation;
 
-class WeatherData implements Observable
+use Lab02\Common\ObservableInterface;
+use Lab02\Common\ObserverInterface;
+use Lab02\Common\ObserversStorage;
+use Lab02\Common\WeatherInfo;
+
+class WeatherData implements ObservableInterface
 {
     private $temperature;
     private $humidity;
@@ -17,9 +22,9 @@ class WeatherData implements Observable
         $this->observers = new ObserversStorage();
     }
 
-    public function registerObserver(Observer $observer, int $number = 0)
+    public function registerObserver(ObserverInterface $observer, int $priority = 0)
     {
-        $this->observers->attach($observer, $number);
+        $this->observers->attach($observer, $priority);
     }
 
     public function notifyObservers()
@@ -31,7 +36,7 @@ class WeatherData implements Observable
         }
     }
 
-    public function removeObserver(Observer $observer)
+    public function removeObserver(ObserverInterface $observer)
     {
         $this->observers->detach($observer);
     }
@@ -42,7 +47,6 @@ class WeatherData implements Observable
         $this->humidity = $humidity;
         $this->pressure = $pressure;
         $this->measurementsChanged();
-
     }
 
     private function measurementsChanged()

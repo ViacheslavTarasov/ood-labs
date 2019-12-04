@@ -1,15 +1,16 @@
 <?php
 
-use Lab02\WeatherStationEvent\Events;
-use Lab02\WeatherStationEvent\StatisticsDisplay;
-use Lab02\WeatherStationEvent\WeatherData;
+use Lab02\Common\OutsideStatistics;
+use Lab02\WeatherStationProEvent\Events;
+use Lab02\WeatherStationProEvent\StatisticsDisplay;
+use Lab02\WeatherStationProEvent\WeatherDataProEvent;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 
-$weatherData = new WeatherData();
-
-$statisticsDisplay = new StatisticsDisplay($weatherData);
+$weatherData = new WeatherDataProEvent();
+$outsideStatistics = new OutsideStatistics();
+$statisticsDisplay = new StatisticsDisplay($weatherData, $outsideStatistics);
 
 $weatherData->setMeasurements(23, 0.7, 755, 20, 155);
 $weatherData->setMeasurements(23, 0.8, 755, 15, 160);

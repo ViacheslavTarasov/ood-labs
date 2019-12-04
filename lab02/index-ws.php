@@ -1,14 +1,17 @@
 <?php
 
-require_once(__DIR__ . '/../vendor/autoload.php');
-
+use Lab02\Common\InsideStatistics;
 use Lab02\WeatherStation\CurrentConditionDisplay;
 use Lab02\WeatherStation\StatisticsDisplay;
 use Lab02\WeatherStation\WeatherData;
 
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+
 $weatherData = new WeatherData();
 $currentConditionDisplay = new CurrentConditionDisplay($weatherData);
-$statisticsDisplay = new StatisticsDisplay($weatherData);
+$insideStatistics = new InsideStatistics();
+$statisticsDisplay = new StatisticsDisplay($weatherData, $insideStatistics);
 
 $weatherData->setMeasurements(23, 0.7, 755);
 $weatherData->setMeasurements(21, 0.8, 753);

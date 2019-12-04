@@ -3,55 +3,51 @@
 
 namespace Lab02\WeatherStationDuo;
 
-use Lab02\WeatherStation\Observer;
+use Lab02\Common\DisplayInterface;
+use Lab02\Common\InsideStatistics;
+use Lab02\Common\ObservableInterface;
+use Lab02\Common\ObserverInterface;
+use Lab02\Common\OutsideStatistics;
+use Lab02\Common\PrintHelper;
 use Lab02\WeatherStation\WeatherData;
-use Lab02\WeatherStation\Statistics;
-use Lab02\WeatherStation\Observable;
-use Lab02\WeatherStation\Display;
 
-class StatisticsDisplayDuo implements Observer, Display
+class StatisticsDisplayDuo implements ObserverInterface, DisplayInterface
 {
-    private $temperatureStatisticsIn;
-    private $humidityStatisticsIn;
-    private $pressureStatisticsIn;
-
-    private $temperatureStatisticsOut;
-    private $humidityStatisticsOut;
-    private $pressureStatisticsOut;
-
     private $weatherDataIn;
     private $weatherDataOut;
+    private $insideStatistics;
+    private $outsideStatistics;
+    private $printHelper;
 
-
-    public function __construct(WeatherData $weatherDataIn, WeatherData $weatherDataOut)
+    public function __construct(
+        WeatherData $weatherDataIn,
+        WeatherData $weatherDataOut,
+        InsideStatistics $insideStatistics,
+        OutsideStatistics $outsideStatistics
+    )
     {
         $this->weatherDataIn = $weatherDataIn;
         $this->weatherDataOut = $weatherDataOut;
         $weatherDataIn->registerObserver($this);
         $weatherDataOut->registerObserver($this);
-
-        $this->temperatureStatisticsIn = new Statistics();
-        $this->humidityStatisticsIn = new Statistics();
-        $this->pressureStatisticsIn = new Statistics();
-
-        $this->temperatureStatisticsOut = new Statistics();
-        $this->humidityStatisticsOut = new Statistics();
-        $this->pressureStatisticsOut = new Statistics();
+        $this->insideStatistics = $insideStatistics;
+        $this->outsideStatistics = $outsideStatistics;
+        $this->printHelper = new PrintHelper();
     }
 
 
-    public function update(Observable $observable)
+    public function update(ObservableInterface $observable)
     {
         if ($observable === $this->weatherDataIn) {
-            $this->temperatureStatisticsIn->add($observable->getTemperature());
-            $this->humidityStatisticsIn->add($observable->getHumidity());
-            $this->pressureStatisticsIn->add($observable->getPressure());
+            $this->insideStatistics->addTemperature($observable->getTemperature());
+            $this->insideStatistics->addHumidity($observable->getHumidity());
+            $this->insideStatistics->addPressure($observable->getPressure());
         }
 
         if ($observable === $this->weatherDataOut) {
-            $this->temperatureStatisticsOut->add($observable->getTemperature());
-            $this->humidityStatisticsOut->add($observable->getHumidity());
-            $this->pressureStatisticsOut->add($observable->getPressure());
+            $this->outsideStatistics->addTemperature($observable->getTemperature());
+            $this->outsideStatistics->addHumidity($observable->getHumidity());
+            $this->outsideStatistics->addPressure($observable->getPressure());
         }
         $this->display();
     }
@@ -59,25 +55,13 @@ class StatisticsDisplayDuo implements Observer, Display
     public function display()
     {
         echo "Inside" . PHP_EOL;
-        echo "Temperature statistics - " . $this->displayStat($this->temperatureStatisticsIn) . PHP_EOL;
-        echo "Humidity statistics - " . $this->displayStat($this->humidityStatisticsIn) . PHP_EOL;
-        echo "Pressure statistics - " . $this->displayStat($this->pressureStatisticsIn) . PHP_EOL;
+        $this->printHelper->printStatistics('temperature', $this->insideStatistics->getTemperatureStatistics());
+        $this->printHelper->printStatistics('humidity', $this->insideStatistics->getHumidityStatistics());
+        $this->printHelper->printStatistics('pressure', $this->insideStatistics->getPressureStatistics());
         echo "Outside" . PHP_EOL;
-        echo "Temperature statistics - " . $this->displayStat($this->temperatureStatisticsOut) . PHP_EOL;
-        echo "Humidity statistics - " . $this->displayStat($this->humidityStatisticsOut) . PHP_EOL;
-        echo "Pressure statistics - " . $this->displayStat($this->pressureStatisticsOut) . PHP_EOL;
+        $this->printHelper->printStatistics('temperature', $this->outsideStatistics->getTemperatureStatistics());
+        $this->printHelper->printStatistics('humidity', $this->outsideStatistics->getHumidityStatistics());
+        $this->printHelper->printStatistics('pressure', $this->outsideStatistics->getPressureStatistics());
         echo PHP_EOL;
     }
-
-
-    private function displayStat(Statistics $statistics)
-    {
-        $max = $statistics->getMax() ? $statistics->getMax() : 'undefined';
-        $min = $statistics->getMin() ? $statistics->getMin() : 'undefined';
-        $avg = $statistics->getAvg() ? round($statistics->getAvg(), 2) : 'undefined';
-        return "Max: " . $max
-            . " Min: " . $min
-            . " Average: " . $avg;
-    }
-
 }

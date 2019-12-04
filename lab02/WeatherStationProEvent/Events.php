@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Lab02\WeatherStationEvent;
+namespace Lab02\WeatherStationProEvent;
 
 class Events
 {

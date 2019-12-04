@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Lab02\WeatherStationPro;
+namespace Lab02\Common;
 
 
 class WindDirectionStatistics

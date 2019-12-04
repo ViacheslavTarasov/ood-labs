@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Lab02\WeatherStation;
+namespace Lab02\Common;
 
 
 class ObserversStorage extends \SplObjectStorage

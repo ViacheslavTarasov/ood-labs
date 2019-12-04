@@ -3,38 +3,32 @@
 
 namespace Lab02\WeatherStationPro;
 
+use Lab02\Common\DisplayInterface;
+use Lab02\Common\ObservableInterface;
+use Lab02\Common\ObserverInterface;
+use Lab02\Common\OutsideStatistics;
+use Lab02\Common\PrintHelper;
 
-use Lab02\WeatherStation\Display;
-use Lab02\WeatherStation\Observable;
-use Lab02\WeatherStation\Observer;
-use Lab02\WeatherStation\Statistics;
-
-class StatisticsDisplayPro implements Observer, Display
+class StatisticsDisplayPro implements ObserverInterface, DisplayInterface
 {
-    private $temperatureStatistics;
-    private $humidityStatistics;
-    private $pressureStatistics;
-    private $windSpeedStatistics;
-    private $windDirectionStatistics;
+    private $outsideStatistics;
+    private $printHelper;
 
-    public function __construct(WeatherDataPro $weatherData)
+    public function __construct(WeatherDataPro $weatherData, OutsideStatistics $outsideStatistics)
     {
         $weatherData->registerObserver($this);
-        $this->temperatureStatistics = new Statistics();
-        $this->humidityStatistics = new Statistics();
-        $this->pressureStatistics = new Statistics();
-        $this->windSpeedStatistics = new Statistics();
-        $this->windDirectionStatistics = new WindDirectionStatistics();
+        $this->outsideStatistics = $outsideStatistics;
+        $this->printHelper = new PrintHelper();
     }
 
-    public function update(Observable $observable)
+    public function update(ObservableInterface $observable)
     {
         if ($observable instanceof WeatherDataPro) {
-            $this->temperatureStatistics->add($observable->getTemperature());
-            $this->humidityStatistics->add($observable->getHumidity());
-            $this->pressureStatistics->add($observable->getPressure());
-            $this->windSpeedStatistics->add($observable->getWindSpeed());
-            $this->windDirectionStatistics->add($observable->getWindDirection());
+            $this->outsideStatistics->addTemperature($observable->getTemperature());
+            $this->outsideStatistics->addHumidity($observable->getHumidity());
+            $this->outsideStatistics->addPressure($observable->getPressure());
+            $this->outsideStatistics->addWindSpeed($observable->getWindSpeed());
+            $this->outsideStatistics->addWindDirection($observable->getWindDirection());
 
             $this->display();
         }
@@ -43,23 +37,11 @@ class StatisticsDisplayPro implements Observer, Display
 
     public function display()
     {
-        echo "Temperature statistics - " . $this->displayStat($this->temperatureStatistics) . PHP_EOL;
-        echo "Humidity statistics - " . $this->displayStat($this->humidityStatistics) . PHP_EOL;
-        echo "Pressure statistics - " . $this->displayStat($this->pressureStatistics) . PHP_EOL;
-        echo "Wind speed statistics - " . $this->displayStat($this->windSpeedStatistics) . PHP_EOL;
-        echo "Wind direction statistics - Average: " . $this->windDirectionStatistics->getAvg() . PHP_EOL;
+        $this->printHelper->printStatistics('temperature', $this->outsideStatistics->getTemperatureStatistics());
+        $this->printHelper->printStatistics('humidity', $this->outsideStatistics->getHumidityStatistics());
+        $this->printHelper->printStatistics('pressure', $this->outsideStatistics->getPressureStatistics());
+        $this->printHelper->printStatistics('wind speed', $this->outsideStatistics->getWindSpeedStatistics());
+        $this->printHelper->printWindDirectionStat('wind direction', $this->outsideStatistics->getWindDirectionStatistics());
         echo PHP_EOL;
     }
-
-
-    private function displayStat(Statistics $statistics)
-    {
-        $max = $statistics->getMax() ? $statistics->getMax() : 'undefined';
-        $min = $statistics->getMin() ? $statistics->getMin() : 'undefined';
-        $avg = $statistics->getAvg() ? round($statistics->getAvg(), 2) : 'undefined';
-        return "Max: " . $max
-            . " Min: " . $min
-            . " Average: " . $avg;
-    }
-
 }

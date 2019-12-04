@@ -1,7 +1,7 @@
 <?php
 
 
-use Lab02\WeatherStationPro\WindDirectionStatistics;
+use Lab02\Common\WindDirectionStatistics;
 use PHPUnit\Framework\TestCase;
 
 class WeatherStationProTest extends TestCase

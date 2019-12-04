@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Lab02\WeatherStation;
+namespace Lab02\Common;
 
 
 class Statistics
@@ -10,7 +10,6 @@ class Statistics
     private $max;
     private $accumulator;
     private $countAccumulations;
-
 
     public function add(float $value)
     {

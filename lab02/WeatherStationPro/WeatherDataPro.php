@@ -3,12 +3,11 @@
 
 namespace Lab02\WeatherStationPro;
 
-use Lab02\WeatherStation\Observable;
-use Lab02\WeatherStation\Observer;
-use Lab02\WeatherStation\ObserversStorage;
-use Lab02\WeatherStation\WeatherInfo;
+use Lab02\Common\ObservableInterface;
+use Lab02\Common\ObserverInterface;
+use Lab02\Common\ObserversStorage;
 
-class WeatherDataPro implements Observable
+class WeatherDataPro implements ObservableInterface
 {
     private $temperature;
     private $humidity;
@@ -24,9 +23,9 @@ class WeatherDataPro implements Observable
         $this->observers = new ObserversStorage();
     }
 
-    public function registerObserver(Observer $observer, int $number = 0)
+    public function registerObserver(ObserverInterface $observer, int $priority = 0)
     {
-        $this->observers->attach($observer, $number);
+        $this->observers->attach($observer, $priority);
     }
 
     public function notifyObservers()
@@ -38,7 +37,7 @@ class WeatherDataPro implements Observable
         }
     }
 
-    public function removeObserver(Observer $observer)
+    public function removeObserver(ObserverInterface $observer)
     {
         $this->observers->detach($observer);
     }
@@ -82,11 +81,6 @@ class WeatherDataPro implements Observable
     public function getWindDirection()
     {
         return $this->windDirection;
-    }
-
-    private function getChangedData(): WeatherInfo
-    {
-        return new WeatherInfo($this->temperature, $this->humidity, $this->pressure);
     }
 
 }

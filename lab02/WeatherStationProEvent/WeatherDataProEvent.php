@@ -1,12 +1,13 @@
 <?php
 
 
-namespace Lab02\WeatherStationEvent;
-
-use Lab02\WeatherStation\ObserversStorage;
+namespace Lab02\WeatherStationProEvent;
 
 
-class WeatherData implements Observable
+
+use Lab02\Common\ObserversStorage;
+
+class WeatherDataProEvent implements ObservableEventInterface
 {
     private $temperature;
     private $humidity;
@@ -16,7 +17,7 @@ class WeatherData implements Observable
 
     protected $observers = [];
 
-    public function subscribeObserver(Observer $observer, int $event, int $priority = 0)
+    public function subscribeObserver(ObserverInterface $observer, int $event, int $priority = 0)
     {
         $this->validateEventOrException($event);
         if (!isset($this->observers[$event])) {
@@ -26,7 +27,7 @@ class WeatherData implements Observable
     }
 
 
-    public function unsubscribeObserver(Observer $observer, int $event)
+    public function unsubscribeObserver(ObserverInterface $observer, int $event)
     {
         $this->validateEventOrException($event);
         if (isset($this->observers[$event])) {
@@ -34,7 +35,7 @@ class WeatherData implements Observable
         }
     }
 
-    public function removeObserver(Observer $observer)
+    public function removeObserver(ObserverInterface $observer)
     {
         foreach ($this->observers as $event => $observers) {
             $observers[$event]->detach($observer);
@@ -47,7 +48,7 @@ class WeatherData implements Observable
             return;
         }
         $observers = $this->observers[$event]->getArraySortedByPriority();
-        /** @var Observer $observer */
+        /** @var ObserverInterface $observer */
         foreach ($observers as $observer) {
             $observer->update($this);
         }

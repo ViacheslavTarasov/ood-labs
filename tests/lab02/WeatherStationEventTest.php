@@ -1,28 +1,29 @@
 <?php
 
-use Lab02\WeatherStationEvent\Events;
-use Lab02\WeatherStationEvent\Observable;
-use Lab02\WeatherStationEvent\Observer;
-use Lab02\WeatherStationEvent\WeatherData;
+use Lab02\WeatherStationProEvent\Events;
+use Lab02\WeatherStationProEvent\ObservableEventInterface;
+use Lab02\WeatherStationProEvent\ObserverInterface;
+use Lab02\WeatherStationProEvent\WeatherDataProEvent;
 use PHPUnit\Framework\TestCase;
+use Tests\Lab02\NotifiedList;
 
 class WeatherStationEventTest extends TestCase
 {
 
     public function testPriority()
     {
-        $weatherData = new WeatherData();
+        $weatherData = new WeatherDataProEvent();
         $notifiedList = new NotifiedList();
         $list = ['b', 'a', 'c'];
         foreach ($list as $item) {
-            $weatherData->subscribeObserver(new SpyDisplay($notifiedList, $item), Events::OUTSIDE_TEMPERATURE);
+            $weatherData->subscribeObserver(new SpyEventDisplay($notifiedList, $item), Events::OUTSIDE_TEMPERATURE);
         }
         $weatherData->setMeasurements(15, 0.65, 750, 20, 270);
         $this->assertTrue($list === $notifiedList->getList());
     }
 }
 
-class SpyDisplay implements Observer
+class SpyEventDisplay implements ObserverInterface
 {
     private $notifiedList;
     private $name;
@@ -33,24 +34,8 @@ class SpyDisplay implements Observer
         $this->name = $name;
     }
 
-    public function update(Observable $observable)
+    public function update(ObservableEventInterface $observable)
     {
         $this->notifiedList->add($this->name);
     }
-}
-
-class NotifiedList
-{
-    private $list;
-
-    public function getList()
-    {
-        return $this->list;
-    }
-
-    public function add($item): void
-    {
-        $this->list[] = $item;
-    }
-
 }
