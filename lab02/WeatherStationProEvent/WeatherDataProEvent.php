@@ -17,7 +17,7 @@ class WeatherDataProEvent implements ObservableEventInterface
 
     protected $observers = [];
 
-    public function subscribeObserver(ObserverInterface $observer, int $event, int $priority = 0)
+    public function subscribeObserver(ObserverInterface $observer, string $event, int $priority = 0)
     {
         $this->validateEventOrException($event);
         if (!isset($this->observers[$event])) {
@@ -27,7 +27,7 @@ class WeatherDataProEvent implements ObservableEventInterface
     }
 
 
-    public function unsubscribeObserver(ObserverInterface $observer, int $event)
+    public function unsubscribeObserver(ObserverInterface $observer, string $event)
     {
         $this->validateEventOrException($event);
         if (isset($this->observers[$event])) {
@@ -42,7 +42,7 @@ class WeatherDataProEvent implements ObservableEventInterface
         }
     }
 
-    public function notifyObservers(int $event)
+    public function notifyObservers(string $event)
     {
         if (!isset($this->observers[$event])) {
             return;

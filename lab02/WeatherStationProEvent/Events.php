@@ -5,15 +5,21 @@ namespace Lab02\WeatherStationProEvent;
 
 class Events
 {
-    const INSIDE_TEMPERATURE = 101;
-    const INSIDE_PRESSURE = 102;
-    const INSIDE_HUMIDITY = 103;
+    const INSIDE_TEMPERATURE = 'inside.temperature_changed';
+    const INSIDE_PRESSURE = 'inside.pressure_changed';
+    const INSIDE_HUMIDITY = 'inside.humidity_changed';
 
-    const OUTSIDE_TEMPERATURE = 201;
-    const OUTSIDE_PRESSURE = 202;
-    const OUTSIDE_HUMIDITY = 203;
-    const OUTSIDE_WIND_SPEED = 204;
-    const OUTSIDE_WIND_DIRECTION = 205;
+    const OUTSIDE_TEMPERATURE = 'outside.temperature_changed';
+    const OUTSIDE_PRESSURE = 'outside.pressure_changed';
+    const OUTSIDE_HUMIDITY = 'outside.humidity_changed';
+    const OUTSIDE_WIND_SPEED = 'outside.wind_speed_changed';
+    const OUTSIDE_WIND_DIRECTION = 'outside.wind_direction_changed';
 
-    const AVAILABLE_CODES = [201, 202, 203, 204, 205];
+    const AVAILABLE_CODES = [
+        self::OUTSIDE_TEMPERATURE,
+        self::OUTSIDE_PRESSURE,
+        self::OUTSIDE_HUMIDITY,
+        self::OUTSIDE_WIND_SPEED,
+        self::OUTSIDE_WIND_DIRECTION,
+    ];
 }

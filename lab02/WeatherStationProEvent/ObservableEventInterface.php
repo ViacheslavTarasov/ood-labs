@@ -4,11 +4,11 @@ namespace Lab02\WeatherStationProEvent;
 
 interface ObservableEventInterface
 {
-    public function subscribeObserver(ObserverInterface $observer, int $event, int $priority);
+    public function subscribeObserver(ObserverInterface $observer, string $event, int $priority);
 
-    public function unsubscribeObserver(ObserverInterface $observer, int $event);
+    public function unsubscribeObserver(ObserverInterface $observer, string $event);
 
-    public function notifyObservers(int $event);
+    public function notifyObservers(string $event);
 
     public function removeObserver(ObserverInterface $observer);
 }
