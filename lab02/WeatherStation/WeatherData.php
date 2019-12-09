@@ -5,7 +5,7 @@ namespace Lab02\WeatherStation;
 
 use Lab02\Common\ObservableInterface;
 use Lab02\Common\ObserverInterface;
-use Lab02\Common\ObserversStorage;
+use Lab02\Common\PriorityStorage;
 use Lab02\Common\WeatherInfo;
 
 class WeatherData implements ObservableInterface
@@ -14,12 +14,12 @@ class WeatherData implements ObservableInterface
     private $humidity;
     private $pressure;
 
-    /** @var ObserversStorage */
+    /** @var PriorityStorage */
     protected $observers;
 
     public function __construct()
     {
-        $this->observers = new ObserversStorage();
+        $this->observers = new PriorityStorage();
     }
 
     public function registerObserver(ObserverInterface $observer, int $priority = 0)
@@ -29,9 +29,8 @@ class WeatherData implements ObservableInterface
 
     public function notifyObservers()
     {
-        $observers = $this->observers->getArraySortedByPriority();
-        /** @var Observer $observer */
-        foreach ($observers as $observer) {
+        /** @var ObserverInterface $observer */
+        foreach ($this->observers as $observer) {
             $observer->update($this);
         }
     }

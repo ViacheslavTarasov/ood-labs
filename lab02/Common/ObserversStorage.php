@@ -3,15 +3,33 @@
 
 namespace Lab02\Common;
 
+use SplObjectStorage;
 
-class ObserversStorage extends \SplObjectStorage
+class ObserversStorage
 {
-    public function getArraySortedByPriority()
+    private $storage;
+
+    public function __construct()
     {
-        $this->rewind();
+        $this->storage = new SplObjectStorage();
+    }
+
+    public function attach(object $object, int $priority = 0)
+    {
+        $this->storage->attach($object, $priority);
+    }
+
+    public function detach(object $object)
+    {
+        $this->storage->detach($object);
+    }
+
+    public function getArraySortedByPriority(): array
+    {
+        $this->storage->rewind();
         $observers = [];
-        foreach ($this as $observer) {
-            $observers[] = ['number' => $this->getInfo(), 'observer' => $observer];
+        foreach ($this->storage as $observer) {
+            $observers[] = ['number' => $this->storage->getInfo(), 'observer' => $observer];
         }
         usort($observers, function ($a, $b) {
             if ($a['number'] === $b['number']) {

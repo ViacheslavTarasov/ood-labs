@@ -5,7 +5,7 @@ namespace Lab02\WeatherStationPro;
 
 use Lab02\Common\ObservableInterface;
 use Lab02\Common\ObserverInterface;
-use Lab02\Common\ObserversStorage;
+use Lab02\Common\PriorityStorage;
 
 class WeatherDataPro implements ObservableInterface
 {
@@ -15,12 +15,12 @@ class WeatherDataPro implements ObservableInterface
     private $windSpeed;
     private $windDirection;
 
-    /** @var ObserversStorage */
+    /** @var PriorityStorage */
     protected $observers;
 
     public function __construct()
     {
-        $this->observers = new ObserversStorage();
+        $this->observers = new PriorityStorage();
     }
 
     public function registerObserver(ObserverInterface $observer, int $priority = 0)
@@ -30,9 +30,8 @@ class WeatherDataPro implements ObservableInterface
 
     public function notifyObservers()
     {
-        $observers = $this->observers->getArraySortedByPriority();
-        /** @var Observer $observer */
-        foreach ($observers as $observer) {
+        /** @var ObserverInterface $observer */
+        foreach ($this->observers as $observer) {
             $observer->update($this);
         }
     }
@@ -50,7 +49,6 @@ class WeatherDataPro implements ObservableInterface
         $this->windSpeed = $windSpeed;
         $this->windDirection = $windDirection;
         $this->measurementsChanged();
-
     }
 
     private function measurementsChanged()
@@ -82,5 +80,4 @@ class WeatherDataPro implements ObservableInterface
     {
         return $this->windDirection;
     }
-
 }

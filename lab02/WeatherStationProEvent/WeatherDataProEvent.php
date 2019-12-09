@@ -3,9 +3,8 @@
 
 namespace Lab02\WeatherStationProEvent;
 
-
-
-use Lab02\Common\ObserversStorage;
+use InvalidArgumentException;
+use Lab02\Common\PriorityStorage;
 
 class WeatherDataProEvent implements ObservableEventInterface
 {
@@ -15,13 +14,14 @@ class WeatherDataProEvent implements ObservableEventInterface
     private $windSpeed;
     private $windDirection;
 
+    /** @var PriorityStorage[] */
     protected $observers = [];
 
     public function subscribeObserver(ObserverInterface $observer, string $event, int $priority = 0)
     {
         $this->validateEventOrException($event);
         if (!isset($this->observers[$event])) {
-            $this->observers[$event] = new ObserversStorage();
+            $this->observers[$event] = new PriorityStorage();
         }
         $this->observers[$event]->attach($observer);
     }
@@ -47,9 +47,8 @@ class WeatherDataProEvent implements ObservableEventInterface
         if (!isset($this->observers[$event])) {
             return;
         }
-        $observers = $this->observers[$event]->getArraySortedByPriority();
         /** @var ObserverInterface $observer */
-        foreach ($observers as $observer) {
+        foreach ($this->observers[$event] as $observer) {
             $observer->update($this);
         }
     }
@@ -107,7 +106,7 @@ class WeatherDataProEvent implements ObservableEventInterface
     private function validateEventOrException($event)
     {
         if (!in_array($event, Events::AVAILABLE_CODES)) {
-            throw new \InvalidArgumentException('invalid event');
+            throw new InvalidArgumentException('invalid event');
         }
     }
 }
