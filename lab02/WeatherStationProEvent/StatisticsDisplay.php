@@ -3,11 +3,10 @@
 namespace Lab02\WeatherStationProEvent;
 
 
-use Lab02\Common\DisplayInterface;
 use Lab02\Common\OutsideStatistics;
 use Lab02\Common\PrintHelper;
 
-class StatisticsDisplay implements ObserverInterface, DisplayInterface
+class StatisticsDisplay implements ObserverInterface
 {
     private $outsideStatistics;
     private $printHelper;

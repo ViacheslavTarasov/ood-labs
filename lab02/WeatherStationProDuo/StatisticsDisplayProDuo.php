@@ -3,8 +3,6 @@
 
 namespace Lab02\WeatherStationProDuo;
 
-
-use Lab02\Common\DisplayInterface;
 use Lab02\Common\InsideStatistics;
 use Lab02\Common\ObservableInterface;
 use Lab02\Common\ObserverInterface;
@@ -13,7 +11,7 @@ use Lab02\Common\PrintHelper;
 use Lab02\WeatherStation\WeatherData;
 use Lab02\WeatherStationPro\WeatherDataPro;
 
-class StatisticsDisplayProDuo implements ObserverInterface, DisplayInterface
+class StatisticsDisplayProDuo implements ObserverInterface
 {
     private $weatherDataIn;
     private $weatherDataOut;

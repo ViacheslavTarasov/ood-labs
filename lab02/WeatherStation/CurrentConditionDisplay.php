@@ -3,11 +3,10 @@
 
 namespace Lab02\WeatherStation;
 
-use Lab02\Common\DisplayInterface;
 use Lab02\Common\ObservableInterface;
 use Lab02\Common\ObserverInterface;
 
-class CurrentConditionDisplay implements ObserverInterface, DisplayInterface
+class CurrentConditionDisplay implements ObserverInterface
 {
     private $temperature;
     private $humidity;

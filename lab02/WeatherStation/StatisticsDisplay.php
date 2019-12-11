@@ -2,13 +2,12 @@
 
 namespace Lab02\WeatherStation;
 
-use Lab02\Common\DisplayInterface;
 use Lab02\Common\InsideStatistics;
 use Lab02\Common\ObservableInterface;
 use Lab02\Common\ObserverInterface;
 use Lab02\Common\PrintHelper;
 
-class StatisticsDisplay implements ObserverInterface, DisplayInterface
+class StatisticsDisplay implements ObserverInterface
 {
     private $insideStatistics;
     private $printHelper;
