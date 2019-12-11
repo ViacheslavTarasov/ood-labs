@@ -6,7 +6,6 @@ namespace Lab02\Common;
 
 class WindDirectionStatistics
 {
-    private $countAccumulations;
     private $sinAcc;
     private $cosAcc;
 
@@ -15,17 +14,14 @@ class WindDirectionStatistics
     {
         $this->sinAcc += sin(deg2rad($value));
         $this->cosAcc += cos(deg2rad($value));
-        $this->countAccumulations++;
     }
 
     public function getAvg()
     {
-        if (is_null($this->countAccumulations)) {
+        if (is_null($this->sinAcc)) {
             return null;
         }
-        $avgSin = $this->sinAcc / $this->countAccumulations;
-        $avgCos = $this->cosAcc / $this->countAccumulations;
-        $angle = rad2deg(atan2($avgSin, $avgCos));
+        $angle = rad2deg(atan2($this->sinAcc, $this->cosAcc));
         $angle = $angle < 0 ? ($angle + 360) : $angle;
         return round($angle, 2);
     }
