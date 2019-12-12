@@ -2,13 +2,15 @@
 
 namespace Lab02\WeatherStationProEvent;
 
+use Closure;
+
 interface ObservableEventInterface
 {
-    public function subscribeObserver(ObserverInterface $observer, string $event, int $priority);
+    public function subscribe(string $event, Closure $eventListener, int $priority = 0);
 
-    public function unsubscribeObserver(ObserverInterface $observer, string $event);
+    public function unsubscribe(string $event, Closure $eventListener);
 
-    public function notifyObservers(string $event);
+    public function notify(string $event);
 
-    public function removeObserver(ObserverInterface $observer);
+    public function removeEventListener(Closure $eventListener);
 }
