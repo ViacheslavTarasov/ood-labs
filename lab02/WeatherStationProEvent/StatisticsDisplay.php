@@ -11,25 +11,51 @@ class StatisticsDisplay
 {
     private $outsideStatistics;
     private $printHelper;
+    private $onTemperatureChangeCallback;
+    private $onPressureChangeCallback;
 
     public function __construct(
-        OutsideStatistics $outsideStatistics
+        OutsideStatistics $outsideStatistics,
+        WeatherDataProEvent $weatherData
     )
     {
         $this->outsideStatistics = $outsideStatistics;
         $this->printHelper = new PrintHelper();
+        $weatherData->subscribe(Events::OUTSIDE_TEMPERATURE, $this->initOnTemperatureChangeCallback());
+        $weatherData->subscribe(Events::OUTSIDE_PRESSURE, $this->initOnPressureChangeCallback());
     }
 
-    public function onChangeTemperature(float $temperature)
+    private function initOnTemperatureChangeCallback()
     {
-        $this->outsideStatistics->addTemperature($temperature);
-        $this->display();
+        if (!isset($this->onTemperatureChangeCallback)) {
+            $self = $this;
+            $this->onTemperatureChangeCallback = function (WeatherDataProEvent $weatherData) use ($self) {
+                $self->outsideStatistics->addTemperature($weatherData->getTemperature());
+                $self->display();
+            };
+        }
+        return $this->onTemperatureChangeCallback;
     }
 
-    public function onChangePressure(float $pressure)
+    private function initOnPressureChangeCallback()
     {
-        $this->outsideStatistics->addPressure($pressure);
-        $this->display();
+        if (!isset($this->onPressureChangeCallback)) {
+            $self = $this;
+            $this->onPressureChangeCallback = function (WeatherDataProEvent $weatherData) use ($self) {
+                $self->outsideStatistics->addPressure($weatherData->getPressure());
+                $self->display();
+            };
+        }
+        return $this->onPressureChangeCallback;
+    }
+
+    public function getOnTemperatureChangeCallback()
+    {
+        return $this->onTemperatureChangeCallback;
+    }
+    public function getOnPressureChangeCallback()
+    {
+        return $this->onPressureChangeCallback;
     }
 
     public function display()

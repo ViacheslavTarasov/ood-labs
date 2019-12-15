@@ -14,17 +14,7 @@ class WeatherStationEventTest extends TestCase
     {
         $weatherData = new WeatherDataProEvent();
         $outsideStatistics = new OutsideStatistics();
-        $display = new StatisticsDisplay($outsideStatistics);
-        $onChangeTemperature = function (WeatherDataProEvent $weatherData) use ($display) {
-            $display->onChangeTemperature($weatherData->getTemperature());
-        };
-
-        $onChangePressure = function (WeatherDataProEvent $weatherData) use ($display) {
-            $display->onChangePressure($weatherData->getPressure());
-        };
-
-        $weatherData->subscribe(Events::OUTSIDE_TEMPERATURE, $onChangeTemperature);
-        $weatherData->subscribe(Events::OUTSIDE_PRESSURE, $onChangePressure);
+        $display = new StatisticsDisplay($outsideStatistics, $weatherData);
 
         $this->assertEquals(null, $outsideStatistics->getTemperatureStatistics()->getAvg());
         $this->assertEquals(null, $outsideStatistics->getPressureStatistics()->getAvg());
@@ -32,12 +22,12 @@ class WeatherStationEventTest extends TestCase
         $this->assertEquals(15, $outsideStatistics->getTemperatureStatistics()->getAvg());
         $this->assertEquals(750, $outsideStatistics->getPressureStatistics()->getAvg());
 
-        $weatherData->unsubscribe(Events::OUTSIDE_TEMPERATURE, $onChangeTemperature);
+        $weatherData->unsubscribe(Events::OUTSIDE_TEMPERATURE, $display->getOnTemperatureChangeCallback());
         $weatherData->setMeasurements(25, 0.65, 760, 20, 270);
         $this->assertEquals(15, $outsideStatistics->getTemperatureStatistics()->getAvg());
         $this->assertEquals(755, $outsideStatistics->getPressureStatistics()->getAvg());
 
-        $weatherData->removeEventListener($onChangePressure);
+        $weatherData->removeEventListener($display->getOnPressureChangeCallback());
         $weatherData->setMeasurements(-30, 0.65, 740, 20, 270);
         $this->assertEquals(15, $outsideStatistics->getTemperatureStatistics()->getAvg());
         $this->assertEquals(755, $outsideStatistics->getPressureStatistics()->getAvg());
