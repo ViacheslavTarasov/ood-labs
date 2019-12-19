@@ -24,17 +24,19 @@ abstract class Beverage implements BeverageInterface
         return array_keys($this->getPrices());
     }
 
-    abstract protected function getPrices(): array;
 
     public function getDescription(): string
     {
         return $this->size . ' ' . $this->getName();
     }
 
-    abstract protected function getName(): string;
 
     public function getCost(): float
     {
         return $this->getPrices()[$this->size];
     }
+
+    abstract protected function getName(): string;
+
+    abstract protected function getPrices(): array;
 }
