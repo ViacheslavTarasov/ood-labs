@@ -1,0 +1,69 @@
+#!/usr/bin/php
+<?php
+
+use Lab03\Stream\CompressFileOutputStream;
+use Lab03\Stream\DecompressFileInputStream;
+use Lab03\Stream\DecryptFileInputStream;
+use Lab03\Stream\EncryptFileOutputStream;
+use Lab03\Stream\FileInputStream;
+use Lab03\Stream\FileOutputStream;
+use Lab03\Stream\Option;
+
+require_once(__DIR__ . '/../../vendor/autoload.php');
+
+system("clear");
+echo "\e[4m"; // <underline>
+if ($argc < 3) {
+    echo "Ошибка параметров \n";
+    exit;
+}
+
+$outputFilePath = __DIR__ . DIRECTORY_SEPARATOR . array_pop($argv);
+$inputFilePath = __DIR__ . DIRECTORY_SEPARATOR . array_pop($argv);
+
+$input = new FileInputStream();
+$output = new FileOutputStream();
+
+for ($i = 1; $i < $argc - 2;) {
+    switch ($argv[$i]) {
+        case Option::ENCRYPT:
+            $i++;
+            $output = new EncryptFileOutputStream($output, getParameterOrException($argv, $i));
+            break;
+        case Option::DECRYPT:
+            $i++;
+            $input = new DecryptFileInputStream($input, getParameterOrException($argv, $i));
+            break;
+        case Option::COMPRESS:
+            $i++;
+            $output = new CompressFileOutputStream($output);
+            break;
+        case Option::DECOMPRESS:
+            $i++;
+            $input = new DecompressFileInputStream($input);
+            break;
+
+        default:
+            echo "Ошибка параметров \n";
+            break;
+    }
+    $i++;
+}
+
+$inputFile = fopen($inputFilePath, 'r');
+$outputFile = fopen($outputFilePath, 'w');
+
+while (!$input->isEof($inputFile)) {
+    $data = $input->readByte($inputFile);
+    $output->writeByte($outputFile, $data);
+}
+
+function getParameterOrException(array $argv, int $i)
+{
+    if (!isset($argv[$i])) {
+        throw new RuntimeException('не указан параметр для опции --encrypt' . Option::ENCRYPT);
+    }
+    return $argv[$i];
+}
+
+echo "Выполнено\n";
