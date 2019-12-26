@@ -28,7 +28,7 @@ class DecompressFileInputStream extends InputStreamDecorator
     public function readBlock($handle, int $length): string
     {
         $block = '';
-        for ($i = 0; $i < strlen($length); $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $block .= $this->readByte($handle);
         }
         while ($this->unpacked) {
