@@ -3,7 +3,7 @@
 
 namespace Lab03\Stream;
 
-class EncryptFileOutputStream extends OutputStreamDecorator
+class EncryptOutputStream extends OutputStreamDecorator
 {
     private $map;
 

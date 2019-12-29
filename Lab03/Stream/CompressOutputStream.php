@@ -2,7 +2,7 @@
 
 namespace Lab03\Stream;
 
-class CompressFileOutputStream extends OutputStreamDecorator
+class CompressOutputStream extends OutputStreamDecorator
 {
     private $count = 0;
     private $current;

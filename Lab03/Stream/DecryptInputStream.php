@@ -2,7 +2,7 @@
 
 namespace Lab03\Stream;
 
-class DecryptFileInputStream extends InputStreamDecorator
+class DecryptInputStream extends InputStreamDecorator
 {
     private $map;
 

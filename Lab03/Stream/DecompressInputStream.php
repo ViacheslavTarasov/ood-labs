@@ -2,7 +2,7 @@
 
 namespace Lab03\Stream;
 
-class DecompressFileInputStream extends InputStreamDecorator
+class DecompressInputStream extends InputStreamDecorator
 {
     private $unpacked = [];
 

@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
 
-use Lab03\Stream\CompressFileOutputStream;
-use Lab03\Stream\DecompressFileInputStream;
-use Lab03\Stream\DecryptFileInputStream;
-use Lab03\Stream\EncryptFileOutputStream;
+use Lab03\Stream\CompressOutputStream;
+use Lab03\Stream\DecompressInputStream;
+use Lab03\Stream\DecryptInputStream;
+use Lab03\Stream\EncryptOutputStream;
 use Lab03\Stream\FileInputStream;
 use Lab03\Stream\FileOutputStream;
 use Lab03\Stream\Option;
@@ -28,19 +28,19 @@ for ($i = 1; $i < $argc - 2;) {
     switch ($argv[$i]) {
         case Option::ENCRYPT:
             $i++;
-            $outputStream = new EncryptFileOutputStream($outputStream, getParameterOrException($argv, $i));
+            $outputStream = new EncryptOutputStream($outputStream, getParameterOrException($argv, $i));
             break;
         case Option::DECRYPT:
             $i++;
-            $inputStream = new DecryptFileInputStream($inputStream, getParameterOrException($argv, $i));
+            $inputStream = new DecryptInputStream($inputStream, getParameterOrException($argv, $i));
             break;
         case Option::COMPRESS:
             $i++;
-            $outputStream = new CompressFileOutputStream($outputStream);
+            $outputStream = new CompressOutputStream($outputStream);
             break;
         case Option::DECOMPRESS:
             $i++;
-            $inputStream = new DecompressFileInputStream($inputStream);
+            $inputStream = new DecompressInputStream($inputStream);
             break;
 
         default:
