@@ -11,12 +11,12 @@ class DecompressFileInputStream extends InputStreamDecorator
         parent::__construct($inputDataStream);
     }
 
-    public function readByte($handle): string
+    public function readByte(): string
     {
-        $byte = $this->getInputDataStream()->readByte($handle);
+        $byte = $this->getInputDataStream()->readByte();
         if ($byte !== '') {
             $count = unpack('C', $byte)[1] ?? 0;
-            $byte = unpack('a', $this->getInputDataStream()->readByte($handle))[1] ?? '';
+            $byte = unpack('a', $this->getInputDataStream()->readByte())[1] ?? '';
             $this->unpacked[] = ['byte' => $byte, 'count' => $count];
         }
         if ($this->unpacked) {
@@ -25,11 +25,11 @@ class DecompressFileInputStream extends InputStreamDecorator
         return $byte;
     }
 
-    public function readBlock($handle, int $length): string
+    public function readBlock(int $length): string
     {
         $block = '';
         for ($i = 0; $i < $length; $i++) {
-            $block .= $this->readByte($handle);
+            $block .= $this->readByte();
         }
         while ($this->unpacked) {
             $block .= $this->extractFirstFromUnpacked();
@@ -37,9 +37,9 @@ class DecompressFileInputStream extends InputStreamDecorator
         return $block;
     }
 
-    public function isEof($handle): bool
+    public function isEof(): bool
     {
-        return $this->getInputDataStream()->isEof($handle) && !$this->unpacked;
+        return $this->getInputDataStream()->isEof() && !$this->unpacked;
     }
 
     private function extractFirstFromUnpacked()

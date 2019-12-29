@@ -6,16 +6,16 @@ namespace Lab03\Stream;
 abstract class InputStreamDecorator implements InputDataStreamInterface
 {
     /** @var InputDataStreamInterface */
-    protected $inputDataStream;
+    private $inputDataStream;
 
     public function __construct(InputDataStreamInterface $inputDataStream)
     {
         $this->inputDataStream = $inputDataStream;
     }
 
-    public function isEof($handle): bool
+    public function isEof(): bool
     {
-        return $this->inputDataStream->isEof($handle);
+        return $this->inputDataStream->isEof();
     }
 
     public function getInputDataStream(): InputDataStreamInterface
@@ -23,8 +23,8 @@ abstract class InputStreamDecorator implements InputDataStreamInterface
         return $this->inputDataStream;
     }
 
-    abstract public function readByte($handle): string;
+    abstract public function readByte(): string;
 
-    abstract public function readBlock($handle, int $length): string;
+    abstract public function readBlock(int $length): string;
 
 }

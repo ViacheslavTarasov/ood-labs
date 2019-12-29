@@ -4,32 +4,32 @@ namespace Lab03\Stream;
 
 class FileInputStream implements InputDataStreamInterface
 {
-    public function readByte($handle): string
+    private $file;
+
+    public function __construct(string $fileName)
     {
-        return $this->readBlock($handle, 1);
+        if (!file_exists($fileName)) {
+            throw new \RuntimeException('File not exists');
+        }
+        $this->file = fopen($fileName, 'rb');
     }
 
-    public function readBlock($handle, int $length): string
+    public function readByte(): string
     {
-        $this->exceptionIfNotResource($handle);
-        $data = fread($handle, $length);
+        return $this->readBlock(1);
+    }
+
+    public function readBlock(int $length): string
+    {
+        $data = fread($this->file, $length);
         if ($data === false) {
-            throw new \RuntimeException('read file error');
+            throw new \RuntimeException('Read file error');
         }
         return $data;
     }
 
-    public function isEof($handle): bool
+    public function isEof(): bool
     {
-        $this->exceptionIfNotResource($handle);
-        return feof($handle);
+        return feof($this->file);
     }
-
-    private function exceptionIfNotResource($res)
-    {
-        if (!is_resource($res)) {
-            throw new \RuntimeException('is not resource');
-        }
-    }
-
 }

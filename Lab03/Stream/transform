@@ -21,26 +21,26 @@ if ($argc < 3) {
 $outputFilePath = __DIR__ . DIRECTORY_SEPARATOR . array_pop($argv);
 $inputFilePath = __DIR__ . DIRECTORY_SEPARATOR . array_pop($argv);
 
-$input = new FileInputStream();
-$output = new FileOutputStream();
+$inputStream = new FileInputStream($inputFilePath);
+$outputStream = new FileOutputStream($outputFilePath);
 
 for ($i = 1; $i < $argc - 2;) {
     switch ($argv[$i]) {
         case Option::ENCRYPT:
             $i++;
-            $output = new EncryptFileOutputStream($output, getParameterOrException($argv, $i));
+            $outputStream = new EncryptFileOutputStream($outputStream, getParameterOrException($argv, $i));
             break;
         case Option::DECRYPT:
             $i++;
-            $input = new DecryptFileInputStream($input, getParameterOrException($argv, $i));
+            $inputStream = new DecryptFileInputStream($inputStream, getParameterOrException($argv, $i));
             break;
         case Option::COMPRESS:
             $i++;
-            $output = new CompressFileOutputStream($output);
+            $outputStream = new CompressFileOutputStream($outputStream);
             break;
         case Option::DECOMPRESS:
             $i++;
-            $input = new DecompressFileInputStream($input);
+            $inputStream = new DecompressFileInputStream($inputStream);
             break;
 
         default:
@@ -50,12 +50,9 @@ for ($i = 1; $i < $argc - 2;) {
     $i++;
 }
 
-$inputFile = fopen($inputFilePath, 'r');
-$outputFile = fopen($outputFilePath, 'w');
-
-while (!$input->isEof($inputFile)) {
-    $data = $input->readByte($inputFile);
-    $output->writeByte($outputFile, $data);
+while (!$inputStream->isEof()) {
+    $data = $inputStream->readByte();
+    $outputStream->writeByte($data);
 }
 
 function getParameterOrException(array $argv, int $i)

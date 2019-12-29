@@ -5,25 +5,23 @@ namespace Lab03\Stream;
 
 class FileOutputStream implements OutputDataStreamInterface
 {
-    public function writeByte($handle, $data): void
+    private $file;
+
+    public function __construct(string $fileName)
     {
-        $this->writeBlock($handle, $data, 1);
+        $this->file = fopen($fileName, 'wb');
     }
 
-    public function writeBlock($handle, $data, int $length): void
+    public function writeByte($data): void
     {
-        $this->exceptionIfNotResource($handle);
-        $result = fwrite($handle, $data, $length);
+        $this->writeBlock($data, 1);
+    }
+
+    public function writeBlock($data, int $length): void
+    {
+        $result = fwrite($this->file, $data, $length);
         if ($result === false) {
-            throw new \RuntimeException('write file error');
+            throw new \RuntimeException('Write file error');
         }
     }
-
-    private function exceptionIfNotResource($res)
-    {
-        if (!is_resource($res)) {
-            throw new \RuntimeException('is not resource');
-        }
-    }
-
 }

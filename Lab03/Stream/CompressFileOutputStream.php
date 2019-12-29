@@ -12,23 +12,23 @@ class CompressFileOutputStream extends OutputStreamDecorator
         parent::__construct($outputDataStream);
     }
 
-    public function writeByte($handle, $data): void
+    public function writeByte($data): void
     {
         if (is_null($this->current)) {
             $this->current = $data;
         } elseif ($this->current != $data || $this->count >= 255) {
             $block = pack('Ca', $this->count, $this->current);
-            $this->outputDataStream->writeBlock($handle, $block, 2);
+            $this->getOutputDataStream()->writeBlock($block, 2);
             $this->current = $data;
             $this->count = 0;
         }
         $this->count++;
     }
 
-    public function writeBlock($handle, $data, int $length): void
+    public function writeBlock($data, int $length): void
     {
         for ($i = 0; $i < strlen($data); $i++) {
-            $this->writeByte($handle, $data[$i]);
+            $this->writeByte($data[$i]);
         }
     }
 }

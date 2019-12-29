@@ -12,14 +12,14 @@ class DecryptFileInputStream extends InputStreamDecorator
         $this->map = (new EncryptionMapGenerator())->generate($key);
     }
 
-    public function readByte($handle): string
+    public function readByte(): string
     {
-        return $this->decrypt($this->getInputDataStream()->readByte($handle));
+        return $this->decrypt($this->getInputDataStream()->readByte());
     }
 
-    public function readBlock($handle, int $length): string
+    public function readBlock(int $length): string
     {
-        $block = $this->getInputDataStream()->readBlock($handle, $length);
+        $block = $this->getInputDataStream()->readBlock($length);
         for ($i = 0; $i < strlen($block); $i++) {
             $block[$i] = $this->decrypt($block[$i]);
         }

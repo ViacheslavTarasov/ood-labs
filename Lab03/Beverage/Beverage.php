@@ -4,7 +4,7 @@ namespace Lab03\Beverage;
 
 abstract class Beverage implements BeverageInterface
 {
-    protected $size;
+    private $size;
 
     /**
      * Beverage constructor.

@@ -13,18 +13,18 @@ class EncryptFileOutputStream extends OutputStreamDecorator
         $this->map = (new EncryptionMapGenerator())->generate($key);
     }
 
-    public function writeByte($handle, $data): void
+    public function writeByte($data): void
     {
-        $this->outputDataStream->writeByte($handle, $this->encrypt($data));
+        $this->getOutputDataStream()->writeByte($this->encrypt($data));
     }
 
-    public function writeBlock($handle, $data, int $length): void
+    public function writeBlock($data, int $length): void
     {
         for ($i = 0; $i < strlen($data); $i++) {
             $data[$i] = $this->encrypt($data[$i]);
         }
 
-        $this->outputDataStream->writeBlock($handle, $data, $length);
+        $this->getOutputDataStream()->writeBlock($data, $length);
     }
 
     private function encrypt(string $byte): string

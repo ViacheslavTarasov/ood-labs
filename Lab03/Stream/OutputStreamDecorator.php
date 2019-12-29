@@ -6,15 +6,20 @@ namespace Lab03\Stream;
 abstract class OutputStreamDecorator implements OutputDataStreamInterface
 {
     /** @var OutputDataStreamInterface */
-    protected $outputDataStream;
+    private $outputDataStream;
 
     public function __construct(OutputDataStreamInterface $outputDataStream)
     {
         $this->outputDataStream = $outputDataStream;
     }
 
-    abstract function writeByte($handle, $data): void;
+    public function getOutputDataStream(): OutputDataStreamInterface
+    {
+        return $this->outputDataStream;
+    }
 
-    abstract function writeBlock($handle, $data, int $length): void;
+    abstract function writeByte($data): void;
+
+    abstract function writeBlock($data, int $length): void;
 
 }
