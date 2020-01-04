@@ -1,40 +1,28 @@
 <?php
-//declare(encoding='UTF-8');
 
 namespace Lab03\Stream;
 
 class EncryptOutputStream extends OutputStreamDecorator
 {
-    private $map;
+    private $encryptionService;
 
     public function __construct(OutputDataStreamInterface $outputDataStream, int $key)
     {
         parent::__construct($outputDataStream);
-        $this->map = (new EncryptionMapGenerator())->generate($key);
+        $this->encryptionService = new EncryptionService($key);
     }
 
     public function writeByte($data): void
     {
-        $this->getOutputDataStream()->writeByte($this->encrypt($data));
+        $this->getOutputDataStream()->writeByte($this->encryptionService->encrypt($data));
     }
 
     public function writeBlock($data, int $length): void
     {
         for ($i = 0; $i < strlen($data); $i++) {
-            $data[$i] = $this->encrypt($data[$i]);
+            $data[$i] = $this->encryptionService->encrypt($data[$i]);
         }
 
         $this->getOutputDataStream()->writeBlock($data, $length);
-    }
-
-    private function encrypt(string $byte): string
-    {
-        $encrypted = $byte;
-        if ($byte !== '') {
-            $ord = ord($byte);
-            $index = array_search($ord, $this->map);
-            $encrypted = chr($index);
-        }
-        return $encrypted;
     }
 }

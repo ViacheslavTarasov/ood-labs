@@ -2,6 +2,7 @@
 
 namespace Lab03\Stream;
 
+use RuntimeException;
 
 class FileOutputStream implements OutputDataStreamInterface
 {
@@ -21,7 +22,7 @@ class FileOutputStream implements OutputDataStreamInterface
     {
         $result = fwrite($this->file, $data, $length);
         if ($result === false) {
-            throw new \RuntimeException('Write file error');
+            throw new RuntimeException('Write file error');
         }
     }
 }

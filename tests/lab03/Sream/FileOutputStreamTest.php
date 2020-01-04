@@ -20,14 +20,14 @@ class FileOutputStreamTest extends TestCase
         }
     }
 
-    public function testWriteByteEmpty()
+    public function testWriteByteEmpty(): void
     {
         $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
         $outputStream->writeByte('');
         $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), '');
     }
 
-    public function testWriteByte()
+    public function testWriteByte(): void
     {
         $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
         for ($i = 0; $i < strlen(self::TEST_TEXT); $i++) {
@@ -36,14 +36,14 @@ class FileOutputStreamTest extends TestCase
         }
     }
 
-    public function testWriteBlockEmpty()
+    public function testWriteBlockEmpty(): void
     {
         $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
         $outputStream->writeBlock('', 10);
         $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), '');
     }
 
-    public function testWriteBlock()
+    public function testWriteBlock(): void
     {
         $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
         $outputStream->writeBlock(self::TEST_TEXT, strlen(self::TEST_TEXT));
@@ -51,7 +51,7 @@ class FileOutputStreamTest extends TestCase
     }
 
 
-    public function testWriteBlockPart()
+    public function testWriteBlockPart(): void
     {
         $length = intval(strlen(self::TEST_TEXT) / 2);
         $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);

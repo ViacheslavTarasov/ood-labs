@@ -52,7 +52,7 @@ for ($i = 1; $i < $argc - 2;) {
 
 while (!$inputStream->isEof()) {
     $data = $inputStream->readByte();
-    $outputStream->writeByte($data);
+    $outputStream->writeBlock($data, strlen($data));
 }
 
 function getParameterOrException(array $argv, int $i)

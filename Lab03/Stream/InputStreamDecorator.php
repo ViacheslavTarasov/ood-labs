@@ -18,7 +18,7 @@ abstract class InputStreamDecorator implements InputDataStreamInterface
         return $this->inputDataStream->isEof();
     }
 
-    public function getInputDataStream(): InputDataStreamInterface
+    protected function getInputDataStream(): InputDataStreamInterface
     {
         return $this->inputDataStream;
     }

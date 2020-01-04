@@ -12,6 +12,18 @@ class CompressOutputStream extends OutputStreamDecorator
         parent::__construct($outputDataStream);
     }
 
+    public function writeBlock($data, int $length): void
+    {
+        $length = strlen($data) < $length ? strlen($data) : $length;
+        if (!$length) {
+            $this->writeByte('');
+            return;
+        }
+        for ($i = 0; $i < $length; $i++) {
+            $this->writeByte($data[$i]);
+        }
+    }
+
     public function writeByte($data): void
     {
         if (is_null($this->current)) {
@@ -23,12 +35,5 @@ class CompressOutputStream extends OutputStreamDecorator
             $this->count = 0;
         }
         $this->count++;
-    }
-
-    public function writeBlock($data, int $length): void
-    {
-        for ($i = 0; $i < strlen($data); $i++) {
-            $this->writeByte($data[$i]);
-        }
     }
 }

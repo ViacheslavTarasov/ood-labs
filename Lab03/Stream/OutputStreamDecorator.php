@@ -13,7 +13,7 @@ abstract class OutputStreamDecorator implements OutputDataStreamInterface
         $this->outputDataStream = $outputDataStream;
     }
 
-    public function getOutputDataStream(): OutputDataStreamInterface
+    protected function getOutputDataStream(): OutputDataStreamInterface
     {
         return $this->outputDataStream;
     }

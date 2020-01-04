@@ -1,6 +1,5 @@
 <?php
 
-
 use Lab03\Stream\FileInputStream;
 use PHPUnit\Framework\TestCase;
 
@@ -21,13 +20,13 @@ class FileInputStreamTest extends TestCase
         }
     }
 
-    public function testIsEofIsFalse()
+    public function testIsEofIsFalse(): void
     {
         $inputStream = new FileInputStream(self::FILE_PATH_INPUT);
         $this->assertFalse($inputStream->isEof());
     }
 
-    public function testIsEofIsTrue()
+    public function testIsEofIsTrue(): void
     {
         file_put_contents(self::FILE_PATH_INPUT, '');
         $inputStream = new FileInputStream(self::FILE_PATH_INPUT);
@@ -35,13 +34,13 @@ class FileInputStreamTest extends TestCase
         $this->assertTrue($inputStream->isEof());
     }
 
-    public function testReadBlock()
+    public function testReadBlock(): void
     {
         $inputStream = new FileInputStream(self::FILE_PATH_INPUT);
         $this->assertEquals(self::TEST_TEXT, $inputStream->readBlock(strlen(self::TEST_TEXT)));
     }
 
-    public function testReadByte()
+    public function testReadByte(): void
     {
         $inputStream = new FileInputStream(self::FILE_PATH_INPUT);
         for ($i = 0; $i < strlen(self::TEST_TEXT); $i++) {

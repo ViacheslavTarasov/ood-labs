@@ -11,20 +11,6 @@ class DecompressInputStream extends InputStreamDecorator
         parent::__construct($inputDataStream);
     }
 
-    public function readByte(): string
-    {
-        $byte = $this->getInputDataStream()->readByte();
-        if ($byte !== '') {
-            $count = unpack('C', $byte)[1] ?? 0;
-            $byte = unpack('a', $this->getInputDataStream()->readByte())[1] ?? '';
-            $this->unpacked[] = ['byte' => $byte, 'count' => $count];
-        }
-        if ($this->unpacked) {
-            $byte = $this->extractFirstFromUnpacked();
-        }
-        return $byte;
-    }
-
     public function readBlock(int $length): string
     {
         $block = '';
@@ -37,9 +23,19 @@ class DecompressInputStream extends InputStreamDecorator
         return $block;
     }
 
-    public function isEof(): bool
+    public function readByte(): string
     {
-        return $this->getInputDataStream()->isEof() && !$this->unpacked;
+        $byte = $this->getInputDataStream()->readByte();
+        if ($byte !== '') {
+            $count = unpack('C', $byte)[1] ?? 0;
+            $byte = unpack('a', $this->getInputDataStream()->readByte())[1] ?? '';
+            $this->unpacked[] = ['byte' => $byte, 'count' => $count];
+        }
+        $data = '';
+        while ($this->unpacked) {
+            $data .= $this->extractFirstFromUnpacked();
+        }
+        return $data;
     }
 
     private function extractFirstFromUnpacked()
@@ -52,5 +48,10 @@ class DecompressInputStream extends InputStreamDecorator
             array_shift($this->unpacked);
         }
         return $byte ?? null;
+    }
+
+    public function isEof(): bool
+    {
+        return $this->getInputDataStream()->isEof() && !$this->unpacked;
     }
 }
