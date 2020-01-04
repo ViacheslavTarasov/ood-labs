@@ -3,21 +3,19 @@
 
 namespace Lab03\Beverage\Coffee;
 
-use Lab03\Beverage\Beverage;
+use Lab03\Beverage\BeverageWithSize;
 use Lab03\Beverage\Size;
 
-class Latte extends Beverage
+class Latte extends BeverageWithSize
 {
-    public function getPrices(): array
+    public function __construct(string $size)
     {
-        return [
-            Size::STANDARD => 90,
-            Size::DOUBLE => 130
-        ];
-    }
-
-    protected function getName(): string
-    {
-        return 'latte';
+        parent::__construct(
+            $size,
+            'latte',
+            [
+                Size::STANDARD => 90,
+                Size::DOUBLE => 130
+            ]);
     }
 }

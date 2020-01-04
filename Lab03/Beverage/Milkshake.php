@@ -4,19 +4,17 @@
 namespace Lab03\Beverage;
 
 
-class Milkshake extends Beverage
+class Milkshake extends BeverageWithSize
 {
-    public function getPrices(): array
+    public function __construct(string $size)
     {
-        return [
-            Size::SMALL => 50,
-            Size::MEDIUM => 60,
-            Size::LARGE => 80
-        ];
-    }
-
-    protected function getName(): string
-    {
-        return 'milkshake';
+        parent::__construct(
+            $size,
+            'milkshake',
+            [
+                Size::SMALL => 50,
+                Size::MEDIUM => 60,
+                Size::LARGE => 80
+            ]);
     }
 }

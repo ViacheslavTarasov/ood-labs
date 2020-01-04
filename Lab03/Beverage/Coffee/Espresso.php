@@ -2,20 +2,18 @@
 
 namespace Lab03\Beverage\Coffee;
 
-use Lab03\Beverage\Beverage;
+use Lab03\Beverage\BeverageWithSize;
 use Lab03\Beverage\Size;
 
-class Espresso extends Beverage
+class Espresso extends BeverageWithSize
 {
-    public function getPrices(): array
+    public function __construct(string $size)
     {
-        return [
-            Size::SMALL => 120
-        ];
-    }
-
-    protected function getName(): string
-    {
-        return 'espresso';
+        parent::__construct(
+            $size,
+            'espresso',
+            [
+                Size::SMALL => 120
+            ]);
     }
 }
