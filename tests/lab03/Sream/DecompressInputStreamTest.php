@@ -35,13 +35,13 @@ class DecompressInputStreamTest extends TestCase
             $this->decompressInputStream->readByte();
             $i++;
         }
-        $this->assertEquals(strlen($this->compressed) / 2, $i);
+        $this->assertEquals(strlen(self::TEST_TEXT), $i);
     }
 
     public function testReadByte(): void
     {
         $this->assertEquals('t', $this->decompressInputStream->readByte());
-        $this->assertEquals('eeeeee', $this->decompressInputStream->readByte());
+        $this->assertEquals('e', $this->decompressInputStream->readByte());
     }
 
     public function testReadBlock(): void

@@ -31,11 +31,7 @@ class DecompressInputStream extends InputStreamDecorator
             $byte = unpack('a', $this->getInputDataStream()->readByte())[1] ?? '';
             $this->unpacked[] = ['byte' => $byte, 'count' => $count];
         }
-        $data = '';
-        while ($this->unpacked) {
-            $data .= $this->extractFirstFromUnpacked();
-        }
-        return $data;
+        return $this->unpacked ? $this->extractFirstFromUnpacked() : '';
     }
 
     private function extractFirstFromUnpacked()

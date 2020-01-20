@@ -35,11 +35,9 @@ for ($i = 1; $i < $argc - 2;) {
             $inputStream = new DecryptInputStream($inputStream, getParameterOrException($argv, $i));
             break;
         case Option::COMPRESS:
-            $i++;
             $outputStream = new CompressOutputStream($outputStream);
             break;
         case Option::DECOMPRESS:
-            $i++;
             $inputStream = new DecompressInputStream($inputStream);
             break;
 
@@ -52,7 +50,7 @@ for ($i = 1; $i < $argc - 2;) {
 
 while (!$inputStream->isEof()) {
     $data = $inputStream->readByte();
-    $outputStream->writeBlock($data, strlen($data));
+    $outputStream->writeByte($data);
 }
 
 function getParameterOrException(array $argv, int $i)
