@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lab04\Color;
 
-class ColorFactory
+class ColorFactory implements ColorFactoryInterface
 {
     public const GREEN = 'green';
     public const RED = 'red';
@@ -12,14 +12,12 @@ class ColorFactory
     public const PINK = 'pink';
     public const BLACK = 'black';
 
-    public const AVAILABLE_COLORS = [self::GREEN, self::RED, self::BLUE, self::YELLOW, self::PINK, self::BLACK];
-
     /**
      * @param string $name
      * @return ColorInterface
      * @throws \InvalidArgumentException
      */
-    public static function create(string $name): ColorInterface
+    public function create(string $name): ColorInterface
     {
         switch (strtolower($name)) {
             case self::GREEN:

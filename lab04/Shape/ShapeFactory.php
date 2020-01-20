@@ -9,9 +9,17 @@ use Lab04\Common\Point;
 
 class ShapeFactory implements ShapeFactoryInterface
 {
+    /** @var ColorFactory */
+    private $colorFactory;
+
+    public function __construct($colorFactory)
+    {
+        $this->colorFactory = $colorFactory;
+    }
+
     public function createShape(string $description): ShapeInterface
     {
-        $args = explode(' ', $description);
+        $args = explode(' ', trim(str_replace('  ', ' ', $description)));
         $command = strtolower(trim($args[0]));
         switch ($command) {
             case 'rectangle':
@@ -79,7 +87,7 @@ class ShapeFactory implements ShapeFactoryInterface
 
     private function extractColorFromNextArgs(array &$args): ColorInterface
     {
-        return ColorFactory::create(strtolower(trim(next($args))));
+        return $this->colorFactory->create(strtolower(trim(next($args))));
     }
 
     private function extractPointFromNextArgs(array &$args): Point
