@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Lab04\Color\ColorFactory;
+use Lab04\Color\ColorFactoryInterface;
 use Lab04\Color\ColorInterface;
 use Lab04\Common\Point;
 use Lab04\Shape\Ellipse;
@@ -40,7 +41,7 @@ class ShapeFactoryTest extends TestCase
         $this->color->method('getR')->willReturn(255);
         $this->color->method('getG')->willReturn(0);
         $this->color->method('getB')->willReturn(0);
-        $this->colorFactory = $this->createMock(ColorFactory::class);
+        $this->colorFactory = $this->createMock(ColorFactoryInterface::class);
         $this->colorFactory->method('create')->willReturn($this->color);
         $this->shapeFactory = new ShapeFactory($this->colorFactory);
     }

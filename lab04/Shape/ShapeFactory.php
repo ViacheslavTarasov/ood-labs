@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace Lab04\Shape;
 
-use Lab04\Color\ColorFactory;
+use Lab04\Color\ColorFactoryInterface;
 use Lab04\Color\ColorInterface;
 use Lab04\Common\Point;
 
 class ShapeFactory implements ShapeFactoryInterface
 {
-    /** @var ColorFactory */
+    /** @var ColorFactoryInterface */
     private $colorFactory;
 
-    public function __construct($colorFactory)
+    public function __construct(ColorFactoryInterface $colorFactory)
     {
         $this->colorFactory = $colorFactory;
     }
