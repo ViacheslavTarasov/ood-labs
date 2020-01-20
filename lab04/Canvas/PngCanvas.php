@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Lab04\Canvas;
 
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 
 class PngCanvas implements CanvasInterface
 {
@@ -24,7 +24,7 @@ class PngCanvas implements CanvasInterface
         $this->color = $color;
     }
 
-    public function drawLine(Coordinates $from, Coordinates $to): void
+    public function drawLine(Point $from, Point $to): void
     {
         imageline(
             $this->image,
@@ -37,7 +37,7 @@ class PngCanvas implements CanvasInterface
         imagepng($this->image, $this->path);
     }
 
-    public function drawEllipse(Coordinates $center, int $width, int $height): void
+    public function drawEllipse(Point $center, int $width, int $height): void
     {
         imageellipse(
             $this->image,

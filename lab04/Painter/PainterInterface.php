@@ -8,5 +8,5 @@ use Lab04\PictureDraft\PictureDraft;
 
 interface PainterInterface
 {
-    public function drawPicture(PictureDraft $pictureDraft, CanvasInterface $canvas);
+    public function drawPicture(PictureDraft $pictureDraft, CanvasInterface $canvas): void;
 }

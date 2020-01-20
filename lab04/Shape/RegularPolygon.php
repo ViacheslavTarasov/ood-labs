@@ -4,11 +4,11 @@ namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 
 class RegularPolygon extends Shape
 {
-    /** @var Coordinates */
+    /** @var Point */
     private $center;
     /** @var int */
     private $vertexCount;
@@ -17,7 +17,7 @@ class RegularPolygon extends Shape
 
     private const MIN_VERTEX_COUNT = 3;
 
-    public function __construct(ColorInterface $color, Coordinates $center, int $vertexCount, int $radius)
+    public function __construct(ColorInterface $color, Point $center, int $vertexCount, int $radius)
     {
         parent::__construct($color);
         if ($vertexCount < self::MIN_VERTEX_COUNT) {
@@ -31,24 +31,24 @@ class RegularPolygon extends Shape
     public function draw(CanvasInterface $canvas): void
     {
         $canvas->setColor($this->getColor());
-        $prev = $this->getVertexCoordinates(0);
+        $prev = $this->getVertex(0);
         for ($i = 1; $i <= $this->vertexCount; $i++) {
-            $current = $this->getVertexCoordinates($i);
+            $current = $this->getVertex($i);
             $canvas->drawLine($prev, $current);
             $prev = $current;
         }
     }
 
-    private function getVertexCoordinates(int $number): Coordinates
+    private function getVertex(int $number): Point
     {
         $angle = 360 / $this->vertexCount;
         $nextAngleInRad = deg2rad($angle * $number - 90);
         $x = round($this->center->getX() + $this->radius * cos($nextAngleInRad));
         $y = round($this->center->getY() + $this->radius * sin($nextAngleInRad));
-        return new Coordinates($x, $y);
+        return new Point($x, $y);
     }
 
-    public function getCenter(): Coordinates
+    public function getCenter(): Point
     {
         return $this->center;
     }

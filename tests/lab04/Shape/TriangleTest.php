@@ -3,7 +3,7 @@
 
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 use Lab04\Shape\Triangle;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,11 +14,11 @@ class TriangleTest extends TestCase
     private $triangle;
     /** @var ColorInterface|MockObject */
     private $color;
-    /** @var Coordinates */
+    /** @var Point */
     private $vertex1;
-    /** @var Coordinates */
+    /** @var Point */
     private $vertex2;
-    /** @var Coordinates */
+    /** @var Point */
     private $vertex3;
     /** @var CanvasInterface|MockObject */
     private $canvas;
@@ -27,9 +27,9 @@ class TriangleTest extends TestCase
     {
         $this->color = $this->createMock(ColorInterface::class);
 
-        $this->vertex1 = new Coordinates(10, 20);
-        $this->vertex2 = new Coordinates(30, 40);
-        $this->vertex3 = new Coordinates(50, 60);
+        $this->vertex1 = new Point(10, 20);
+        $this->vertex2 = new Point(30, 40);
+        $this->vertex3 = new Point(50, 60);
 
         $this->canvas = $this->createMock(CanvasInterface::class);
 

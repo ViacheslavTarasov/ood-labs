@@ -5,7 +5,7 @@ namespace Lab04\Shape;
 
 use Lab04\Color\ColorFactory;
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 
 class ShapeFactory implements ShapeFactoryInterface
 {
@@ -32,8 +32,8 @@ class ShapeFactory implements ShapeFactoryInterface
         $this->assertCount(6, $args);
         return new Rectangle(
             $this->extractColorFromNextArgs($args),
-            $this->extractCoordinatesFromNextArgs($args),
-            $this->extractCoordinatesFromNextArgs($args)
+            $this->extractPointFromNextArgs($args),
+            $this->extractPointFromNextArgs($args)
         );
     }
 
@@ -42,9 +42,9 @@ class ShapeFactory implements ShapeFactoryInterface
         $this->assertCount(8, $args);
         return new Triangle(
             $this->extractColorFromNextArgs($args),
-            $this->extractCoordinatesFromNextArgs($args),
-            $this->extractCoordinatesFromNextArgs($args),
-            $this->extractCoordinatesFromNextArgs($args)
+            $this->extractPointFromNextArgs($args),
+            $this->extractPointFromNextArgs($args),
+            $this->extractPointFromNextArgs($args)
         );
     }
 
@@ -54,7 +54,7 @@ class ShapeFactory implements ShapeFactoryInterface
         $this->assertCount(6, $args);
         return new Ellipse(
             $this->extractColorFromNextArgs($args),
-            $this->extractCoordinatesFromNextArgs($args),
+            $this->extractPointFromNextArgs($args),
             $this->extractIntFromNextArgs($args),
             $this->extractIntFromNextArgs($args)
         );
@@ -65,7 +65,7 @@ class ShapeFactory implements ShapeFactoryInterface
         $this->assertCount(6, $args);
         return new RegularPolygon(
             $this->extractColorFromNextArgs($args),
-            $this->extractCoordinatesFromNextArgs($args),
+            $this->extractPointFromNextArgs($args),
             $this->extractIntFromNextArgs($args),
             $this->extractIntFromNextArgs($args)
         );
@@ -82,9 +82,9 @@ class ShapeFactory implements ShapeFactoryInterface
         return ColorFactory::create(strtolower(trim(next($args))));
     }
 
-    private function extractCoordinatesFromNextArgs(array &$args): Coordinates
+    private function extractPointFromNextArgs(array &$args): Point
     {
-        return new Coordinates((int)next($args), (int)next($args));
+        return new Point((int)next($args), (int)next($args));
     }
 
     /**

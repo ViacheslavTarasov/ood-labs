@@ -5,16 +5,16 @@ namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 
 class Rectangle extends Shape
 {
-    /** @var Coordinates */
+    /** @var Point */
     private $leftTop;
-    /** @var Coordinates */
+    /** @var Point */
     private $rightBottom;
 
-    public function __construct(ColorInterface $color, Coordinates $leftTop, Coordinates $rightBottom)
+    public function __construct(ColorInterface $color, Point $leftTop, Point $rightBottom)
     {
         parent::__construct($color);
         $this->leftTop = $leftTop;
@@ -26,8 +26,8 @@ class Rectangle extends Shape
         $canvas->setColor($this->getColor());
         $leftTop = $this->getLeftTop();
         $rightBottom = $this->getRightBottom();
-        $rightTop = new Coordinates($rightBottom->getX(), $leftTop->getY());
-        $leftBottom = new Coordinates($leftTop->getX(), $rightBottom->getY());
+        $rightTop = new Point($rightBottom->getX(), $leftTop->getY());
+        $leftBottom = new Point($leftTop->getX(), $rightBottom->getY());
 
         $canvas->drawLine($leftTop, $rightTop);
         $canvas->drawLine($rightTop, $rightBottom);
@@ -35,12 +35,12 @@ class Rectangle extends Shape
         $canvas->drawLine($leftBottom, $leftTop);
     }
 
-    public function getLeftTop(): Coordinates
+    public function getLeftTop(): Point
     {
         return $this->leftTop;
     }
 
-    public function getRightBottom(): Coordinates
+    public function getRightBottom(): Point
     {
         return $this->rightBottom;
     }

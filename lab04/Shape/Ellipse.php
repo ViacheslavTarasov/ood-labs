@@ -5,18 +5,18 @@ namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 
 class Ellipse extends Shape
 {
-    /** @var Coordinates */
+    /** @var Point */
     private $center;
     /** @var int */
     private $width;
     /** @var int */
     private $height;
 
-    public function __construct(ColorInterface $color, Coordinates $center, int $width, int $height)
+    public function __construct(ColorInterface $color, Point $center, int $width, int $height)
     {
         parent::__construct($color);
         $this->center = $center;
@@ -30,7 +30,7 @@ class Ellipse extends Shape
         $canvas->drawEllipse($this->getCenter(), $this->getWidth(), $this->getHeight());
     }
 
-    public function getCenter(): Coordinates
+    public function getCenter(): Point
     {
         return $this->center;
     }

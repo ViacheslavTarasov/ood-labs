@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lab04\Common;
 
-class Coordinates
+class Point
 {
     /** @var int */
     private $x;

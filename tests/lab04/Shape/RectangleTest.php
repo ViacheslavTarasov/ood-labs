@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 use Lab04\Shape\Rectangle;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,13 +14,13 @@ class RectangleTest extends TestCase
     private $rectangle;
     /** @var ColorInterface|MockObject */
     private $color;
-    /** @var Coordinates */
+    /** @var Point */
     private $leftTop;
-    /** @var Coordinates */
+    /** @var Point */
     private $rightTop;
-    /** @var Coordinates */
+    /** @var Point */
     private $rightBottom;
-    /** @var Coordinates */
+    /** @var Point */
     private $leftBottom;
     /** @var CanvasInterface|MockObject */
     private $canvas;
@@ -29,10 +29,10 @@ class RectangleTest extends TestCase
     {
         $this->color = $this->createMock(ColorInterface::class);
 
-        $this->leftTop = new Coordinates(10, 20);
-        $this->rightBottom = new Coordinates(30, 40);
-        $this->rightTop = new Coordinates($this->rightBottom->getX(), $this->leftTop->getY());
-        $this->leftBottom = new Coordinates($this->leftTop->getX(), $this->rightBottom->getY());
+        $this->leftTop = new Point(10, 20);
+        $this->rightBottom = new Point(30, 40);
+        $this->rightTop = new Point($this->rightBottom->getX(), $this->leftTop->getY());
+        $this->leftBottom = new Point($this->leftTop->getX(), $this->rightBottom->getY());
 
         $this->canvas = $this->createMock(CanvasInterface::class);
 

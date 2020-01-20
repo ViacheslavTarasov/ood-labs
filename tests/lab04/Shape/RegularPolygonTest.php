@@ -3,7 +3,7 @@
 
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\ColorInterface;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 use Lab04\Shape\RegularPolygon;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +14,7 @@ class RegularPolygonTest extends TestCase
     private $polygon;
     /** @var ColorInterface|MockObject */
     private $color;
-    /** @var Coordinates */
+    /** @var Point */
     private $center;
     /** @var int */
     private $vertexCount;
@@ -27,7 +27,7 @@ class RegularPolygonTest extends TestCase
     {
         $this->color = $this->createMock(ColorInterface::class);
 
-        $this->center = new Coordinates(10, 20);
+        $this->center = new Point(10, 20);
         $this->vertexCount = 6;
         $this->radius = 30;
         $this->canvas = $this->createMock(CanvasInterface::class);

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Lab04\Color\ColorFactory;
-use Lab04\Common\Coordinates;
+use Lab04\Common\Point;
 use Lab04\Shape\Ellipse;
 use Lab04\Shape\Rectangle;
 use Lab04\Shape\RegularPolygon;
@@ -44,8 +44,8 @@ class ShapeFactoryTest extends TestCase
         $shape = $this->shapeFactory->createShape($description);
         $this->assertInstanceOf(Rectangle::class, $shape);
         $this->assertEquals(ColorFactory::create(self::COLOR), $shape->getColor());
-        $this->assertEquals(new Coordinates(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getLeftTop());
-        $this->assertEquals(new Coordinates(self::VERTEX_2_X, self::VERTEX_2_Y), $shape->getRightBottom());
+        $this->assertEquals(new Point(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getLeftTop());
+        $this->assertEquals(new Point(self::VERTEX_2_X, self::VERTEX_2_Y), $shape->getRightBottom());
     }
 
     public function testInvalidCountArgumentsWhenCreateRectangle(): void
@@ -63,9 +63,9 @@ class ShapeFactoryTest extends TestCase
         $shape = $this->shapeFactory->createShape($description);
         $this->assertInstanceOf(Triangle::class, $shape);
         $this->assertEquals(ColorFactory::create(self::COLOR), $shape->getColor());
-        $this->assertEquals(new Coordinates(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getVertex1());
-        $this->assertEquals(new Coordinates(self::VERTEX_2_X, self::VERTEX_2_Y), $shape->getVertex2());
-        $this->assertEquals(new Coordinates(self::VERTEX_3_X, self::VERTEX_3_Y), $shape->getVertex3());
+        $this->assertEquals(new Point(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getVertex1());
+        $this->assertEquals(new Point(self::VERTEX_2_X, self::VERTEX_2_Y), $shape->getVertex2());
+        $this->assertEquals(new Point(self::VERTEX_3_X, self::VERTEX_3_Y), $shape->getVertex3());
     }
 
     public function testInvalidCountArgumentsWhenCreateTriangle(): void
@@ -83,7 +83,7 @@ class ShapeFactoryTest extends TestCase
         $shape = $this->shapeFactory->createShape($description);
         $this->assertInstanceOf(Ellipse::class, $shape);
         $this->assertEquals(ColorFactory::create(self::COLOR), $shape->getColor());
-        $this->assertEquals(new Coordinates(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getCenter());
+        $this->assertEquals(new Point(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getCenter());
         $this->assertEquals(self::HEIGHT, $shape->getHeight());
         $this->assertEquals(self::WIDTH, $shape->getWidth());
     }
@@ -103,7 +103,7 @@ class ShapeFactoryTest extends TestCase
         $shape = $this->shapeFactory->createShape($description);
         $this->assertInstanceOf(RegularPolygon::class, $shape);
         $this->assertEquals(ColorFactory::create(self::COLOR), $shape->getColor());
-        $this->assertEquals(new Coordinates(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getCenter());
+        $this->assertEquals(new Point(self::VERTEX_1_X, self::VERTEX_1_Y), $shape->getCenter());
         $this->assertEquals(self::VERTEX_COUNT, $shape->getVertexCount());
         $this->assertEquals(self::RADIUS, $shape->getRadius());
     }
