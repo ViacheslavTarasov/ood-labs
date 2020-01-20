@@ -5,10 +5,12 @@ namespace Lab03\Stream;
 class EncryptionService
 {
     private $map;
+    private $transMap;
 
     public function __construct(int $key)
     {
-        $this->map = $this->map = (new EncryptionMapGenerator())->generate($key);
+        $this->map = (new EncryptionMapGenerator())->generate($key);
+        $this->transMap = array_flip($this->map);
     }
 
     public function encrypt(string $byte): string
@@ -16,8 +18,7 @@ class EncryptionService
         $encrypted = $byte;
         if ($byte !== '') {
             $ord = ord($byte);
-            $index = array_search($ord, $this->map);
-            $encrypted = chr($index);
+            $encrypted = chr($this->transMap[$ord]);
         }
         return $encrypted;
     }

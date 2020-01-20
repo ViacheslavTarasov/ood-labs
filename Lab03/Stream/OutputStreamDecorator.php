@@ -18,8 +18,8 @@ abstract class OutputStreamDecorator implements OutputDataStreamInterface
         return $this->outputDataStream;
     }
 
-    abstract function writeByte($data): void;
+    abstract function writeByte(string $data): void;
 
-    abstract function writeBlock($data, int $length): void;
+    abstract function writeBlock(string $data, int $length): void;
 
 }

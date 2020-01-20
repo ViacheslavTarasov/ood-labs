@@ -6,12 +6,12 @@ class InMemoryOutputStream implements OutputDataStreamInterface
 {
     private $data = '';
 
-    public function writeByte($data): void
+    public function writeByte(string $data): void
     {
         $this->writeBlock($data, 1);
     }
 
-    public function writeBlock($data, int $length): void
+    public function writeBlock(string $data, int $length): void
     {
         $this->data .= substr($data, 0, $length);
     }
