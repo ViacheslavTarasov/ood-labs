@@ -14,7 +14,13 @@
       "Lab02\\": "lab02/",
       "Lab03\\": "Lab03/",
       "Lab04\\": "lab04/",
+      "Lab05\\": "lab05/",
       "Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "7.4.2"
     }
   }
 }
