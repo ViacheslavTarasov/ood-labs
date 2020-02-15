@@ -13,12 +13,12 @@ class FileOutputStream implements OutputDataStreamInterface
         $this->file = fopen($fileName, 'wb');
     }
 
-    public function writeByte($data): void
+    public function writeByte(string $data): void
     {
         $this->writeBlock($data, 1);
     }
 
-    public function writeBlock($data, int $length): void
+    public function writeBlock(string $data, int $length): void
     {
         $result = fwrite($this->file, $data, $length);
         if ($result === false) {

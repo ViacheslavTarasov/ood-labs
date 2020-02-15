@@ -7,12 +7,7 @@ class CompressOutputStream extends OutputStreamDecorator
     private $count = 0;
     private $current;
 
-    public function __construct(OutputDataStreamInterface $outputDataStream)
-    {
-        parent::__construct($outputDataStream);
-    }
-
-    public function writeBlock($data, int $length): void
+    public function writeBlock(string $data, int $length): void
     {
         $length = strlen($data) < $length ? strlen($data) : $length;
         if (!$length) {
@@ -24,9 +19,9 @@ class CompressOutputStream extends OutputStreamDecorator
         }
     }
 
-    public function writeByte($data): void
+    public function writeByte(string $data): void
     {
-        if (is_null($this->current)) {
+        if ($this->current === null) {
             $this->current = $data;
         } elseif ($this->current != $data || $this->count >= 255) {
             $block = pack('Ca', $this->count, $this->current);

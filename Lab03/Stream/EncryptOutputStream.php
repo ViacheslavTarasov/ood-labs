@@ -12,14 +12,15 @@ class EncryptOutputStream extends OutputStreamDecorator
         $this->encryptionService = new EncryptionService($key);
     }
 
-    public function writeByte($data): void
+    public function writeByte(string $data): void
     {
         $this->getOutputDataStream()->writeByte($this->encryptionService->encrypt($data));
     }
 
-    public function writeBlock($data, int $length): void
+    public function writeBlock(string $data, int $length): void
     {
-        for ($i = 0; $i < strlen($data); $i++) {
+        $dataLength = strlen($data);
+        for ($i = 0; $i < $dataLength; $i++) {
             $data[$i] = $this->encryptionService->encrypt($data[$i]);
         }
 
