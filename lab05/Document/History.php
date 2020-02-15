@@ -5,7 +5,7 @@ namespace Lab05\Document;
 
 use Lab05\Command\Document\CommandInterface;
 
-class History implements HistoryInterface
+class History
 {
     public const MAX_COUNT = 10;
 

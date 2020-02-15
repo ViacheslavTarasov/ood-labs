@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use Lab05\Command\Document\ChangeTextCommand;
 use Lab05\Document\History;
-use Lab05\Document\HistoryInterface;
 use Lab05\Document\Paragraph;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +12,7 @@ class ParagraphTest extends TestCase
     private const TEXT = 'test text';
     /** @var Paragraph */
     private $paragraph;
-    /** @var HistoryInterface|MockObject */
+    /** @var History|MockObject */
     private $history;
 
     public function testGettersReturn(): void
@@ -37,7 +36,7 @@ class ParagraphTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->history = $this->createMock(HistoryInterface::class);
+        $this->history = $this->createMock(History::class);
         $this->paragraph = new Paragraph($this->history, self::TEXT);
     }
 }

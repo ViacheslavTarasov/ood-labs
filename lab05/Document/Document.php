@@ -15,7 +15,7 @@ class Document implements DocumentInterface
     public const DEFAULT_TITLE = '';
     public const IMAGES_DIR = __DIR__ . '/images';
 
-    /** @var HistoryInterface */
+    /** @var History */
     private $history;
     /** @var DocumentItems */
     private $items;
@@ -26,7 +26,7 @@ class Document implements DocumentInterface
     /** @var DocumentSavingService */
     private $savingService;
 
-    public function __construct(HistoryInterface $history, ImageManager $imageManager, DocumentSavingService $savingService)
+    public function __construct(History $history, ImageManager $imageManager, DocumentSavingService $savingService)
     {
         $this->history = $history;
         $this->items = new DocumentItems();
@@ -37,6 +37,9 @@ class Document implements DocumentInterface
 
     public function insertParagraph(string $text, int $position = null): ParagraphInterface
     {
+        if ($position > $this->getItemsCount()) {
+            throw new InvalidArgumentException('position exceeds the number of elements in the document');
+        }
         $paragraph = new Paragraph($this->history, $text);
         $command = new InsertDocumentItemCommand($this->imageManager, $this->items, new DocumentItem($paragraph), $position);
         $this->history->addAndExecuteCommand($command);
@@ -55,6 +58,9 @@ class Document implements DocumentInterface
 
     public function insertImage(string $path, int $width, int $height, int $position = null): ImageInterface
     {
+        if ($position > $this->getItemsCount()) {
+            throw new InvalidArgumentException('position exceeds the number of elements in the document');
+        }
         $newPath = $this->imageManager->save($path, self::IMAGES_DIR);
         $image = new Image($newPath, $width, $height);
         $command = new InsertDocumentItemCommand($this->imageManager, $this->items, new DocumentItem($image), $position);

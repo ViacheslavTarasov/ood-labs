@@ -5,7 +5,6 @@ use Lab05\Document\Document;
 use Lab05\Document\DocumentInterface;
 use Lab05\Document\DocumentSavingService;
 use Lab05\Document\History;
-use Lab05\Document\HistoryInterface;
 use Lab05\Document\ImageManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -20,12 +19,12 @@ class DocumentTest extends TestCase
 
     /** @var DocumentInterface */
     private $document;
-    /** @var HistoryInterface */
+    /** @var History */
     private $history;
     /** @var ImageManager|MockObject */
-    private $imageManager;
+    private $mockImageManager;
     /** @var DocumentSavingService|MockObject */
-    private $savingService;
+    private $mockSavingService;
 
     public function testSuccessfulSetTitle(): void
     {
@@ -42,6 +41,18 @@ class DocumentTest extends TestCase
     public function testCanRedoReturnFalseInitially(): void
     {
         $this->assertFalse($this->document->canRedo());
+    }
+
+    public function testThrowsExceptionUndoIfCanUndoIsFalse(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->document->undo();
+    }
+
+    public function testThrowsExceptionRedoIfCanRedoIsFalse(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->document->redo();
     }
 
     public function testTitleRestoredAfterUndoAndRedo(): void
@@ -62,6 +73,14 @@ class DocumentTest extends TestCase
     public function testReturnsZeroGetItemsCount(): void
     {
         $this->assertEquals(0, $this->document->getItemsCount());
+    }
+
+    public function testThrowsExceptionInsertParagraphWhenPositionIsGreaterThanItemsCount(): void
+    {
+        $this->document->getItemsCount();
+        $position = $this->document->getItemsCount() + 1;
+        $this->expectException(InvalidArgumentException::class);
+        $this->document->insertParagraph(self::TEXT, $position);
     }
 
     public function testInsertedParagraphAndChangedItemsCount(): void
@@ -88,6 +107,17 @@ class DocumentTest extends TestCase
         $this->assertEquals($newText, $paragraph->getText());
     }
 
+    /**
+     * @dataProvider invalidPositionProvider
+     * @param int $position
+     */
+    public function testThrowsExceptionReplaceTextWhenInvalidPosition(int $position): void
+    {
+        $this->document->insertParagraph(self::TEXT);
+        $this->expectException(InvalidArgumentException::class);
+        $this->document->replaceText('new text', $position);
+    }
+
     public function testDeleteItemAndUndoAndRedo(): void
     {
         $paragraph = $this->document->insertParagraph(self::TEXT);
@@ -100,16 +130,34 @@ class DocumentTest extends TestCase
         $this->assertEquals($paragraph, $this->document->getItem(0)->getParagraph());
     }
 
+    /**
+     * @dataProvider invalidPositionProvider
+     * @param int $position
+     */
+    public function testThrowsExceptionDeleteItemWhenInvalidPosition(int $position): void
+    {
+        $this->document->insertParagraph(self::TEXT);
+        $this->expectException(InvalidArgumentException::class);
+        $this->document->deleteItem($position);
+    }
+
     public function testInsertImage(): void
     {
         $newPath = 'newpath';
-        $this->imageManager->method('save')->willReturn($newPath);
+        $this->mockImageManager->method('save')->willReturn($newPath);
         $image = $this->document->insertImage(self::SRC_PATH, self::WIDTH, self::HEIGHT);
         $this->assertEquals($newPath, $image->getPath());
         $this->assertEquals(self::WIDTH, $image->getWidth());
         $this->assertEquals(self::HEIGHT, $image->getHeight());
 
         $this->assertEquals(1, $this->document->getItemsCount());
+    }
+
+    public function testThrowsExceptionInsertImageWhenPositionIsGreaterThanItemsCount(): void
+    {
+        $position = $this->document->getItemsCount() + 1;
+        $this->expectException(InvalidArgumentException::class);
+        $this->document->insertImage(self::SRC_PATH, self::WIDTH, self::HEIGHT, $position);
     }
 
     public function testResizeImage(): void
@@ -123,18 +171,38 @@ class DocumentTest extends TestCase
         $this->assertEquals($height, $image->getHeight());
     }
 
+    /**
+     * @dataProvider invalidPositionProvider
+     * @param int $position
+     */
+    public function testThrowsExceptionResizeImageWhenInvalidPosition(int $position): void
+    {
+        $this->document->insertImage(self::SRC_PATH, self::WIDTH, self::HEIGHT);
+        $this->expectException(InvalidArgumentException::class);
+        $this->document->resizeImage($position, self::WIDTH + 10, self::HEIGHT + 10);
+    }
+
     public function testSave(): void
     {
         $path = '/1.html';
-        $this->savingService->expects($this->once())->method('saveAsHtml')->with($path);
+        $this->mockSavingService->expects($this->once())->method('saveAsHtml')->with($path);
         $this->document->save($path);
+    }
+
+    public function invalidPositionProvider(): array
+    {
+        return [
+            [-1],
+            [1],
+            [100],
+        ];
     }
 
     protected function setUp(): void
     {
         $this->history = new History(10);
-        $this->imageManager = $this->createMock(ImageManager::class);
-        $this->savingService = $this->createMock(DocumentSavingService::class);
-        $this->document = new Document($this->history, $this->imageManager, $this->savingService);
+        $this->mockImageManager = $this->createMock(ImageManager::class);
+        $this->mockSavingService = $this->createMock(DocumentSavingService::class);
+        $this->document = new Document($this->history, $this->mockImageManager, $this->mockSavingService);
     }
 }

@@ -7,12 +7,12 @@ use Lab05\Command\Document\ChangeTextCommand;
 
 class Paragraph implements ParagraphInterface
 {
-    /** @var HistoryInterface */
+    /** @var History */
     private $history;
     /** @var string */
     private $text;
 
-    public function __construct(HistoryInterface $history, string $text)
+    public function __construct(History $history, string $text)
     {
         $this->history = $history;
         $this->text = $text;
