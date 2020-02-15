@@ -6,7 +6,7 @@ namespace Lab04\Shape;
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\ColorInterface;
 
-abstract class Shape implements ShapeInterface
+abstract class Shape
 {
     /** @var ColorInterface */
     private $color;

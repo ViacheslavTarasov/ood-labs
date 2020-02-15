@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Painter\Painter;
 use Lab04\PictureDraft\PictureDraft;
-use Lab04\Shape\ShapeInterface;
+use Lab04\Shape\Shape;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,15 +21,15 @@ class PainterTest extends TestCase
 
     public function testDrawPicture(): void
     {
-        /** @var ShapeInterface|MockObject $shape */
-        $shape = $this->createMock(ShapeInterface::class);
+        /** @var Shape|MockObject $shape */
+        $shape = $this->createMock(Shape::class);
         /** @var CanvasInterface|MockObject $canvas */
         $canvas = $this->createMock(CanvasInterface::class);
         /** @var PictureDraft|MockObject $pictureDraft */
         $pictureDraft = $this->createMock(PictureDraft::class);
 
 
-        $pictureDraft->expects($this->exactly(1))
+        $pictureDraft->expects($this->once())
             ->method('getShapeCount')->willReturn(self::SHAPES_COUNT);
 
         $pictureDraft->expects($this->exactly(self::SHAPES_COUNT))

@@ -17,7 +17,7 @@ class ShapeFactory implements ShapeFactoryInterface
         $this->colorFactory = $colorFactory;
     }
 
-    public function createShape(string $description): ShapeInterface
+    public function createShape(string $description): Shape
     {
         $args = explode(' ', trim(str_replace('  ', ' ', $description)));
         $command = strtolower(trim($args[0]));

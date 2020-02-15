@@ -5,5 +5,5 @@ namespace Lab04\Shape;
 
 interface ShapeFactoryInterface
 {
-    public function createShape(string $description): ShapeInterface;
+    public function createShape(string $description): Shape;
 }

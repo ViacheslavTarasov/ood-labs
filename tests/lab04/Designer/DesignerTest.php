@@ -2,8 +2,8 @@
 
 
 use Lab04\Designer\Designer;
+use Lab04\Shape\Shape;
 use Lab04\Shape\ShapeFactoryInterface;
-use Lab04\Shape\ShapeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +23,7 @@ class DesignerTest extends TestCase
     {
         $this->shapeFactory = $this->createMock(ShapeFactoryInterface::class);
         $this->designer = new Designer($this->shapeFactory);
-        $this->stdin = new \SplTempFileObject(-1);
+        $this->stdin = new SplTempFileObject(-1);
         $this->stdin->fwrite(implode(PHP_EOL, array_merge($this->commandsBeforeDone, [self::DONE_COMMAND], $this->commandsAfterDone)));
     }
 
@@ -36,7 +36,7 @@ class DesignerTest extends TestCase
         $this->stdin->rewind();
         $this->shapeFactory->expects($this->exactly(count($this->commandsBeforeDone)))
             ->method('createShape')
-            ->willReturn($this->createMock(ShapeInterface::class))
+            ->willReturn($this->createMock(Shape::class))
             ->withConsecutive(...$consecutiveArray);
 
         $this->designer->createDraft($this->stdin);

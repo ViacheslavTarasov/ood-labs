@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Lab04\PictureDraft;
 
-use Lab04\Shape\ShapeInterface;
+use Lab04\Shape\Shape;
 
 class PictureDraft
 {
     private $shapes = [];
 
-    public function addShape(ShapeInterface $shape): void
+    public function addShape(Shape $shape): void
     {
         $this->shapes[] = $shape;
     }
@@ -19,7 +19,7 @@ class PictureDraft
         return count($this->shapes);
     }
 
-    public function getShape(int $index): ShapeInterface
+    public function getShape(int $index): Shape
     {
         if (!isset($this->shapes[$index])) {
             throw new \InvalidArgumentException('invalid shape index');
