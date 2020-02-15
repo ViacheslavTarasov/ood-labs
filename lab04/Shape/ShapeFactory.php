@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Lab04\Shape;
 
+use InvalidArgumentException;
 use Lab04\Color\Color;
 use Lab04\Common\Point;
+use function Lab04\Helper\checkArraySize;
 
 class ShapeFactory implements ShapeFactoryInterface
 {
@@ -22,13 +24,13 @@ class ShapeFactory implements ShapeFactoryInterface
             case 'polygon':
                 return $this->createRegularPolygon($args);
             default:
-                throw new \InvalidArgumentException('invalid shape description');
+                throw new InvalidArgumentException('invalid shape description');
         }
     }
 
     private function createRectangle(array $args): Rectangle
     {
-        $this->assertCount(6, $args);
+        checkArraySize(6, $args);
         return new Rectangle(
             $this->extractColorFromNextArgs($args),
             $this->extractPointFromNextArgs($args),
@@ -38,7 +40,7 @@ class ShapeFactory implements ShapeFactoryInterface
 
     private function createTriangle(array $args): Triangle
     {
-        $this->assertCount(8, $args);
+        checkArraySize(8, $args);
         return new Triangle(
             $this->extractColorFromNextArgs($args),
             $this->extractPointFromNextArgs($args),
@@ -50,7 +52,7 @@ class ShapeFactory implements ShapeFactoryInterface
 
     private function createEllipse(array $args): Ellipse
     {
-        $this->assertCount(6, $args);
+        checkArraySize(6, $args);
         return new Ellipse(
             $this->extractColorFromNextArgs($args),
             $this->extractPointFromNextArgs($args),
@@ -61,7 +63,7 @@ class ShapeFactory implements ShapeFactoryInterface
 
     private function createRegularPolygon(array $args): RegularPolygon
     {
-        $this->assertCount(6, $args);
+        checkArraySize(6, $args);
         return new RegularPolygon(
             $this->extractColorFromNextArgs($args),
             $this->extractPointFromNextArgs($args),
@@ -75,7 +77,6 @@ class ShapeFactory implements ShapeFactoryInterface
         return (int)next($args);
     }
 
-
     private function extractColorFromNextArgs(array &$args): Color
     {
         return Color::createFromString(strtolower(trim(next($args))));
@@ -85,17 +86,4 @@ class ShapeFactory implements ShapeFactoryInterface
     {
         return new Point((int)next($args), (int)next($args));
     }
-
-    /**
-     * @param int $count
-     * @param array $data
-     * @throws \InvalidArgumentException
-     */
-    private function assertCount(int $count, array $data): void
-    {
-        if (count($data) !== $count) {
-            throw new \InvalidArgumentException('invalid count arguments');
-        }
-    }
-
 }

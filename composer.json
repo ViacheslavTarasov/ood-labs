@@ -16,7 +16,10 @@
       "Lab04\\": "lab04/",
       "Lab05\\": "lab05/",
       "Tests\\": "tests/"
-    }
+    },
+    "files": [
+      "lab04/Helper/functions.php"
+    ]
   },
   "config": {
     "platform": {
