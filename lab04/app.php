@@ -31,8 +31,9 @@ $stdin = new SplFileObject('php://stdin', 'r');
 $draft = $designer->createDraft($stdin);
 $painter = new Painter();
 
-$canvas = new PngCanvas(800, 600, IMAGE_PATH);
+$canvas = new PngCanvas(800, 600);
 $painter->drawPicture($draft, $canvas);
+$canvas->save(IMAGE_PATH);
 
 $canvas = new TextCanvas(new SplFileObject('php://stdout', 'w'));
 $painter->drawPicture($draft, $canvas);

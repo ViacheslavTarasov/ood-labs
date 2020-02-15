@@ -8,7 +8,6 @@ use Lab04\PictureDraft\PictureDraft;
 
 class Painter
 {
-
     public function drawPicture(PictureDraft $pictureDraft, CanvasInterface $canvas): void
     {
         $count = $pictureDraft->getShapeCount();

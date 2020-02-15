@@ -11,12 +11,10 @@ class PngCanvas implements CanvasInterface
     /** @var Color */
     private $color;
     private $image;
-    private $path;
 
-    public function __construct(int $width, int $height, string $path)
+    public function __construct(int $width, int $height)
     {
         $this->image = imagecreatetruecolor($width, $height);
-        $this->path = $path;
     }
 
     public function setColor(Color $color): void
@@ -34,7 +32,6 @@ class PngCanvas implements CanvasInterface
             $to->getY(),
             $this->getIntColor()
         );
-        imagepng($this->image, $this->path);
     }
 
     public function drawEllipse(Point $center, int $width, int $height): void
@@ -47,7 +44,11 @@ class PngCanvas implements CanvasInterface
             $height,
             $this->getIntColor()
         );
-        imagepng($this->image, $this->path);
+    }
+
+    public function save(string $path): void
+    {
+        imagepng($this->image, $path);
     }
 
 

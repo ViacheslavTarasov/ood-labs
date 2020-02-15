@@ -16,7 +16,7 @@ class PngCanvasTest extends TestCase
 
     public function setUp(): void
     {
-        $this->canvas = new PngCanvas(800, 600, self::IMAGE_PATH);
+        $this->canvas = new PngCanvas(800, 600);
         if (file_exists(self::IMAGE_PATH)) {
             unlink(self::IMAGE_PATH);
         }
@@ -52,6 +52,7 @@ class PngCanvasTest extends TestCase
         $regularPolygon = new RegularPolygon(Color::createFromString(Color::BLUE), $center, 3, 50);
         $regularPolygon->draw($this->canvas);
 
+        $this->canvas->save(self::IMAGE_PATH);
         $this->assertTrue(file_exists(self::IMAGE_PATH));
     }
 }
