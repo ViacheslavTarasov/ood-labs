@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 
 class Ellipse extends Shape
@@ -16,7 +16,7 @@ class Ellipse extends Shape
     /** @var int */
     private $height;
 
-    public function __construct(ColorInterface $color, Point $center, int $width, int $height)
+    public function __construct(Color $color, Point $center, int $width, int $height)
     {
         parent::__construct($color);
         $this->center = $center;

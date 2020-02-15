@@ -2,7 +2,7 @@
 
 
 use Lab04\Canvas\TextCanvas;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class TextCanvasTest extends TestCase
     private $vertex1;
     /** @var Point */
     private $vertex2;
-    /** @var ColorInterface */
+    /** @var Color */
     private $color;
 
     public function setUp(): void
@@ -30,7 +30,7 @@ class TextCanvasTest extends TestCase
         $this->vertex1 = new Point(10, 20);
         $this->vertex2 = new Point(30, 40);
         $this->outStream = new SplTempFileObject(-1);
-        $this->color = $this->createMock(ColorInterface::class);
+        $this->color = $this->createMock(Color::class);
         $this->color->method('getR')->willReturn(self::COLOR_R);
         $this->color->method('getG')->willReturn(self::COLOR_G);
         $this->color->method('getB')->willReturn(self::COLOR_B);

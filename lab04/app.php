@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use Lab04\Canvas\PngCanvas;
 use Lab04\Canvas\TextCanvas;
-use Lab04\Color\ColorFactory;
 use Lab04\Designer\Designer;
 use Lab04\Painter\Painter;
 use Lab04\Shape\ShapeFactory;
@@ -26,8 +25,7 @@ echo 'Shapes Factory' . PHP_EOL
     . 'polygon <Color> <CenterX> <VertexCount> <Radius>' . PHP_EOL
     . 'done' . PHP_EOL;
 
-$colorFactory = new ColorFactory();
-$shapeFactory = new ShapeFactory($colorFactory);
+$shapeFactory = new ShapeFactory();
 $designer = new Designer($shapeFactory);
 $stdin = new SplFileObject('php://stdin', 'r');
 $draft = $designer->createDraft($stdin);

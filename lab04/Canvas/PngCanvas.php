@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Lab04\Canvas;
 
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 
 class PngCanvas implements CanvasInterface
 {
-    /** @var ColorInterface */
+    /** @var Color */
     private $color;
     private $image;
     private $path;
@@ -19,7 +19,7 @@ class PngCanvas implements CanvasInterface
         $this->path = $path;
     }
 
-    public function setColor(ColorInterface $color): void
+    public function setColor(Color $color): void
     {
         $this->color = $color;
     }

@@ -3,20 +3,11 @@ declare(strict_types=1);
 
 namespace Lab04\Shape;
 
-use Lab04\Color\ColorFactoryInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 
 class ShapeFactory implements ShapeFactoryInterface
 {
-    /** @var ColorFactoryInterface */
-    private $colorFactory;
-
-    public function __construct(ColorFactoryInterface $colorFactory)
-    {
-        $this->colorFactory = $colorFactory;
-    }
-
     public function createShape(string $description): Shape
     {
         $args = explode(' ', trim(str_replace('  ', ' ', $description)));
@@ -85,9 +76,9 @@ class ShapeFactory implements ShapeFactoryInterface
     }
 
 
-    private function extractColorFromNextArgs(array &$args): ColorInterface
+    private function extractColorFromNextArgs(array &$args): Color
     {
-        return $this->colorFactory->create(strtolower(trim(next($args))));
+        return Color::createFromString(strtolower(trim(next($args))));
     }
 
     private function extractPointFromNextArgs(array &$args): Point

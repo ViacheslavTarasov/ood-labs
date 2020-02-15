@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 
 class Rectangle extends Shape
@@ -14,7 +14,7 @@ class Rectangle extends Shape
     /** @var Point */
     private $rightBottom;
 
-    public function __construct(ColorInterface $color, Point $leftTop, Point $rightBottom)
+    public function __construct(Color $color, Point $leftTop, Point $rightBottom)
     {
         parent::__construct($color);
         $this->leftTop = $leftTop;

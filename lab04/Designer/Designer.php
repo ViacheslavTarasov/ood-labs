@@ -6,7 +6,7 @@ namespace Lab04\Designer;
 use Lab04\PictureDraft\PictureDraft;
 use Lab04\Shape\ShapeFactoryInterface;
 
-class Designer implements DesignerInterface
+class Designer
 {
     /** @var ShapeFactoryInterface */
     private $shapeFactory;

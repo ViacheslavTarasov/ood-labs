@@ -3,7 +3,7 @@
 namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 
 class RegularPolygon extends Shape
@@ -17,7 +17,7 @@ class RegularPolygon extends Shape
 
     private const MIN_VERTEX_COUNT = 3;
 
-    public function __construct(ColorInterface $color, Point $center, int $vertexCount, int $radius)
+    public function __construct(Color $color, Point $center, int $vertexCount, int $radius)
     {
         parent::__construct($color);
         if ($vertexCount < self::MIN_VERTEX_COUNT) {

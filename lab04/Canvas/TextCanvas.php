@@ -2,7 +2,7 @@
 
 namespace Lab04\Canvas;
 
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 
 class TextCanvas implements CanvasInterface
@@ -15,7 +15,7 @@ class TextCanvas implements CanvasInterface
         $this->outStream = $outStream;
     }
 
-    public function setColor(ColorInterface $color): void
+    public function setColor(Color $color): void
     {
         $text = 'set pen color: ' . $color->getR() . ' ' . $color->getG() . ' ' . $color->getB() . PHP_EOL;
         $this->outStream->fwrite($text);

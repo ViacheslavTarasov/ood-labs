@@ -2,7 +2,7 @@
 
 
 use Lab04\Canvas\CanvasInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 use Lab04\Shape\Triangle;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -12,7 +12,7 @@ class TriangleTest extends TestCase
 {
     /** @var Triangle */
     private $triangle;
-    /** @var ColorInterface|MockObject */
+    /** @var Color|MockObject */
     private $color;
     /** @var Point */
     private $vertex1;
@@ -25,7 +25,7 @@ class TriangleTest extends TestCase
 
     public function setUp(): void
     {
-        $this->color = $this->createMock(ColorInterface::class);
+        $this->color = $this->createMock(Color::class);
 
         $this->vertex1 = new Point(10, 20);
         $this->vertex2 = new Point(30, 40);
@@ -41,14 +41,14 @@ class TriangleTest extends TestCase
         $this->assertTrue($this->color === $this->triangle->getColor());
     }
 
-    public function testGetVertexes()
+    public function testGetVertexes(): void
     {
         $this->assertTrue($this->vertex1 === $this->triangle->getVertex1());
         $this->assertTrue($this->vertex2 === $this->triangle->getVertex2());
         $this->assertTrue($this->vertex3 === $this->triangle->getVertex3());
     }
 
-    public function testDraw()
+    public function testDraw(): void
     {
         $this->canvas->expects($this->once())
             ->method('setColor')->with($this->equalTo($this->color));

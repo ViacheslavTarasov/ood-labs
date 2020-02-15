@@ -4,19 +4,19 @@ declare(strict_types=1);
 namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 
 abstract class Shape
 {
-    /** @var ColorInterface */
+    /** @var Color */
     private $color;
 
-    public function __construct(ColorInterface $color)
+    public function __construct(Color $color)
     {
         $this->color = $color;
     }
 
-    public function getColor(): ColorInterface
+    public function getColor(): Color
     {
         return $this->color;
     }

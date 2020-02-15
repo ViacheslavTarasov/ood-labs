@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Lab04\Color\ColorFactory;
-use Lab04\Color\ColorFactoryInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 use Lab04\Shape\Ellipse;
 use Lab04\Shape\Rectangle;
@@ -24,7 +22,7 @@ class ShapeFactoryTest extends TestCase
     private const HEIGHT = 50;
     private const RADIUS = 100;
     private const VERTEX_COUNT = 8;
-    private const COLOR = ColorFactory::RED;
+    private const COLOR = Color::RED;
     private const RECTANGLE_COMMAND = 'rectangle';
     private const TRIANGLE_COMMAND = 'triangle';
     private const ELLIPSE_COMMAND = 'ellipse';
@@ -32,18 +30,13 @@ class ShapeFactoryTest extends TestCase
 
     /** @var ShapeFactory */
     private $shapeFactory;
-    private $colorFactory;
+    /** @var Color */
     private $color;
 
     public function setUp(): void
     {
-        $this->color = $this->createMock(ColorInterface::class);
-        $this->color->method('getR')->willReturn(255);
-        $this->color->method('getG')->willReturn(0);
-        $this->color->method('getB')->willReturn(0);
-        $this->colorFactory = $this->createMock(ColorFactoryInterface::class);
-        $this->colorFactory->method('create')->willReturn($this->color);
-        $this->shapeFactory = new ShapeFactory($this->colorFactory);
+        $this->color = Color::createFromString(self::COLOR);
+        $this->shapeFactory = new ShapeFactory();
     }
 
     public function testCreateRectangle(): void

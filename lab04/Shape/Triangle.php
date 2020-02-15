@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Lab04\Shape;
 
 use Lab04\Canvas\CanvasInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 
 class Triangle extends Shape
@@ -16,7 +16,7 @@ class Triangle extends Shape
     /** @var Point */
     private $vertex3;
 
-    public function __construct(ColorInterface $color, Point $vertex1, Point $vertex2, Point $vertex3)
+    public function __construct(Color $color, Point $vertex1, Point $vertex2, Point $vertex3)
     {
         parent::__construct($color);
         $this->vertex1 = $vertex1;

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Lab04\Canvas\CanvasInterface;
-use Lab04\Color\ColorInterface;
+use Lab04\Color\Color;
 use Lab04\Common\Point;
 use Lab04\Shape\Rectangle;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -12,7 +12,7 @@ class RectangleTest extends TestCase
 {
     /** @var Rectangle */
     private $rectangle;
-    /** @var ColorInterface|MockObject */
+    /** @var Color|MockObject */
     private $color;
     /** @var Point */
     private $leftTop;
@@ -27,7 +27,7 @@ class RectangleTest extends TestCase
 
     public function setUp(): void
     {
-        $this->color = $this->createMock(ColorInterface::class);
+        $this->color = $this->createMock(Color::class);
 
         $this->leftTop = new Point(10, 20);
         $this->rightBottom = new Point(30, 40);
