@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Lab03\Stream\DecryptInputStream;
 use Lab03\Stream\EncryptionService;
 use Lab03\Stream\InMemoryInputStream;
+use Lab03\Stream\InputDataStreamInterface;
 use PHPUnit\Framework\TestCase;
 
 class DecryptInputStreamTest extends TestCase
@@ -30,6 +31,22 @@ class DecryptInputStreamTest extends TestCase
             $expected .= $this->encryptionService->decrypt(self::TEST_TEXT[$i]);
         }
         $this->assertEquals($expected, $this->decryptInputStream->readBlock($length));
+    }
+
+    public function testIsEofReturnsTrue(): void
+    {
+        $inputStream = $this->createMock(InputDataStreamInterface::class);
+        $inputStream->expects($this->once())->method('isEof')->willReturn(true);
+        $decryptInputStream = new DecryptInputStream($inputStream, self::ENCRYPTION_KEY);
+        $this->assertTrue($decryptInputStream->isEof());
+    }
+
+    public function testIsEofReturnsFalse(): void
+    {
+        $inputStream = $this->createMock(InputDataStreamInterface::class);
+        $inputStream->expects($this->once())->method('isEof')->willReturn(false);
+        $decryptInputStream = new DecryptInputStream($inputStream, self::ENCRYPTION_KEY);
+        $this->assertFalse($decryptInputStream->isEof());
     }
 
     public function testReturnsTrueIsEofWhenEndHasBeenReached(): void
