@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 use Lab03\Stream\CompressOutputStream;
 use Lab03\Stream\InMemoryOutputStream;
@@ -7,49 +7,119 @@ use PHPUnit\Framework\TestCase;
 
 class CompressOutputStreamTest extends TestCase
 {
-    private const TEST_TEXT = 'teeeeee';
     /** @var CompressOutputStream */
     private $compressOutputStream;
     /** @var InMemoryOutputStream */
     private $outputStream;
 
-    public function setUp(): void
+    public function testWriteByteDontWrittenInStreamWhenEmptyString(): void
+    {
+        $this->compressOutputStream->writeByte('');
+        $this->compressOutputStream->writeByte('');
+        $this->assertEquals(0, strlen($this->outputStream->getData()));
+    }
+
+    public function testWriteBlockDontWrittenInStreamWhenEmptyString(): void
+    {
+        $this->compressOutputStream->writeBlock('', strlen(''));
+        $this->compressOutputStream->writeBlock('', 5);
+        $this->assertEquals(0, strlen($this->outputStream->getData()));
+    }
+
+    public function testDontWriteInStreamIfNotChangedChar(): void
+    {
+        $this->compressOutputStream->writeByte('a');
+        $this->compressOutputStream->writeByte('a');
+        $this->compressOutputStream->writeByte('a');
+        $this->assertEquals(0, strlen($this->outputStream->getData()));
+    }
+
+    public function testByteWasWritten(): void
+    {
+        $char = 'a';
+        $this->compressOutputStream->writeByte($char);
+        $this->compressOutputStream->writeByte('');
+        $this->assertEquals(2, strlen($this->outputStream->getData()));
+        $this->assertEquals(1, $this->unpackCount(0));
+        $this->assertEquals($char, $this->unpackChar(0));
+    }
+
+    public function testWriteByteCompressedSequenceOfIdenticalChars(): void
+    {
+        $length = 5;
+        $char = 't';
+        for ($i = 0; $i < $length; $i++) {
+            $this->compressOutputStream->writeByte('t');
+        }
+        $this->compressOutputStream->writeByte('');
+        $this->assertEquals($length, $this->unpackCount(0));
+        $this->assertEquals($char, $this->unpackChar(0));
+    }
+
+    public function testBlockWasWrittenWhenDifferentCharacters(): void
+    {
+        $text = 'abcde';
+        $this->compressOutputStream->writeBlock($text, 3);
+        $this->compressOutputStream->writeBlock('', 1);
+
+        $this->assertEquals(6, strlen($this->outputStream->getData()));
+
+        $this->assertEquals(1, $this->unpackCount(0));
+        $this->assertEquals($text[0], $this->unpackChar(0));
+
+        $this->assertEquals(1, $this->unpackCount(1));
+        $this->assertEquals($text[1], $this->unpackChar(1));
+
+        $this->assertEquals(1, $this->unpackCount(2));
+        $this->assertEquals($text[2], $this->unpackChar(2));
+    }
+
+    public function testBlockWasWrittenWhenLengthGreaterThanString(): void
+    {
+        $text = 'aabbb';
+        $this->compressOutputStream->writeBlock($text, strlen($text) + 10);
+        $this->compressOutputStream->writeBlock('', 1);
+
+        $this->assertEquals(4, strlen($this->outputStream->getData()));
+
+        $this->assertEquals(2, $this->unpackCount(0));
+        $this->assertEquals('a', $this->unpackChar(0));
+
+        $this->assertEquals(3, $this->unpackCount(1));
+        $this->assertEquals('b', $this->unpackChar(1));
+    }
+
+    public function testWriteBlockCompressedString(): void
+    {
+        $text = 'aaaccxxxx';
+        $this->compressOutputStream->writeBlock($text, strlen($text));
+        $this->compressOutputStream->writeBlock('', 1);
+
+        $this->assertEquals(6, strlen($this->outputStream->getData()));
+
+        $this->assertEquals(3, $this->unpackCount(0));
+        $this->assertEquals('a', $this->unpackChar(0));
+
+        $this->assertEquals(2, $this->unpackCount(1));
+        $this->assertEquals('c', $this->unpackChar(1));
+
+        $this->assertEquals(4, $this->unpackCount(2));
+        $this->assertEquals('x', $this->unpackChar(2));
+    }
+
+    protected function setUp(): void
     {
         $this->outputStream = new InMemoryOutputStream();
         $this->compressOutputStream = new CompressOutputStream($this->outputStream);
     }
 
-    public function testWriteByte(): void
+    private function unpackCount(int $number): int
     {
-        $this->compressOutputStream->writeByte(self::TEST_TEXT[0]);
-        $this->compressOutputStream->writeByte('');
-        $this->assertEquals(2, strlen($this->outputStream->getData()));
-        $this->assertEquals('1', unpack('C', $this->outputStream->getData()[0])[1]);
-        $this->assertEquals(self::TEST_TEXT[0], unpack('a', $this->outputStream->getData()[1])[1]);
+        return unpack('C', $this->outputStream->getData()[$number * 2])[1];
     }
 
-    public function testWriteBlock(): void
+    private function unpackChar(int $number): string
     {
-        $this->compressOutputStream->writeBlock(self::TEST_TEXT, 2);
-        $this->compressOutputStream->writeBlock('', 1);
-        $this->assertEquals(4, strlen($this->outputStream->getData()));
-        $this->assertEquals('1', unpack('C', $this->outputStream->getData()[0])[1]);
-        $this->assertEquals(self::TEST_TEXT[0], unpack('a', $this->outputStream->getData()[1])[1]);
-        $this->assertEquals('1', unpack('C', $this->outputStream->getData()[2])[1]);
-        $this->assertEquals(self::TEST_TEXT[1], unpack('a', $this->outputStream->getData()[3])[1]);
-    }
-
-    public function testCompress(): void
-    {
-        for ($i = 0; $i < strlen(self::TEST_TEXT); $i++) {
-            $this->compressOutputStream->writeByte(self::TEST_TEXT[$i]);
-        }
-        $this->compressOutputStream->writeByte('');
-
-        $this->assertEquals(4, strlen($this->outputStream->getData()));
-        $this->assertEquals('1', unpack('C', $this->outputStream->getData()[0])[1]);
-        $this->assertEquals(self::TEST_TEXT[0], unpack('a', $this->outputStream->getData()[1])[1]);
-        $this->assertEquals('6', unpack('C', $this->outputStream->getData()[2])[1]);
-        $this->assertEquals(self::TEST_TEXT[1], unpack('a', $this->outputStream->getData()[3])[1]);
+        return unpack('a', $this->outputStream->getData()[$number * 2 + 1])[1];
     }
 }

@@ -42,8 +42,9 @@ class FileInputStreamTest extends TestCase
 
     public function testReadByte(): void
     {
+        $length = strlen(self::TEST_TEXT);
         $inputStream = new FileInputStream(self::FILE_PATH_INPUT);
-        for ($i = 0; $i < strlen(self::TEST_TEXT); $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $this->assertEquals(self::TEST_TEXT[$i], $inputStream->readByte());
         }
     }

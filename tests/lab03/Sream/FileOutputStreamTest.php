@@ -29,8 +29,9 @@ class FileOutputStreamTest extends TestCase
 
     public function testWriteByte(): void
     {
+        $length = strlen(self::TEST_TEXT);
         $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
-        for ($i = 0; $i < strlen(self::TEST_TEXT); $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $outputStream->writeByte(self::TEST_TEXT[$i]);
             $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), substr(self::TEST_TEXT, 0, $i + 1));
         }
@@ -53,7 +54,7 @@ class FileOutputStreamTest extends TestCase
 
     public function testWriteBlockPart(): void
     {
-        $length = intval(strlen(self::TEST_TEXT) / 2);
+        $length = 4;
         $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
         $outputStream->writeBlock(self::TEST_TEXT, $length);
         $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), substr(self::TEST_TEXT, 0, $length));

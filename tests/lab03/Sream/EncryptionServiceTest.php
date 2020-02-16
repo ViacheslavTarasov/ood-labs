@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Lab03\Stream\EncryptionMapGenerator;
 use Lab03\Stream\EncryptionService;
@@ -24,6 +25,7 @@ class EncryptionServiceTest extends TestCase
         $expected = chr(array_search(ord($char), $this->map));
         $this->assertEquals('', $this->encryption->encrypt(''));
         $this->assertEquals($expected, $this->encryption->encrypt($char));
+        $this->assertNotEquals($this->encryption->encrypt('a'), $this->encryption->encrypt('b'));
     }
 
     public function testDecrypt(): void

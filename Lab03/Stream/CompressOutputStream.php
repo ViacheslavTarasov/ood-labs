@@ -4,8 +4,14 @@ namespace Lab03\Stream;
 
 class CompressOutputStream extends OutputStreamDecorator
 {
-    private $count = 0;
-    private $current;
+    /** @var CompressService */
+    private $compressService;
+
+    public function __construct(OutputDataStreamInterface $outputDataStream)
+    {
+        parent::__construct($outputDataStream);
+        $this->compressService = new CompressService();
+    }
 
     public function writeBlock(string $data, int $length): void
     {
@@ -21,14 +27,9 @@ class CompressOutputStream extends OutputStreamDecorator
 
     public function writeByte(string $data): void
     {
-        if ($this->current === null) {
-            $this->current = $data;
-        } elseif ($this->current != $data || $this->count >= 255) {
-            $block = pack('Ca', $this->count, $this->current);
-            $this->getOutputDataStream()->writeBlock($block, 2);
-            $this->current = $data;
-            $this->count = 0;
+        $packed = $this->compressService->getPackedOrAccumulate($data);
+        if ($packed) {
+            $this->getOutputDataStream()->writeBlock($packed, 2);
         }
-        $this->count++;
     }
 }

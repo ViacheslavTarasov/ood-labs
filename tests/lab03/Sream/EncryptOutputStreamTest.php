@@ -23,16 +23,24 @@ class EncryptOutputStreamTest extends TestCase
         $this->encryptionService = new EncryptionService(self::ENCRYPTION_KEY);
     }
 
-    public function testWriteByte(): void
+    public function testWrittenEmptyString(): void
     {
-        $this->encryptOutputStream->writeByte(self::TEST_TEXT[0]);
-        $this->assertEquals($this->encryptionService->encrypt(self::TEST_TEXT[0]), $this->outputStream->getData());
+        $this->encryptOutputStream->writeByte('');
+        $this->assertEquals('', $this->outputStream->getData());
     }
 
-    public function testWriteBlock(): void
+    public function testWrittenEncryptedByteInStream(): void
+    {
+        $char = 'a';
+        $this->encryptOutputStream->writeByte($char);
+        $this->assertEquals($this->encryptionService->encrypt($char), $this->outputStream->getData());
+        $this->assertEquals(1, strlen($this->outputStream->getData()));
+    }
+
+    public function testWrittenEncryptedBlock(): void
     {
         $expected = '';
-        $length = intval(strlen(self::TEST_TEXT) / 2);
+        $length = 5;
         for ($i = 0; $i < $length; $i++) {
             $expected .= $this->encryptionService->encrypt(self::TEST_TEXT[$i]);
         }

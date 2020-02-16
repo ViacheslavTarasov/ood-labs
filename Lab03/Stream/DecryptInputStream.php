@@ -20,7 +20,8 @@ class DecryptInputStream extends InputStreamDecorator
     public function readBlock(int $length): string
     {
         $block = $this->getInputDataStream()->readBlock($length);
-        for ($i = 0; $i < strlen($block); $i++) {
+        $blockLength = strlen($block);
+        for ($i = 0; $i < $blockLength; $i++) {
             $block[$i] = $this->encryptionService->decrypt($block[$i]);
         }
         return $block;

@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Lab03\Stream;
 
 class EncryptionMapGenerator
 {
-    public function generate(int $key)
+    public function generate(int $key): array
     {
         mt_srand($key);
         $map = [];
@@ -12,7 +13,7 @@ class EncryptionMapGenerator
             do {
                 $value = mt_rand(0, 255);
             } while (in_array($value, $map));
-            array_push($map, $value);
+            $map[] = $value;
         }
         return $map;
     }

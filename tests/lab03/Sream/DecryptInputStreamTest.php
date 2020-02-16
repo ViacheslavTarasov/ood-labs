@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Lab03\Stream\DecryptInputStream;
 use Lab03\Stream\EncryptionService;
@@ -15,36 +16,36 @@ class DecryptInputStreamTest extends TestCase
     /** @var EncryptionService */
     private $encryptionService;
 
-    public function setUp(): void
-    {
-        $this->inputStream = new InMemoryInputStream(self::TEST_TEXT);
-        $this->decryptInputStream = new DecryptInputStream($this->inputStream, self::ENCRYPTION_KEY);
-        $this->encryptionService = new EncryptionService(self::ENCRYPTION_KEY);
-    }
-
-    public function testReadByte(): void
+    public function testReadByteAndDecryptedCorrectly(): void
     {
         $this->assertEquals($this->encryptionService->decrypt(self::TEST_TEXT[0]), $this->decryptInputStream->readByte());
         $this->assertEquals($this->encryptionService->decrypt(self::TEST_TEXT[1]), $this->decryptInputStream->readByte());
     }
 
-    public function testReadBlock(): void
+    public function testReadBlockReturnsDecryptedString(): void
     {
         $expected = '';
-        $length = intval(strlen(self::TEST_TEXT) / 2);
+        $length = 3;
         for ($i = 0; $i < $length; $i++) {
             $expected .= $this->encryptionService->decrypt(self::TEST_TEXT[$i]);
         }
         $this->assertEquals($expected, $this->decryptInputStream->readBlock($length));
     }
 
-    public function testIsEof(): void
+    public function testReturnsTrueIsEofWhenEndHasBeenReached(): void
     {
-        $i = 0;
-        while (!$this->decryptInputStream->isEof()) {
+        $length = strlen(self::TEST_TEXT);
+        for ($i = 0; $i < $length; $i++) {
+            $this->assertFalse($this->decryptInputStream->isEof());
             $this->decryptInputStream->readByte();
-            $i++;
         }
-        $this->assertEquals(strlen(self::TEST_TEXT), $i);
+        $this->assertTrue($this->decryptInputStream->isEof());
+    }
+
+    protected function setUp(): void
+    {
+        $this->inputStream = new InMemoryInputStream(self::TEST_TEXT);
+        $this->decryptInputStream = new DecryptInputStream($this->inputStream, self::ENCRYPTION_KEY);
+        $this->encryptionService = new EncryptionService(self::ENCRYPTION_KEY);
     }
 }
