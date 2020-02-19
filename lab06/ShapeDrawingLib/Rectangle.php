@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lab06\ShapeDrawingLib;
 
-use Lab06\GraphicLib\CanvasInterface;
+use Lab06\GraphicsLib\CanvasInterface;
 
 class Rectangle implements CanvasDrawableInterface
 {

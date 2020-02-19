@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Lab06\App;
 
 use Lab06\App\Adapter\ModernGraphicsRendererAdapter;
-use Lab06\GraphicLib\Canvas;
+use Lab06\GraphicsLib\Canvas;
 use Lab06\ModernGraphicsLib\ModernGraphicsRenderer;
 use Lab06\ShapeDrawingLib\CanvasPainter;
 use Lab06\ShapeDrawingLib\Point;

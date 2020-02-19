@@ -6,19 +6,18 @@ namespace Lab06\App\Adapter;
 use Lab06\GraphicsLib\CanvasInterface;
 use Lab06\ModernGraphicsLib\ModernGraphicsRenderer;
 use Lab06\ModernGraphicsLib\Point;
+use SplFileObject;
 
-class ModernGraphicsRendererAdapter implements CanvasInterface
+class ModernRendererClassAdapter extends ModernGraphicsRenderer implements CanvasInterface
 {
-    /** @var ModernGraphicsRenderer */
-    private $renderer;
     /** @var Point */
     private $start;
 
-    public function __construct(ModernGraphicsRenderer $modernGraphicsRenderer)
+    public function __construct(SplFileObject $stdout)
     {
+        parent::__construct($stdout);
         $this->start = new Point(0, 0);
-        $this->renderer = $modernGraphicsRenderer;
-        $this->renderer->beginDraw();
+        $this->beginDraw();
     }
 
     public function moveTo(int $x, int $y): void
@@ -29,7 +28,7 @@ class ModernGraphicsRendererAdapter implements CanvasInterface
     public function lineTo(int $x, int $y): void
     {
         $end = new Point($x, $y);
-        $this->renderer->drawLine($this->start, $end);
+        $this->drawLine($this->start, $end);
         $this->start = $end;
     }
 }

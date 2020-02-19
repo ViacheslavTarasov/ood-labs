@@ -40,12 +40,11 @@ class ModernGraphicsRenderer
             throw new LogicException('DrawLine is allowed between BeginDraw()/EndDraw() only');
         }
 
-        $content = printf('<line fromX="%d" fromY="%d" toX="%d" toY="%d"/>', $start->getX(), $start->getY(), $end->getX(), $end->getY()) . PHP_EOL;
+        $content = sprintf('<line fromX="%d" fromY="%d" toX="%d" toY="%d"/>', $start->getX(), $start->getY(), $end->getX(), $end->getY()) . PHP_EOL;
         $this->stdout->fwrite($content);
     }
 
-
-    private function endDraw(): void
+    public function endDraw(): void
     {
         if (!$this->drawing) {
             throw new LogicException('Drawing has not been started');

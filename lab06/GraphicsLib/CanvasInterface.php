@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab06\GraphicLib;
+namespace Lab06\GraphicsLib;
 
 interface CanvasInterface
 {
