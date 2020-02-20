@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Lab06\App\Adapter\ModernGraphicsRendererClassAdapter;
+use Lab06\ModernGraphicsLib\Point;
 use PHPUnit\Framework\TestCase;
 
 class ModernGraphicsRendererClassAdapterTest extends TestCase
@@ -61,6 +62,25 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
         $this->rendererAdapter->endDraw();
     }
 
+    public function testThrowsExceptionDrawLineBeforeBeginDraw(): void
+    {
+        $p1 = new Point(self::FROM_X, self::FROM_Y);
+        $p2 = new Point(self::TO_X, self::TO_Y);
+
+        $this->expectException(LogicException::class);
+        $this->rendererAdapter->drawLine($p1, $p2);
+    }
+
+    public function testWrittenLineAfterDrawLine(): void
+    {
+        $p1 = new Point(self::FROM_X, self::FROM_Y);
+        $p2 = new Point(self::TO_X, self::TO_Y);
+        $this->rendererAdapter->beginDraw();
+        $this->rendererAdapter->drawLine($p1, $p2);
+
+        $this->checkLineAssertion(self::FROM_X, self::FROM_Y, self::TO_X, self::TO_Y);
+    }
+
     public function testNothingWrittenAfterMoveTo(): void
     {
         $this->rendererAdapter->moveTo(self::FROM_X, self::FROM_Y);
@@ -79,11 +99,8 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
     {
         $this->rendererAdapter->beginDraw();
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
-        $this->stdout->rewind();
-        $this->assertStringContainsString('<draw>', $this->stdout->fgets());
 
-        $expectedString = '<line fromX="0" fromY="0" toX="' . self::TO_X . '" toY="' . self::TO_Y . '"/>';
-        $this->assertStringContainsString($expectedString, $this->stdout->fgets());
+        $this->checkLineAssertion(0, 0, self::TO_X, self::TO_Y);
     }
 
     public function testCorrectlyWrittenWhenMoveToAndLineTo(): void
@@ -92,11 +109,7 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
         $this->rendererAdapter->moveTo(self::FROM_X, self::FROM_Y);
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
 
-        $this->stdout->rewind();
-        $this->assertStringContainsString('<draw>', $this->stdout->fgets());
-
-        $expectedString = '<line fromX="' . self::FROM_X . '" fromY="' . self::FROM_Y . '" toX="' . self::TO_X . '" toY="' . self::TO_Y . '"/>';
-        $this->assertStringContainsString($expectedString, $this->stdout->fgets());
+        $this->checkLineAssertion(self::FROM_X, self::FROM_Y, self::TO_X, self::TO_Y);
     }
 
     protected function setUp(): void
@@ -110,9 +123,17 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
         unset($this->rendererAdapter);
     }
 
-
     private function eofStdout(): bool
     {
         return '' === $this->stdout->fread(1) && $this->stdout->eof();
+    }
+
+    private function checkLineAssertion(int $fromX, int $fromY, int $toX, int $toY): void
+    {
+        $this->stdout->rewind();
+        $this->assertStringContainsString('<draw>', $this->stdout->fgets());
+
+        $expectedString = sprintf('<line fromX="%d" fromY="%d" toX="%d" toY="%d"/>', $fromX, $fromY, $toX, $toY);
+        $this->assertStringContainsString($expectedString, $this->stdout->fgets());
     }
 }
