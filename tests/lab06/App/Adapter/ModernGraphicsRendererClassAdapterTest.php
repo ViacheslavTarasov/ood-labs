@@ -1,48 +1,83 @@
 <?php
 declare(strict_types=1);
 
-use Lab06\App\Adapter\ModernGraphicsRendererAdapter;
-use Lab06\ModernGraphicsLib\ModernGraphicsRenderer;
+use Lab06\App\Adapter\ModernGraphicsRendererClassAdapter;
 use PHPUnit\Framework\TestCase;
 
-class ModernGraphicsRendererAdapterTest extends TestCase
+class ModernGraphicsRendererClassAdapterTest extends TestCase
 {
     private const FROM_X = 50;
     private const FROM_Y = 70;
     private const TO_X = 150;
     private const TO_Y = 250;
 
-    /** @var ModernGraphicsRendererAdapter */
+    /** @var ModernGraphicsRendererClassAdapter */
     private $rendererAdapter;
     /** @var SplTempFileObject */
     private $stdout;
 
-    public function testWrittenDrawInStdoutAfterInit(): void
+    public function testStdoutIsEmptyAfterInit(): void
     {
+        $this->assertEquals('', $this->stdout->fread(1));
+        $this->assertTrue($this->stdout->eof());
+    }
+
+    public function testBeginDrawWrittenInStdout(): void
+    {
+        $this->rendererAdapter->beginDraw();
         $this->stdout->rewind();
         $this->assertEquals('<draw>' . PHP_EOL, $this->stdout->fgets());
         $this->assertTrue($this->eofStdout());
     }
 
-    public function testWrittenEndDrawInStdoutAfterDestruct(): void
+    public function testThrowsExceptionTwoCallBeginDraw(): void
     {
-        unset($this->rendererAdapter);
+        $this->expectException(LogicException::class);
+        $this->rendererAdapter->beginDraw();
+        $this->rendererAdapter->beginDraw();
+    }
+
+    public function testThrowsExceptionEndDrawBeforeBeginDraw(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->rendererAdapter->endDraw();
+    }
+
+    public function testBeginDrawAndEndDrawWrittenInStdout(): void
+    {
+        $this->rendererAdapter->beginDraw();
+        $this->rendererAdapter->endDraw();
         $this->stdout->rewind();
         $this->assertEquals('<draw>' . PHP_EOL, $this->stdout->fgets());
         $this->assertEquals('</draw>' . PHP_EOL, $this->stdout->fgets());
         $this->assertTrue($this->eofStdout());
     }
 
+    public function testThrowsExceptionTwoCallEndDraw(): void
+    {
+        $this->rendererAdapter->beginDraw();
+        $this->rendererAdapter->endDraw();
+        $this->expectException(LogicException::class);
+        $this->rendererAdapter->endDraw();
+    }
+
     public function testNothingWrittenAfterMoveTo(): void
     {
         $this->rendererAdapter->moveTo(self::FROM_X, self::FROM_Y);
         $this->stdout->rewind();
-        $this->assertEquals('<draw>' . PHP_EOL, $this->stdout->fgets());
-        $this->assertTrue($this->eofStdout());
+        $this->assertEquals('', $this->stdout->fread(1));
+        $this->assertTrue($this->stdout->eof());
     }
 
-    public function testWrittenWhenCallsLineToWithoutMoveTo(): void
+    public function testThrowsExceptionLineToWithoutBeginDraw(): void
     {
+        $this->expectException(LogicException::class);
+        $this->rendererAdapter->lineTo(10, 20);
+    }
+
+    public function testWrittenLineFromStartPointWithoutCallsMoveTo(): void
+    {
+        $this->rendererAdapter->beginDraw();
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
         $this->stdout->rewind();
         $this->assertStringContainsString('<draw>', $this->stdout->fgets());
@@ -51,8 +86,9 @@ class ModernGraphicsRendererAdapterTest extends TestCase
         $this->assertStringContainsString($expectedString, $this->stdout->fgets());
     }
 
-    public function testWrittenInStdoutWhenMoveToAndLineTo(): void
+    public function testCorrectlyWrittenWhenMoveToAndLineTo(): void
     {
+        $this->rendererAdapter->beginDraw();
         $this->rendererAdapter->moveTo(self::FROM_X, self::FROM_Y);
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
 
@@ -66,13 +102,14 @@ class ModernGraphicsRendererAdapterTest extends TestCase
     protected function setUp(): void
     {
         $this->stdout = new SplTempFileObject();
-        $this->rendererAdapter = new ModernGraphicsRendererAdapter(New ModernGraphicsRenderer($this->stdout));
+        $this->rendererAdapter = new ModernGraphicsRendererClassAdapter($this->stdout);
     }
 
     protected function tearDown(): void
     {
         unset($this->rendererAdapter);
     }
+
 
     private function eofStdout(): bool
     {

@@ -14,5 +14,4 @@ class Canvas implements CanvasInterface
     {
         echo 'Line To (' . $x . ', ' . $y . ')' . PHP_EOL;
     }
-
 }

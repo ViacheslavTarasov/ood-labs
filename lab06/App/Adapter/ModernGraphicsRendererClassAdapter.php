@@ -8,7 +8,7 @@ use Lab06\ModernGraphicsLib\ModernGraphicsRenderer;
 use Lab06\ModernGraphicsLib\Point;
 use SplFileObject;
 
-class ModernRendererClassAdapter extends ModernGraphicsRenderer implements CanvasInterface
+class ModernGraphicsRendererClassAdapter extends ModernGraphicsRenderer implements CanvasInterface
 {
     /** @var Point */
     private $start;
@@ -17,7 +17,6 @@ class ModernRendererClassAdapter extends ModernGraphicsRenderer implements Canva
     {
         parent::__construct($stdout);
         $this->start = new Point(0, 0);
-        $this->beginDraw();
     }
 
     public function moveTo(int $x, int $y): void
