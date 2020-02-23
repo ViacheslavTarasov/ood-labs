@@ -10,6 +10,7 @@ use Lab06\ShapeDrawingLib\CanvasPainter;
 use Lab06\ShapeDrawingLib\Point;
 use Lab06\ShapeDrawingLib\Rectangle;
 use Lab06\ShapeDrawingLib\Triangle;
+use SplFileObject;
 
 class App
 {
@@ -18,8 +19,8 @@ class App
 
     public function run(): void
     {
+        $this->stdout = new SplFileObject('php://stdout', 'w');
         $line = readline("Should we use new API (y)? ");
-
         if (trim(mb_strtolower($line)) === 'y') {
             $this->paintPictureOnModernGraphicsRenderer();
         } else {
