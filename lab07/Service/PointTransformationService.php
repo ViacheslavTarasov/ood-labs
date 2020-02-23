@@ -1,0 +1,20 @@
+<?php
+declare(strict_types=1);
+
+namespace Lab07\Service;
+
+use Lab07\Common\Point;
+use Lab07\Shape\Frame;
+
+class PointTransformationService
+{
+    public function transform(Point $point, Frame $oldFrame, Frame $newFrame): Point
+    {
+        $xTransform = $newFrame->getWidth() / $oldFrame->getWidth();
+        $newX = $xTransform * ($point->getX() - $oldFrame->getLeftTop()->getX()) + $newFrame->getLeftTop()->getX();
+        $yTransform = $newFrame->getHeight() / $oldFrame->getHeight();
+        $newY = $yTransform * ($point->getY() - $oldFrame->getLeftTop()->getY()) + $newFrame->getLeftTop()->getY();
+
+        return new Point((int)$newX, (int)$newY);
+    }
+}
