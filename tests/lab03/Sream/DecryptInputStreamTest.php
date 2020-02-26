@@ -17,13 +17,13 @@ class DecryptInputStreamTest extends TestCase
     /** @var EncryptionService */
     private $encryptionService;
 
-    public function testReadByteAndDecryptedCorrectly(): void
+    public function testReadByteReturnsDecryptedByteFromEncryptedStream(): void
     {
         $this->assertEquals($this->encryptionService->decrypt(self::TEST_TEXT[0]), $this->decryptInputStream->readByte());
         $this->assertEquals($this->encryptionService->decrypt(self::TEST_TEXT[1]), $this->decryptInputStream->readByte());
     }
 
-    public function testReadBlockReturnsDecryptedString(): void
+    public function testReadBlockReturnsDecryptedStringFromEncryptedStream(): void
     {
         $expected = '';
         $length = 3;
@@ -33,7 +33,7 @@ class DecryptInputStreamTest extends TestCase
         $this->assertEquals($expected, $this->decryptInputStream->readBlock($length));
     }
 
-    public function testIsEofReturnsTrue(): void
+    public function testIsEofReturnsTrueWhenInputStreamIsEofReturnsTrue(): void
     {
         $inputStream = $this->createMock(InputDataStreamInterface::class);
         $inputStream->expects($this->once())->method('isEof')->willReturn(true);
@@ -41,7 +41,7 @@ class DecryptInputStreamTest extends TestCase
         $this->assertTrue($decryptInputStream->isEof());
     }
 
-    public function testIsEofReturnsFalse(): void
+    public function testIsEofReturnsFalseWhenInputStreamIsEofReturnsFalse(): void
     {
         $inputStream = $this->createMock(InputDataStreamInterface::class);
         $inputStream->expects($this->once())->method('isEof')->willReturn(false);
@@ -49,7 +49,7 @@ class DecryptInputStreamTest extends TestCase
         $this->assertFalse($decryptInputStream->isEof());
     }
 
-    public function testReturnsTrueIsEofWhenEndHasBeenReached(): void
+    public function testIsEofReturnsTrueWhenEndOfStreamHasBeenReached(): void
     {
         $length = strlen(self::TEST_TEXT);
         for ($i = 0; $i < $length; $i++) {

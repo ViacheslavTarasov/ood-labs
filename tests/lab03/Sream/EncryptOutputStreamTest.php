@@ -16,20 +16,13 @@ class EncryptOutputStreamTest extends TestCase
     /** @var EncryptionService */
     private $encryptionService;
 
-    public function setUp(): void
-    {
-        $this->outputStream = new InMemoryOutputStream();
-        $this->encryptOutputStream = new EncryptOutputStream($this->outputStream, self::ENCRYPTION_KEY);
-        $this->encryptionService = new EncryptionService(self::ENCRYPTION_KEY);
-    }
-
-    public function testWrittenEmptyString(): void
+    public function testWriteByteWrittenEmptyString(): void
     {
         $this->encryptOutputStream->writeByte('');
         $this->assertEquals('', $this->outputStream->getData());
     }
 
-    public function testWrittenEncryptedByteInStream(): void
+    public function testWriteByteWrittenEncryptedByteInStream(): void
     {
         $char = 'a';
         $this->encryptOutputStream->writeByte($char);
@@ -37,7 +30,7 @@ class EncryptOutputStreamTest extends TestCase
         $this->assertEquals(1, strlen($this->outputStream->getData()));
     }
 
-    public function testWrittenEncryptedBlock(): void
+    public function testWriteBlockWrittenEncryptedBlockInStream(): void
     {
         $expected = '';
         $length = 5;
@@ -46,5 +39,12 @@ class EncryptOutputStreamTest extends TestCase
         }
         $this->encryptOutputStream->writeBlock(self::TEST_TEXT, $length);
         $this->assertEquals($expected, $this->outputStream->getData());
+    }
+
+    protected function setUp(): void
+    {
+        $this->outputStream = new InMemoryOutputStream();
+        $this->encryptOutputStream = new EncryptOutputStream($this->outputStream, self::ENCRYPTION_KEY);
+        $this->encryptionService = new EncryptionService(self::ENCRYPTION_KEY);
     }
 }

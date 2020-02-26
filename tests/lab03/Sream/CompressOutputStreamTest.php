@@ -21,12 +21,11 @@ class CompressOutputStreamTest extends TestCase
 
     public function testWriteBlockDontWrittenInStreamWhenEmptyString(): void
     {
-        $this->compressOutputStream->writeBlock('', strlen(''));
         $this->compressOutputStream->writeBlock('', 5);
         $this->assertEquals(0, strlen($this->outputStream->getData()));
     }
 
-    public function testDontWriteInStreamIfNotChangedChar(): void
+    public function testWriteByteDontWriteInStreamIfNotChangedChar(): void
     {
         $this->compressOutputStream->writeByte('a');
         $this->compressOutputStream->writeByte('a');
@@ -34,7 +33,7 @@ class CompressOutputStreamTest extends TestCase
         $this->assertEquals(0, strlen($this->outputStream->getData()));
     }
 
-    public function testByteWasWritten(): void
+    public function testWriteByteWrittenInStreamAfterChangedChar(): void
     {
         $char = 'a';
         $this->compressOutputStream->writeByte($char);

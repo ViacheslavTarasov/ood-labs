@@ -13,26 +13,38 @@ class EncryptionServiceTest extends TestCase
     private $encryption;
     private $map;
 
-    public function setUp(): void
+    public function testEncryptShouldEncodeEmptyStringIntoEmptyString(): void
     {
-        $this->map = (new EncryptionMapGenerator())->generate(self::ENCRYPTION_KEY);
-        $this->encryption = new EncryptionService(self::ENCRYPTION_KEY);
+        $this->assertEquals('', $this->encryption->encrypt(''));
     }
 
-    public function testEncrypt(): void
+    public function testEncryptShouldReturnsDifferentResultForDifferentChars(): void
     {
-        $char = 'f';
-        $expected = chr(array_search(ord($char), $this->map));
-        $this->assertEquals('', $this->encryption->encrypt(''));
-        $this->assertEquals($expected, $this->encryption->encrypt($char));
         $this->assertNotEquals($this->encryption->encrypt('a'), $this->encryption->encrypt('b'));
     }
 
-    public function testDecrypt(): void
+    public function testEncryptShouldReturnsCharFromEncryptionMap(): void
+    {
+        $char = 'f';
+        $expected = chr(array_search(ord($char), $this->map));
+        $this->assertEquals($expected, $this->encryption->encrypt($char));
+    }
+
+    public function testDecryptShouldDecodeEmptyStringIntoEmptyString(): void
+    {
+        $this->assertEquals('', $this->encryption->encrypt(''));
+    }
+
+    public function testDecryptShouldReturnsCharFromEncryptionMap(): void
     {
         $char = 'N';
         $expected = chr($this->map[ord($char)]);
-        $this->assertEquals('', $this->encryption->decrypt(''));
         $this->assertEquals($expected, $this->encryption->decrypt($char));
+    }
+
+    protected function setUp(): void
+    {
+        $this->map = (new EncryptionMapGenerator())->generate(self::ENCRYPTION_KEY);
+        $this->encryption = new EncryptionService(self::ENCRYPTION_KEY);
     }
 }

@@ -8,55 +8,46 @@ class FileOutputStreamTest extends TestCase
     private const TEST_TEXT = 'test text';
     private const FILE_PATH_OUTPUT = __DIR__ . '/test.output';
 
-    public function setUp(): void
-    {
-        file_put_contents(self::FILE_PATH_OUTPUT, '');
-    }
+    /** @var FileOutputStream */
+    private $outputStream;
 
-    public function tearDown(): void
+    public function testWriteByteEmptyStringNothingWritingInFile(): void
     {
-        if (file_exists(self::FILE_PATH_OUTPUT)) {
-            unlink(self::FILE_PATH_OUTPUT);
-        }
-    }
-
-    public function testWriteByteEmpty(): void
-    {
-        $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
-        $outputStream->writeByte('');
+        $this->outputStream->writeByte('');
         $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), '');
     }
 
-    public function testWriteByte(): void
+    public function testWriteByteWritingCharsInFileSequentially(): void
     {
         $length = strlen(self::TEST_TEXT);
-        $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
         for ($i = 0; $i < $length; $i++) {
-            $outputStream->writeByte(self::TEST_TEXT[$i]);
+            $this->outputStream->writeByte(self::TEST_TEXT[$i]);
             $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), substr(self::TEST_TEXT, 0, $i + 1));
         }
     }
 
-    public function testWriteBlockEmpty(): void
+    public function testWriteBlockWritingEmptyStringInFile(): void
     {
-        $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
-        $outputStream->writeBlock('', 10);
+        $this->outputStream->writeBlock('', 10);
         $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), '');
     }
 
-    public function testWriteBlock(): void
+    public function testWriteBlockWritingExpectedTextInFile(): void
     {
-        $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
-        $outputStream->writeBlock(self::TEST_TEXT, strlen(self::TEST_TEXT));
+        $this->outputStream->writeBlock(self::TEST_TEXT, strlen(self::TEST_TEXT));
         $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), self::TEST_TEXT);
     }
 
-
-    public function testWriteBlockPart(): void
+    protected function setUp(): void
     {
-        $length = 4;
-        $outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
-        $outputStream->writeBlock(self::TEST_TEXT, $length);
-        $this->assertEquals(file_get_contents(self::FILE_PATH_OUTPUT), substr(self::TEST_TEXT, 0, $length));
+        file_put_contents(self::FILE_PATH_OUTPUT, '');
+        $this->outputStream = new FileOutputStream(self::FILE_PATH_OUTPUT);
+    }
+
+    protected function tearDown(): void
+    {
+        if (file_exists(self::FILE_PATH_OUTPUT)) {
+            unlink(self::FILE_PATH_OUTPUT);
+        }
     }
 }

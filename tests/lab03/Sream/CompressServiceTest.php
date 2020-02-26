@@ -11,23 +11,23 @@ class CompressServiceTest extends TestCase
     /** @var CompressService */
     private $compressService;
 
-    public function testReturnsNullIfEmptyByte(): void
+    public function testGetPackedOrAccumulateReturnsNullIfEmptyByte(): void
     {
         $this->assertNull($this->compressService->getPackedOrAccumulate(''));
     }
 
-    public function testReturnsNullIfOneByte(): void
+    public function testGetPackedOrAccumulateReturnsNullIfOneByte(): void
     {
         $this->assertNull($this->compressService->getPackedOrAccumulate(self::BYTE));
     }
 
-    public function testReturnsNullIfByteIsRepeated(): void
+    public function testGetPackedOrAccumulateReturnsNullIfByteIsRepeated(): void
     {
         $this->assertNull($this->compressService->getPackedOrAccumulate(self::BYTE));
         $this->assertNull($this->compressService->getPackedOrAccumulate(self::BYTE));
     }
 
-    public function testReturnsPacketStringOnlyAfterAccumulatorSizeRepeated(): void
+    public function testGetPackedOrAccumulateReturnsPacketStringOnlyAfterAccumulatorSizeRepeated(): void
     {
         for ($i = 0; $i < CompressService::ACCUMULATOR_SIZE; $i++) {
             $this->assertNull($this->compressService->getPackedOrAccumulate(self::BYTE));
@@ -42,7 +42,7 @@ class CompressServiceTest extends TestCase
         return pack('Ca', $count, $byte);
     }
 
-    public function testReturnsPackedWhenAnotherByte(): void
+    public function testGetPackedOrAccumulateReturnsPackedWhenAnotherByte(): void
     {
         $this->compressService->getPackedOrAccumulate(self::BYTE);
         $this->compressService->getPackedOrAccumulate(self::BYTE);

@@ -19,19 +19,20 @@ class DecompressInputStreamTest extends TestCase
     private $compressService;
 
 
-    public function testReadByteReturnsEmptyString(): void
+    public function testReadByteReturnsEmptyStringWhenCompressedDataIsEmpty(): void
     {
         $decompressInputStream = $this->getDecompressInputStream('');
         $this->assertEquals('', $decompressInputStream->readByte());
     }
 
-    public function testReadByteReturnsStringOneCharLong(): void
+    public function testReadByteReturnsStringOneCharLongWhenCompressedDataIsNotEmpty(): void
     {
         $decompressInputStream = $this->getDecompressInputStream(self::TEST_TEXT);
+        $this->assertTrue(strlen(self::TEST_TEXT) > 1);
         $this->assertEquals(1, strlen($decompressInputStream->readByte()));
     }
 
-    public function testSuccessivelyReadByte(): void
+    public function testReadByteReadsCompressedDataSuccessively(): void
     {
         $decompressInputStream = $this->getDecompressInputStream(self::TEST_TEXT);
         $length = strlen(self::TEST_TEXT);
@@ -40,24 +41,19 @@ class DecompressInputStreamTest extends TestCase
         }
     }
 
-    public function testReadBlockReturnsEmptyString(): void
+    public function testReadBlockReturnsEmptyStringWhenStreamIsEmpty(): void
     {
         $decompressInputStream = $this->getDecompressInputStream('');
         $this->assertEquals('', $decompressInputStream->readBlock(3));
     }
 
-    public function testReadBlock(): void
+    public function testReadBlockReturnsExpectedTextWithExpectedLength(): void
     {
         $decompressInputStream = $this->getDecompressInputStream(self::TEST_TEXT);
         $this->assertEquals(self::READ_BLOCK_TEXT, $decompressInputStream->readBlock(self::READ_BLOCK_LENGTH));
     }
 
-    public function testReadBlockFully(): void
-    {
-        $this->assertEquals(self::TEST_TEXT, $this->decompressInputStream->readBlock(strlen(self::TEST_TEXT)));
-    }
-
-    public function testReadBlockWhenLengthGreaterThanStringLength(): void
+    public function testReadBlockReturnsStringSizeDoesNotExceedSizeOfCompressedData(): void
     {
         $this->assertEquals(self::TEST_TEXT, $this->decompressInputStream->readBlock(strlen(self::TEST_TEXT) + 10));
     }
@@ -70,7 +66,7 @@ class DecompressInputStreamTest extends TestCase
         $this->assertEquals(4, strlen($decompressInputStream->readBlock(4)));
     }
 
-    public function testReadBlockReturnsCorrectlyString(): void
+    public function testReadBlockReturnsCorrectlyStringOnSequentialReads(): void
     {
         $decompressInputStream = $this->getDecompressInputStream(self::TEST_TEXT);
         $this->assertEquals(substr(self::TEST_TEXT, 0, 3), $decompressInputStream->readBlock(3));
@@ -78,13 +74,13 @@ class DecompressInputStreamTest extends TestCase
 
     }
 
-    public function testReturnsTrueIsEofWhenEmptyString(): void
+    public function testIsEofReturnsTrueWhenCompressedDataIsEmptyString(): void
     {
         $decompressInputStream = $this->getDecompressInputStream('');
         $this->assertTrue($decompressInputStream->isEof());
     }
 
-    public function testReturnsTrueIsEofWhenEndHasBeenReached(): void
+    public function testIsEofReturnsTrueWhenEndHasBeenReached(): void
     {
         $decompressInputStream = $this->getDecompressInputStream(self::TEST_TEXT);
         $length = strlen(self::TEST_TEXT);
