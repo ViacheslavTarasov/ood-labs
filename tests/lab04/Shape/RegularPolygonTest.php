@@ -1,6 +1,5 @@
 <?php
 
-
 use Lab04\Canvas\CanvasInterface;
 use Lab04\Color\Color;
 use Lab04\Common\Point;

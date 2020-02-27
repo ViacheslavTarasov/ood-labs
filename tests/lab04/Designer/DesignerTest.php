@@ -1,6 +1,5 @@
 <?php
 
-
 use Lab04\Designer\Designer;
 use Lab04\Shape\Shape;
 use Lab04\Shape\ShapeFactoryInterface;

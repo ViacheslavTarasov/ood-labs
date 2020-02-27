@@ -1,6 +1,5 @@
 <?php
 
-
 use Lab04\Common\Point;
 use PHPUnit\Framework\TestCase;
 

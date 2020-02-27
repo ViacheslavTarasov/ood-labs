@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lab04\Shape;
 
@@ -8,14 +9,13 @@ use Lab04\Common\Point;
 
 class RegularPolygon extends Shape
 {
+    private const MIN_VERTEX_COUNT = 3;
     /** @var Point */
     private $center;
     /** @var int */
     private $vertexCount;
     /** @var int */
     private $radius;
-
-    private const MIN_VERTEX_COUNT = 3;
 
     public function __construct(Color $color, Point $center, int $vertexCount, int $radius)
     {
@@ -43,8 +43,8 @@ class RegularPolygon extends Shape
     {
         $angle = 360 / $this->vertexCount;
         $nextAngleInRad = deg2rad($angle * $number - 90);
-        $x = round($this->center->getX() + $this->radius * cos($nextAngleInRad));
-        $y = round($this->center->getY() + $this->radius * sin($nextAngleInRad));
+        $x = (int)round($this->center->getX() + $this->radius * cos($nextAngleInRad));
+        $y = (int)round($this->center->getY() + $this->radius * sin($nextAngleInRad));
         return new Point($x, $y);
     }
 
