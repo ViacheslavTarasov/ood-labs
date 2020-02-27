@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Lab05\Command\Document\ChangeTextCommand;
-use Lab05\Document\History;
+use Lab05\Document\Command\ChangeTextCommand;
 use Lab05\Document\Paragraph;
+use Lab05\History\History;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

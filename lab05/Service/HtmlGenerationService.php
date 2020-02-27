@@ -3,31 +3,30 @@ declare(strict_types=1);
 
 namespace Lab05\Service;
 
-use Lab05\Document\DocumentItemInterface;
-use Lab05\Document\DocumentItems;
-use Lab05\Document\ImageInterface;
+use Lab05\Service\Input\DocumentItemsInput;
+use Lab05\Service\Input\ImageInput;
+use Lab05\Service\Input\ParagraphInput;
 
 class HtmlGenerationService
 {
-    public function generate(string $title, DocumentItems $items, string $imagesRelativeDir): string
+    public function generate(string $title, DocumentItemsInput $items, string $imagesRelativeDir): string
     {
         $body = '';
-        /** @var DocumentItemInterface $item */
+        $title = htmlspecialchars($title);
         foreach ($items as $item) {
-            $image = $item->getImage();
-            if ($image) {
-                $src = $this->getImageRelativePath($image, $imagesRelativeDir);
-                $body .= "<img src='{$src}' width='{$image->getWidth()}' height='{$image->getHeight()}' alt=''>";
+            if ($item instanceof ImageInput) {
+                $src = $this->getImageRelativePath($item, $imagesRelativeDir);
+                $body .= "<img src='{$src}' width='{$item->getWidth()}' height='{$item->getHeight()}' alt=''>";
             }
-            $paragraph = $item->getParagraph();
-            if ($paragraph) {
-                $body .= "<p>{$paragraph->getText()}</p>";
+            if ($item instanceof ParagraphInput) {
+                $text = htmlspecialchars($item->getText());
+                $body .= "<p>{$text}</p>";
             }
         }
         return $this->getHtml($title, $body);
     }
 
-    private function getImageRelativePath(ImageInterface $image, string $imagesRelativeDir): string
+    private function getImageRelativePath(ImageInput $image, string $imagesRelativeDir): string
     {
         return $imagesRelativeDir . DIRECTORY_SEPARATOR . pathinfo($image->getPath(), PATHINFO_BASENAME);
     }

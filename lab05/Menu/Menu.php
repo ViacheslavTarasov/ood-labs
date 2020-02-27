@@ -42,19 +42,6 @@ class Menu implements MenuInterface
         }
     }
 
-    public function executeCommand(string $line): bool
-    {
-        $this->exit = false;
-        $shortcut = $this->extractShortcut($line);
-        $arguments = $this->extractArguments($line);
-        $menuItem = $this->getItemByShortcut($shortcut);
-        if ($menuItem === null) {
-            throw new InvalidArgumentException('unknown command' . PHP_EOL);
-        }
-        $menuItem->getCommand()->execute($arguments);
-        return !$this->exit;
-    }
-
     public function run(): void
     {
         $execute = true;
@@ -73,14 +60,17 @@ class Menu implements MenuInterface
 
     }
 
-    public function exit(): void
+    public function executeCommand(string $line): bool
     {
-        $this->exit = true;
-    }
-
-    private function getItemByShortcut(string $shortcut): ?MenuItem
-    {
-        return $this->items[$shortcut] ?? null;
+        $this->exit = false;
+        $shortcut = $this->extractShortcut($line);
+        $arguments = $this->extractArguments($line);
+        $menuItem = $this->getItemByShortcut($shortcut);
+        if ($menuItem === null) {
+            throw new InvalidArgumentException('unknown command' . PHP_EOL);
+        }
+        $menuItem->getCommand()->execute($arguments);
+        return !$this->exit;
     }
 
     private function extractShortcut(string $line): string
@@ -93,6 +83,16 @@ class Menu implements MenuInterface
     {
         preg_match('/^\s*\S+\s+(?<arguments>.*\S)\s*$/', $line, $matches);
         return $matches['arguments'] ?? '';
+    }
+
+    private function getItemByShortcut(string $shortcut): ?MenuItem
+    {
+        return $this->items[$shortcut] ?? null;
+    }
+
+    public function exit(): void
+    {
+        $this->exit = true;
     }
 
 }

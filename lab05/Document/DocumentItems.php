@@ -3,15 +3,16 @@ declare(strict_types=1);
 
 namespace Lab05\Document;
 
-use Iterator;
+use ArrayIterator;
+use IteratorAggregate;
 
-class DocumentItems implements Iterator
+class DocumentItems implements IteratorAggregate
 {
     private $items = [];
 
-    public function add(DocumentItemInterface $item, int $position = null)
+    public function add(DocumentItem $item, int $position = null): void
     {
-        if ($position < 0 || $position > $this->getCountItems()) {
+        if ($position < 0 || $position > $this->getItemCount()) {
             throw new \InvalidArgumentException('invalid position');
         }
 
@@ -22,7 +23,7 @@ class DocumentItems implements Iterator
         }
     }
 
-    public function getCountItems(): int
+    public function getItemCount(): int
     {
         return count($this->items);
     }
@@ -35,34 +36,13 @@ class DocumentItems implements Iterator
         array_splice($this->items, $position, 1);
     }
 
-    public function getItem(int $position): ?DocumentItemInterface
+    public function getItem(int $position): ?DocumentItem
     {
         return $this->items[$position] ?? null;
     }
 
-    public function rewind(): void
+    public function getIterator()
     {
-        reset($this->items);
-    }
-
-    public function current()
-    {
-        return current($this->items);
-    }
-
-    public function key()
-    {
-        return key($this->items);
-    }
-
-    public function next()
-    {
-        return next($this->items);
-    }
-
-    public function valid(): bool
-    {
-        $key = key($this->items);
-        return $key !== null && $key !== false;
+        return new ArrayIterator($this->items);
     }
 }

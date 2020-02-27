@@ -5,6 +5,9 @@ namespace Lab05\Document;
 
 use Lab05\Service\FilesystemService;
 use Lab05\Service\HtmlGenerationService;
+use Lab05\Service\Input\DocumentItemsInput;
+use Lab05\Service\Input\ImageInput;
+use Lab05\Service\Input\ParagraphInput;
 
 class DocumentSavingService
 {
@@ -40,14 +43,27 @@ class DocumentSavingService
             throw new \InvalidArgumentException('file exist');
         }
         $imagesAbsoluteDir = $dir . DIRECTORY_SEPARATOR . self::IMAGES_RELATIVE_DIR;
-        file_put_contents($path, $this->htmlGenerationService->generate($title, $items, self::IMAGES_RELATIVE_DIR));
+        $inputItems = [];
+        /** @var DocumentItem $item */
+        foreach ($items as $item) {
+            if ($item->getParagraph()) {
+                $inputItems[] = new ParagraphInput($item->getParagraph()->getText());
+            }
+            $image = $item->getImage();
+            if ($image) {
+                $inputItems[] = new ImageInput($image->getPath(), $image->getWidth(), $image->getHeight());
+            }
+
+        }
+        $documentsItemsInput = new DocumentItemsInput($inputItems);
+        file_put_contents($path, $this->htmlGenerationService->generate($title, $documentsItemsInput, self::IMAGES_RELATIVE_DIR));
         $this->copyImages($items, $imagesAbsoluteDir);
     }
 
     private function copyImages(DocumentItems $items, string $destinationDir): void
     {
         $this->filesystemService->createDirectory($destinationDir);
-        /** @var DocumentItemInterface $item */
+        /** @var DocumentItem $item */
         foreach ($items as $item) {
             $image = $item->getImage();
             if ($image === null) {

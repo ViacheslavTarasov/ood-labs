@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Lab05\Document;
 
-use Lab05\Command\Document\ChangeTextCommand;
+use Lab05\Document\Command\ChangeTextCommand;
+use Lab05\History\History;
 
 class Paragraph implements ParagraphInterface
 {

@@ -7,23 +7,20 @@ use SplFileObject;
 
 class DocumentPrinter
 {
-    /** @var DocumentInterface */
-    private $document;
     /** @var SplFileObject */
     private $stdout;
 
-    public function __construct(DocumentInterface $document, SplFileObject $stdout)
+    public function __construct(SplFileObject $stdout)
     {
-        $this->document = $document;
         $this->stdout = $stdout;
     }
 
-    public function doPrint(): void
+    public function doPrint(DocumentInterface $document): void
     {
-        $this->printTitle($this->document->getTitle());
-        $count = $this->document->getItemsCount();
+        $this->printTitle($document->getTitle());
+        $count = $document->getItemsCount();
         for ($i = 0; $i < $count; $i++) {
-            $item = $this->document->getItem($i);
+            $item = $document->getItem($i);
             if (null !== $item->getParagraph()) {
                 $this->printParagraph($i, $item->getParagraph());
             }

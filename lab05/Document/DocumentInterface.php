@@ -15,7 +15,7 @@ interface DocumentInterface
 
     public function getItemsCount(): int;
 
-    public function getItem(int $position): ?DocumentItemInterface;
+    public function getItem(int $position): ?DocumentItem;
 
     public function deleteItem(int $position): void;
 

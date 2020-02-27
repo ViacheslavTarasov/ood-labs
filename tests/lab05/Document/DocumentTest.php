@@ -4,8 +4,8 @@ declare(strict_types=1);
 use Lab05\Document\Document;
 use Lab05\Document\DocumentInterface;
 use Lab05\Document\DocumentSavingService;
-use Lab05\Document\History;
 use Lab05\Document\ImageManager;
+use Lab05\History\History;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

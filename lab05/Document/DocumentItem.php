@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lab05\Document;
 
-class DocumentItem implements DocumentItemInterface
+class DocumentItem
 {
     private $imageOrParagraph;
 

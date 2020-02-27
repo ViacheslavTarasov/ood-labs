@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Lab05\Document\DocumentItemInterface;
+use Lab05\Document\DocumentItem;
 use Lab05\Document\DocumentItems;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -10,12 +10,12 @@ class DocumentItemsTest extends TestCase
 {
     /** @var DocumentItems */
     private $documentItems;
-    /** @var DocumentItemInterface|MockObject */
+    /** @var DocumentItem|MockObject */
     private $item;
 
     public function testWhatDocumentItemsIsEmpty(): void
     {
-        $this->assertEquals(0, $this->documentItems->getCountItems());
+        $this->assertEquals(0, $this->documentItems->getItemCount());
     }
 
     public function testAddWithInvalidPosition(): void
@@ -27,23 +27,23 @@ class DocumentItemsTest extends TestCase
     public function testAddItemInEndWithGetItemsCount(): void
     {
         $this->documentItems->add($this->item);
-        $this->assertEquals(1, $this->documentItems->getCountItems());
+        $this->assertEquals(1, $this->documentItems->getItemCount());
         $this->documentItems->add($this->item);
-        $this->assertEquals(2, $this->documentItems->getCountItems());
+        $this->assertEquals(2, $this->documentItems->getItemCount());
     }
 
     public function testDeleteItemAfterAdd(): void
     {
         $this->documentItems->add($this->item);
         $this->documentItems->deleteItem(0);
-        $this->assertEquals(0, $this->documentItems->getCountItems());
+        $this->assertEquals(0, $this->documentItems->getItemCount());
     }
 
     public function testAddedItemsInPositionIsEqualsGetItems(): void
     {
-        $first = $this->createMock(DocumentItemInterface::class);
-        $second = $this->createMock(DocumentItemInterface::class);
-        $third = $this->createMock(DocumentItemInterface::class);
+        $first = $this->createMock(DocumentItem::class);
+        $second = $this->createMock(DocumentItem::class);
+        $third = $this->createMock(DocumentItem::class);
 
         $this->documentItems->add($first, 0);
         $this->documentItems->add($third, 1);
@@ -57,9 +57,9 @@ class DocumentItemsTest extends TestCase
 
     public function testDeleteItemFromPositionIsCorrectly(): void
     {
-        $first = $this->createMock(DocumentItemInterface::class);
-        $second = $this->createMock(DocumentItemInterface::class);
-        $third = $this->createMock(DocumentItemInterface::class);
+        $first = $this->createMock(DocumentItem::class);
+        $second = $this->createMock(DocumentItem::class);
+        $third = $this->createMock(DocumentItem::class);
 
         $this->documentItems->add($first);
         $this->documentItems->add($second);
@@ -76,6 +76,6 @@ class DocumentItemsTest extends TestCase
     {
         parent::setUp();
         $this->documentItems = new DocumentItems();
-        $this->item = $this->createMock(DocumentItemInterface::class);
+        $this->item = $this->createMock(DocumentItem::class);
     }
 }

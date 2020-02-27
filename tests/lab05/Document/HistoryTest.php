@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Lab05\Command\Document\CommandInterface;
-use Lab05\Document\History;
+use Lab05\History\CommandInterface;
+use Lab05\History\History;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ class HistoryTest extends TestCase
     private const COUNT_CALLS = 3;
     /** @var History */
     private $history;
-    /** @var CommandInterface|MockObject */
+    /** @var \Lab05\History\CommandInterface|MockObject */
     private $command;
 
     public function testThrowsExceptionWhenCreateHistoryWithZeroMaxLength(): void
@@ -82,7 +82,7 @@ class HistoryTest extends TestCase
 
     public function testLostCanceledCommandAfterAddNewCommand(): void
     {
-        /** @var  CommandInterface[] $commands */
+        /** @var  \Lab05\History\CommandInterface[] $commands */
         $commands = [];
         for ($i = 0; $i < self::MAX_LENGTH; $i++) {
             $commands[$i] = $this->createMock(CommandInterface::class);

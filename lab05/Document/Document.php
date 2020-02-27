@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace Lab05\Document;
 
 use InvalidArgumentException;
-use Lab05\Command\Document\ChangeTextCommand;
-use Lab05\Command\Document\DeleteDocumentItemCommand;
-use Lab05\Command\Document\InsertDocumentItemCommand;
-use Lab05\Command\Document\ResizeImageCommand;
+use Lab05\Document\Command\ChangeTextCommand;
+use Lab05\Document\Command\DeleteDocumentItemCommand;
+use Lab05\Document\Command\InsertDocumentItemCommand;
+use Lab05\Document\Command\ResizeImageCommand;
+use Lab05\History\History;
 use RuntimeException;
 
 class Document implements DocumentInterface
@@ -46,6 +47,11 @@ class Document implements DocumentInterface
         return $paragraph;
     }
 
+    public function getItemsCount(): int
+    {
+        return $this->items->getItemCount();
+    }
+
     public function replaceText($text, int $position): void
     {
         $item = $this->getItem($position);
@@ -55,6 +61,10 @@ class Document implements DocumentInterface
         $item->getParagraph()->setText($text);
     }
 
+    public function getItem(int $position): ?DocumentItem
+    {
+        return $this->items->getItem($position);
+    }
 
     public function insertImage(string $path, int $width, int $height, int $position = null): ImageInterface
     {
@@ -77,17 +87,6 @@ class Document implements DocumentInterface
         $this->history->addAndExecuteCommand(new ResizeImageCommand($item->getImage(), $width, $height));
     }
 
-
-    public function getItemsCount(): int
-    {
-        return $this->items->getCountItems();
-    }
-
-    public function getItem(int $position): ?DocumentItemInterface
-    {
-        return $this->items->getItem($position);
-    }
-
     public function deleteItem(int $position): void
     {
         $this->history->addAndExecuteCommand(new DeleteDocumentItemCommand($this->imageManager, $this->items, $position));
@@ -103,11 +102,6 @@ class Document implements DocumentInterface
         $this->history->addAndExecuteCommand(new ChangeTextCommand($this->title, $title));
     }
 
-    public function canUndo(): bool
-    {
-        return $this->history->canUndo();
-    }
-
     public function undo(): void
     {
         if (!$this->canUndo()) {
@@ -116,9 +110,9 @@ class Document implements DocumentInterface
         $this->history->undo();
     }
 
-    public function canRedo(): bool
+    public function canUndo(): bool
     {
-        return $this->history->canRedo();
+        return $this->history->canUndo();
     }
 
     public function redo(): void
@@ -127,6 +121,11 @@ class Document implements DocumentInterface
             throw new RuntimeException('can not redo');
         }
         $this->history->redo();
+    }
+
+    public function canRedo(): bool
+    {
+        return $this->history->canRedo();
     }
 
     public function save(string $path): void
