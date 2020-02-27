@@ -12,20 +12,20 @@ class CompressOutputStreamTest extends TestCase
     /** @var InMemoryOutputStream */
     private $outputStream;
 
-    public function testWriteByteDontWrittenInStreamWhenEmptyString(): void
+    public function testWriteByteDoesNotWriteInStreamWhenEmptyString(): void
     {
         $this->compressOutputStream->writeByte('');
         $this->compressOutputStream->writeByte('');
         $this->assertEquals(0, strlen($this->outputStream->getData()));
     }
 
-    public function testWriteBlockDontWrittenInStreamWhenEmptyString(): void
+    public function testWriteBlockDoesNotWriteInStreamWhenEmptyString(): void
     {
         $this->compressOutputStream->writeBlock('', 5);
         $this->assertEquals(0, strlen($this->outputStream->getData()));
     }
 
-    public function testWriteByteDontWriteInStreamIfNotChangedChar(): void
+    public function testWriteByteDoesNotWriteInStreamIfNotChangedChar(): void
     {
         $this->compressOutputStream->writeByte('a');
         $this->compressOutputStream->writeByte('a');
@@ -33,7 +33,7 @@ class CompressOutputStreamTest extends TestCase
         $this->assertEquals(0, strlen($this->outputStream->getData()));
     }
 
-    public function testWriteByteWrittenInStreamAfterChangedChar(): void
+    public function testWriteByteWritesInStreamAfterChangedChar(): void
     {
         $char = 'a';
         $this->compressOutputStream->writeByte($char);
@@ -41,6 +41,16 @@ class CompressOutputStreamTest extends TestCase
         $this->assertEquals(2, strlen($this->outputStream->getData()));
         $this->assertEquals(1, $this->unpackCount(0));
         $this->assertEquals($char, $this->unpackChar(0));
+    }
+
+    private function unpackCount(int $number): int
+    {
+        return unpack('C', $this->outputStream->getData()[$number * 2])[1];
+    }
+
+    private function unpackChar(int $number): string
+    {
+        return unpack('a', $this->outputStream->getData()[$number * 2 + 1])[1];
     }
 
     public function testWriteByteCompressedSequenceOfIdenticalChars(): void
@@ -110,15 +120,5 @@ class CompressOutputStreamTest extends TestCase
     {
         $this->outputStream = new InMemoryOutputStream();
         $this->compressOutputStream = new CompressOutputStream($this->outputStream);
-    }
-
-    private function unpackCount(int $number): int
-    {
-        return unpack('C', $this->outputStream->getData()[$number * 2])[1];
-    }
-
-    private function unpackChar(int $number): string
-    {
-        return unpack('a', $this->outputStream->getData()[$number * 2 + 1])[1];
     }
 }

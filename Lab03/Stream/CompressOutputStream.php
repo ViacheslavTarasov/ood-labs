@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lab03\Stream;
 
@@ -28,7 +29,7 @@ class CompressOutputStream extends OutputStreamDecorator
     public function writeByte(string $data): void
     {
         $packed = $this->compressService->getPackedOrAccumulate($data);
-        if ($packed) {
+        if ($packed !== null) {
             $this->getOutputDataStream()->writeBlock($packed, 2);
         }
     }

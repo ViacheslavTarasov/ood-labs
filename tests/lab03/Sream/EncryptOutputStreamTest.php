@@ -16,13 +16,13 @@ class EncryptOutputStreamTest extends TestCase
     /** @var EncryptionService */
     private $encryptionService;
 
-    public function testWriteByteWrittenEmptyString(): void
+    public function testWriteByteWritesEmptyString(): void
     {
         $this->encryptOutputStream->writeByte('');
         $this->assertEquals('', $this->outputStream->getData());
     }
 
-    public function testWriteByteWrittenEncryptedByteInStream(): void
+    public function testWriteByteWritesEncryptedByteInStream(): void
     {
         $char = 'a';
         $this->encryptOutputStream->writeByte($char);
@@ -30,7 +30,7 @@ class EncryptOutputStreamTest extends TestCase
         $this->assertEquals(1, strlen($this->outputStream->getData()));
     }
 
-    public function testWriteBlockWrittenEncryptedBlockInStream(): void
+    public function testWriteBlockWritesEncryptedBlockInStream(): void
     {
         $expected = '';
         $length = 5;
