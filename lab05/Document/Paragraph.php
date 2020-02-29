@@ -4,18 +4,18 @@ declare(strict_types=1);
 namespace Lab05\Document;
 
 use Lab05\Document\Command\ChangeTextCommand;
-use Lab05\History\History;
+use Lab05\History\CommandExecutantInterface;
 
 class Paragraph implements ParagraphInterface
 {
-    /** @var History */
-    private $history;
+    /** @var CommandExecutantInterface */
+    private $commandExecutant;
     /** @var string */
     private $text;
 
-    public function __construct(History $history, string $text)
+    public function __construct(CommandExecutantInterface $commandExecutant, string $text)
     {
-        $this->history = $history;
+        $this->commandExecutant = $commandExecutant;
         $this->text = $text;
     }
 
@@ -26,6 +26,6 @@ class Paragraph implements ParagraphInterface
 
     public function setText(string $text): void
     {
-        $this->history->addAndExecuteCommand(new ChangeTextCommand($this->text, $text));
+        $this->commandExecutant->addAndExecuteCommand(new ChangeTextCommand($this->text, $text));
     }
 }
