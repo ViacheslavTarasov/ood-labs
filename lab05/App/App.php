@@ -18,13 +18,13 @@ use Lab05\Document\Document;
 use Lab05\Document\DocumentInterface;
 use Lab05\Document\DocumentPrinter;
 use Lab05\Document\DocumentSavingService;
+use Lab05\Document\HtmlGenerationService;
 use Lab05\Document\ImageManager;
 use Lab05\History\History;
 use Lab05\Menu\Menu;
 use Lab05\Menu\MenuInterface;
 use Lab05\Menu\MenuItem;
 use Lab05\Service\FilesystemService;
-use Lab05\Service\HtmlGenerationService;
 use SplFileObject;
 
 class App
@@ -71,6 +71,6 @@ class App
         $this->menu->addItem(new MenuItem('undo', 'Cancel prev command', new UndoMenuCommand($this->document)));
         $this->menu->addItem(new MenuItem('redo', 'Execute canceled command', new RedoMenuCommand($this->document)));
         $this->menu->addItem(new MenuItem('list', 'Output document items', new ListMenuCommand($this->document, new DocumentPrinter($this->stdout))));
-        $this->menu->addItem(new MenuItem('save', 'save <path>', new SaveMenuCommand($this->document)));
+        $this->menu->addItem(new MenuItem('save', 'save <filePath>', new SaveMenuCommand($this->document)));
     }
 }

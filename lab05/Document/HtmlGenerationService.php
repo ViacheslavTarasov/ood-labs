@@ -1,32 +1,31 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab05\Service;
-
-use Lab05\Service\Input\DocumentItemsInput;
-use Lab05\Service\Input\ImageInput;
-use Lab05\Service\Input\ParagraphInput;
+namespace Lab05\Document;
 
 class HtmlGenerationService
 {
-    public function generate(string $title, DocumentItemsInput $items, string $imagesRelativeDir): string
+    public function generate(string $title, DocumentItems $items, string $imagesRelativeDir): string
     {
         $body = '';
         $title = htmlspecialchars($title);
+        /** @var DocumentItem $item */
         foreach ($items as $item) {
-            if ($item instanceof ImageInput) {
-                $src = $this->getImageRelativePath($item, $imagesRelativeDir);
-                $body .= "<img src='{$src}' width='{$item->getWidth()}' height='{$item->getHeight()}' alt=''>";
+            $image = $item->getImage();
+            if ($image) {
+                $src = $this->getImageRelativePath($image, $imagesRelativeDir);
+                $body .= "<img src='{$src}' width='{$image->getWidth()}' height='{$image->getHeight()}' alt=''>";
             }
-            if ($item instanceof ParagraphInput) {
-                $text = htmlspecialchars($item->getText());
+            $paragraph = $item->getParagraph();
+            if ($paragraph) {
+                $text = htmlspecialchars($paragraph->getText());
                 $body .= "<p>{$text}</p>";
             }
         }
         return $this->getHtml($title, $body);
     }
 
-    private function getImageRelativePath(ImageInput $image, string $imagesRelativeDir): string
+    private function getImageRelativePath(ImageInterface $image, string $imagesRelativeDir): string
     {
         return $imagesRelativeDir . DIRECTORY_SEPARATOR . pathinfo($image->getPath(), PATHINFO_BASENAME);
     }
@@ -35,7 +34,7 @@ class HtmlGenerationService
     {
         return "
             <!DOCTYPE html>
-            <html>
+            <htm lang=\"en\">
                 <head>
                     <title>{$title}</title>
                 </head>
