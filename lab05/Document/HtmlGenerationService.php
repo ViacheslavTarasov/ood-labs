@@ -34,7 +34,7 @@ class HtmlGenerationService
     {
         return "
             <!DOCTYPE html>
-            <htm lang=\"en\">
+            <html lang=\"en\">
                 <head>
                     <title>{$title}</title>
                 </head>

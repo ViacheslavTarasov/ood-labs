@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Lab05\App;
 
+use Lab05\App\Menu\DeleteItemMenuCommand;
 use Lab05\App\Menu\ExitMenuCommand;
 use Lab05\App\Menu\HelpMenuCommand;
 use Lab05\App\Menu\InsertImageMenuCommand;
@@ -68,6 +69,7 @@ class App
         $this->menu->addItem(new MenuItem('replaceText', 'replaceText <position> <pagraph text>', new ReplaceTextMenuCommand($this->document)));
         $this->menu->addItem(new MenuItem('insertImage', 'insertImage <position>|end <width> <height> <imagepath>', new InsertImageMenuCommand($this->document)));
         $this->menu->addItem(new MenuItem('resizeImage', 'resizeImage <position>|end <width> <height>', new ResizeImageMenuCommand($this->document)));
+        $this->menu->addItem(new MenuItem('deleteItem', 'deleteItem <position>', new DeleteItemMenuCommand($this->document)));
         $this->menu->addItem(new MenuItem('undo', 'Cancel prev command', new UndoMenuCommand($this->document)));
         $this->menu->addItem(new MenuItem('redo', 'Execute canceled command', new RedoMenuCommand($this->document)));
         $this->menu->addItem(new MenuItem('list', 'Output document items', new ListMenuCommand($this->document, new DocumentPrinter($this->stdout))));
