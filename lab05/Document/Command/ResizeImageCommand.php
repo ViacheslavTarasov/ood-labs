@@ -23,16 +23,6 @@ class ResizeImageCommand extends AbstractCommand
 
     protected function doExecute(): void
     {
-        $this->changeTextValues();
-    }
-
-    protected function doUnexecute(): void
-    {
-        $this->resize();
-    }
-
-    private function changeTextValues(): void
-    {
         $this->resize();
     }
 
@@ -43,5 +33,10 @@ class ResizeImageCommand extends AbstractCommand
         $this->image->resize($this->width, $this->height);
         $this->width = $tmpWidth;
         $this->height = $tmpHeight;
+    }
+
+    protected function doUnexecute(): void
+    {
+        $this->resize();
     }
 }
