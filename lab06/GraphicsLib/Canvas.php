@@ -14,4 +14,9 @@ class Canvas implements CanvasInterface
     {
         echo 'Line To (' . $x . ', ' . $y . ')' . PHP_EOL;
     }
+
+    public function setColor(string $hexColor): void
+    {
+        echo 'Set color ' . $hexColor . PHP_EOL;
+    }
 }

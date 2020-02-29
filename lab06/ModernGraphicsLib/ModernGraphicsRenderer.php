@@ -34,13 +34,14 @@ class ModernGraphicsRenderer
         $this->drawing = true;
     }
 
-    public function drawLine(Point $start, Point $end): void
+    public function drawLine(Point $start, Point $end, RgbaColor $color): void
     {
         if (!$this->drawing) {
             throw new LogicException('DrawLine is allowed between BeginDraw()/EndDraw() only');
         }
-
         $content = sprintf('<line fromX="%d" fromY="%d" toX="%d" toY="%d"/>', $start->getX(), $start->getY(), $end->getX(), $end->getY()) . PHP_EOL;
+        $content .= sprintf('<color r="%f" g="%f" b="%f" a="%f"/>', $color->getR(), $color->getG(), $color->getB(), $color->getAlpha()) . PHP_EOL;
+        $content .= '</line>' . PHP_EOL;
         $this->stdout->fwrite($content);
     }
 

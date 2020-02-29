@@ -10,19 +10,23 @@ class Rectangle implements CanvasDrawableInterface
     /** @var Point */
     private $leftTop;
     /** @var int */
-    private $height;
-    /** @var int */
     private $width;
+    /** @var int */
+    private $height;
+    /** @var string */
+    private $hexColor;
 
-    public function __construct(Point $leftTop, int $width, int $height)
+    public function __construct(Point $leftTop, int $width, int $height, string $hexColor = '#FFFFFF')
     {
         $this->leftTop = $leftTop;
         $this->width = $width;
         $this->height = $height;
+        $this->hexColor = $hexColor;
     }
 
     public function draw(CanvasInterface $canvas): void
     {
+        $canvas->setColor($this->hexColor);
         $leftTopX = $this->leftTop->getX();
         $leftTopY = $this->leftTop->getY();
         $canvas->moveTo($leftTopX, $leftTopY);
