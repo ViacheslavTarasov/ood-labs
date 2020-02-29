@@ -15,7 +15,7 @@ class ImageManagerTest extends TestCase
     /** @var FilesystemService|MockObject */
     private $filesystemService;
 
-    public function testCallsCopyFileWithParams(): void
+    public function testSaveCallsCopyFileWithParams(): void
     {
         $this->filesystemService->method('fileExists')->willReturn(true);
         $this->filesystemService->method('isImageFileType')->willReturn(true);

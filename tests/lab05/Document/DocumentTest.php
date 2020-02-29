@@ -33,12 +33,12 @@ class DocumentTest extends TestCase
         $this->assertEquals(self::TITLE, $this->document->getTitle());
     }
 
-    public function testCanUndoReturnFalseInitially(): void
+    public function testCanUndoReturnsFalseInitially(): void
     {
         $this->assertFalse($this->document->canUndo());
     }
 
-    public function testCanRedoReturnFalseInitially(): void
+    public function testCanRedoReturnsFalseInitially(): void
     {
         $this->assertFalse($this->document->canRedo());
     }
@@ -70,12 +70,12 @@ class DocumentTest extends TestCase
         $this->assertEquals($newTitle, $this->document->getTitle());
     }
 
-    public function testReturnsZeroGetItemsCount(): void
+    public function testGetItemsCountReturnsZero(): void
     {
         $this->assertEquals(0, $this->document->getItemsCount());
     }
 
-    public function testThrowsExceptionInsertParagraphWhenPositionIsGreaterThanItemsCount(): void
+    public function testInsertParagraphThrowsExceptionWhenPositionIsGreaterThanItemsCount(): void
     {
         $this->document->getItemsCount();
         $position = $this->document->getItemsCount() + 1;
@@ -91,7 +91,7 @@ class DocumentTest extends TestCase
         $this->assertEquals(2, $this->document->getItemsCount());
     }
 
-    public function testGetItemReturnInsertedParagraph(): void
+    public function testGetItemReturnsInsertedParagraph(): void
     {
         $paragraph = $this->document->insertParagraph(self::TEXT);
         $this->assertEquals($paragraph, $this->document->getItem(0)->getParagraph());
@@ -141,7 +141,7 @@ class DocumentTest extends TestCase
         $this->document->deleteItem($position);
     }
 
-    public function testInsertImage(): void
+    public function testImageInserted(): void
     {
         $newPath = 'newpath';
         $this->mockImageManager->method('save')->willReturn($newPath);
@@ -153,7 +153,7 @@ class DocumentTest extends TestCase
         $this->assertEquals(1, $this->document->getItemsCount());
     }
 
-    public function testThrowsExceptionInsertImageWhenPositionIsGreaterThanItemsCount(): void
+    public function testInsertImageThrowsExceptionWhenPositionIsGreaterThanItemsCount(): void
     {
         $position = $this->document->getItemsCount() + 1;
         $this->expectException(InvalidArgumentException::class);
@@ -182,7 +182,7 @@ class DocumentTest extends TestCase
         $this->document->resizeImage($position, self::WIDTH + 10, self::HEIGHT + 10);
     }
 
-    public function testSave(): void
+    public function testSaveCallsSavingServiceSaveAsHtml(): void
     {
         $path = '/1.html';
         $this->mockSavingService->expects($this->once())->method('saveAsHtml')->with($path);

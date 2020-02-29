@@ -44,7 +44,7 @@ class InsertDocumentItemCommandTest extends TestCase
         $this->command->unexecute();
     }
 
-    public function testExecuteWhenNullPosition(): void
+    public function testExecuteAddsItemWhenNullPosition(): void
     {
         $this->items->method('getItemCount')->willReturn(self::POSITION);
 
@@ -54,7 +54,7 @@ class InsertDocumentItemCommandTest extends TestCase
         $command->execute();
     }
 
-    public function testUnexecuteWhenNullPosition(): void
+    public function testUnexecuteDeleteItemWhenNullPosition(): void
     {
         $this->items->method('getItemCount')->willReturn(self::POSITION);
 
@@ -93,5 +93,4 @@ class InsertDocumentItemCommandTest extends TestCase
     {
         return new InsertDocumentItemCommand($this->imageStorage, $this->items, $this->item, $position);
     }
-
 }

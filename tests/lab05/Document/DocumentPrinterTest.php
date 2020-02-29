@@ -17,14 +17,14 @@ class DocumentPrinterTest extends TestCase
     /** @var DocumentPrinter */
     private $documentPrinter;
 
-    public function testDoPrintIfEmptyDocument(): void
+    public function testDoPrintWritesInStdoutIfEmptyDocument(): void
     {
         $this->documentPrinter->doPrint($this->document);
         $this->stdout->rewind();
         $this->assertEquals('Title: ' . Document::DEFAULT_TITLE . PHP_EOL, $this->stdout->fgets());
     }
 
-    public function testDoPrintIfDocumentWithTitleAndParagraph(): void
+    public function testDoPrintWritesInStdoutIfDocumentWithTitleAndParagraph(): void
     {
         $this->document->insertParagraph('text', 0);
         $this->documentPrinter->doPrint($this->document);

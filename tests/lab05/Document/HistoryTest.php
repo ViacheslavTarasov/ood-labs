@@ -10,9 +10,10 @@ class HistoryTest extends TestCase
 {
     private const MAX_LENGTH = 3;
     private const COUNT_CALLS = 3;
+
     /** @var History */
     private $history;
-    /** @var \Lab05\History\CommandInterface|MockObject */
+    /** @var CommandInterface|MockObject */
     private $command;
 
     public function testThrowsExceptionWhenCreateHistoryWithZeroMaxLength(): void
@@ -27,7 +28,7 @@ class HistoryTest extends TestCase
         $this->history->addAndExecuteCommand($this->command);
     }
 
-    public function testMethodUnexecuteWasCalledWhenUndoAsManyTimesAsAddedCommands(): void
+    public function testUnexecuteCalledWhenUndoAsManyTimesAsAddedCommands(): void
     {
         for ($i = 0; $i < self::COUNT_CALLS; $i++) {
             $this->history->addAndExecuteCommand($this->command);
@@ -39,7 +40,7 @@ class HistoryTest extends TestCase
         }
     }
 
-    public function testMethodExecuteNotCalledAfterRedoIfNoCommandsForRedo(): void
+    public function testExecuteNotCalledAfterRedoIfNoCommandsForRedo(): void
     {
         $this->history->addAndExecuteCommand($this->command);
         $this->command->expects($this->exactly(0))->method('execute');
@@ -82,7 +83,7 @@ class HistoryTest extends TestCase
 
     public function testLostCanceledCommandAfterAddNewCommand(): void
     {
-        /** @var  \Lab05\History\CommandInterface[] $commands */
+        /** @var CommandInterface[] $commands */
         $commands = [];
         for ($i = 0; $i < self::MAX_LENGTH; $i++) {
             $commands[$i] = $this->createMock(CommandInterface::class);

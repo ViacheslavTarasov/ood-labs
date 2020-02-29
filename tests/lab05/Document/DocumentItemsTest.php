@@ -13,18 +13,18 @@ class DocumentItemsTest extends TestCase
     /** @var DocumentItem|MockObject */
     private $item;
 
-    public function testWhatDocumentItemsIsEmpty(): void
+    public function testDocumentItemsIsEmpty(): void
     {
         $this->assertEquals(0, $this->documentItems->getItemCount());
     }
 
-    public function testAddWithInvalidPosition(): void
+    public function testThrowsExceptionAddWithInvalidPosition(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->documentItems->add($this->item, 1);
     }
 
-    public function testAddItemInEndWithGetItemsCount(): void
+    public function testItemAddedIfPositionIsNull(): void
     {
         $this->documentItems->add($this->item);
         $this->assertEquals(1, $this->documentItems->getItemCount());
@@ -32,14 +32,14 @@ class DocumentItemsTest extends TestCase
         $this->assertEquals(2, $this->documentItems->getItemCount());
     }
 
-    public function testDeleteItemAfterAdd(): void
+    public function testItemDeleted(): void
     {
         $this->documentItems->add($this->item);
         $this->documentItems->deleteItem(0);
         $this->assertEquals(0, $this->documentItems->getItemCount());
     }
 
-    public function testAddedItemsInPositionIsEqualsGetItems(): void
+    public function testAddedItemsAreEqualsGetItemsByPositions(): void
     {
         $first = $this->createMock(DocumentItem::class);
         $second = $this->createMock(DocumentItem::class);
@@ -55,7 +55,7 @@ class DocumentItemsTest extends TestCase
 
     }
 
-    public function testDeleteItemFromPositionIsCorrectly(): void
+    public function testDeletedItemFromPosition(): void
     {
         $first = $this->createMock(DocumentItem::class);
         $second = $this->createMock(DocumentItem::class);
@@ -74,7 +74,6 @@ class DocumentItemsTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->documentItems = new DocumentItems();
         $this->item = $this->createMock(DocumentItem::class);
     }

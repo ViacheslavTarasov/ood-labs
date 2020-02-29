@@ -16,7 +16,7 @@ class ParagraphTest extends TestCase
     /** @var History|MockObject */
     private $history;
 
-    public function testGettersReturn(): void
+    public function testGetTextReturnsCorrectlyValue(): void
     {
         $this->assertEquals(self::TEXT, $this->paragraph->getText());
     }
