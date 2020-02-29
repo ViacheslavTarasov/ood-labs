@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use Lab05\Document\Command\ChangeTextCommand;
 use Lab05\Document\Command\DeleteDocumentItemCommand;
 use Lab05\Document\Command\InsertDocumentItemCommand;
-use Lab05\Document\Command\ResizeImageCommand;
 use Lab05\History\History;
 use RuntimeException;
 
@@ -72,7 +71,7 @@ class Document implements DocumentInterface
             throw new InvalidArgumentException('position exceeds the number of elements in the document');
         }
         $newPath = $this->imageManager->save($path, self::IMAGES_DIR);
-        $image = new Image($newPath, $width, $height);
+        $image = new Image($this->history, $newPath, $width, $height);
         $command = new InsertDocumentItemCommand($this->imageManager, $this->items, new DocumentItem($image), $position);
         $this->history->addAndExecuteCommand($command);
         return $image;
@@ -84,7 +83,7 @@ class Document implements DocumentInterface
         if ($item === null || !$item->getImage() instanceof ImageInterface) {
             throw new InvalidArgumentException('Invalid position');
         }
-        $this->history->addAndExecuteCommand(new ResizeImageCommand($item->getImage(), $width, $height));
+        $item->getImage()->resize($width, $height);
     }
 
     public function deleteItem(int $position): void

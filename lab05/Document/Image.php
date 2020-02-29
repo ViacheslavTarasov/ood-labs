@@ -3,10 +3,16 @@ declare(strict_types=1);
 
 namespace Lab05\Document;
 
+use Lab05\Document\Command\ResizeImageCommand;
+use Lab05\History\History;
+
 class Image implements ImageInterface
 {
     public const MIN_SIZE = 1;
     public const MAX_SIZE = 10000;
+
+    /** @var History */
+    private $history;
     /** @var string */
     private $path;
     /** @var int */
@@ -14,10 +20,13 @@ class Image implements ImageInterface
     /** @var int */
     private $height;
 
-    public function __construct(string $path, int $width, int $height)
+    public function __construct(History $history, string $path, int $width, int $height)
     {
+        $this->checkSize($width, $height);
+        $this->history = $history;
         $this->path = $path;
-        $this->setSize($width, $height);
+        $this->width = $width;
+        $this->height = $height;
     }
 
     public function getPath(): string
@@ -37,10 +46,12 @@ class Image implements ImageInterface
 
     public function resize(int $width, int $height): void
     {
-        $this->setSize($width, $height);
+        $this->checkSize($width, $height);
+        $command = new ResizeImageCommand($this->width, $this->height, $width, $height);
+        $this->history->addAndExecuteCommand($command);
     }
 
-    private function setSize(int $width, int $height): void
+    private function checkSize(int $width, int $height): void
     {
         if ($width < self::MIN_SIZE || $width > self::MAX_SIZE) {
             throw new \InvalidArgumentException('invalid width');
@@ -48,7 +59,6 @@ class Image implements ImageInterface
         if ($height < self::MIN_SIZE || $height > self::MAX_SIZE) {
             throw new \InvalidArgumentException('invalid width');
         }
-        $this->width = $width;
-        $this->height = $height;
+
     }
 }

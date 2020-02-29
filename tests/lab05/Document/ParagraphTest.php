@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 class ParagraphTest extends TestCase
 {
     private const TEXT = 'test text';
+
     /** @var Paragraph */
     private $paragraph;
     /** @var History|MockObject */

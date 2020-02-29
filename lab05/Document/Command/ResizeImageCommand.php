@@ -3,22 +3,23 @@ declare(strict_types=1);
 
 namespace Lab05\Document\Command;
 
-use Lab05\Document\ImageInterface;
-
 class ResizeImageCommand extends AbstractCommand
 {
-    /** @var ImageInterface */
-    private $image;
     /** @var int */
     private $width;
     /** @var int */
     private $height;
+    /** @var int */
+    private $newWidth;
+    /** @var int */
+    private $newHeight;
 
-    public function __construct(ImageInterface $image, int $width, int $height)
+    public function __construct(int &$width, int &$height, int $newWidth, int $newHeight)
     {
-        $this->image = $image;
-        $this->width = $width;
-        $this->height = $height;
+        $this->width = &$width;
+        $this->height = &$height;
+        $this->newWidth = $newWidth;
+        $this->newHeight = $newHeight;
     }
 
     protected function doExecute(): void
@@ -26,17 +27,14 @@ class ResizeImageCommand extends AbstractCommand
         $this->resize();
     }
 
-    private function resize(): void
-    {
-        $tmpWidth = $this->image->getWidth();
-        $tmpHeight = $this->image->getHeight();
-        $this->image->resize($this->width, $this->height);
-        $this->width = $tmpWidth;
-        $this->height = $tmpHeight;
-    }
-
     protected function doUnexecute(): void
     {
         $this->resize();
+    }
+
+    private function resize(): void
+    {
+        [$this->width, $this->newWidth] = [$this->newWidth, $this->width];
+        [$this->height, $this->newHeight] = [$this->newHeight, $this->height];
     }
 }

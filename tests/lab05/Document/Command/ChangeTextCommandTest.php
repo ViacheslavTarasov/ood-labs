@@ -8,6 +8,7 @@ class ChangeTextCommandTest extends TestCase
 {
     private const TEST_TEXT = 'text';
     private const NEW_TEXT = 'new text';
+
     /** @var ChangeTextCommand */
     private $command;
     /** @var string */
@@ -20,7 +21,7 @@ class ChangeTextCommandTest extends TestCase
         $this->assertEquals(self::NEW_TEXT, $this->text);
     }
 
-    public function testRestoreTextAfterExecuteAndUnexecute(): void
+    public function testTextRestoredAfterExecuteAndUnexecute(): void
     {
         $this->command->execute();
         $this->command->unexecute();

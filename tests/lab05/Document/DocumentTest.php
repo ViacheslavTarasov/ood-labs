@@ -160,7 +160,7 @@ class DocumentTest extends TestCase
         $this->document->insertImage(self::SRC_PATH, self::WIDTH, self::HEIGHT, $position);
     }
 
-    public function testResizeImage(): void
+    public function testResizeShouldChangeImageSize(): void
     {
         $width = 10;
         $height = 20;
