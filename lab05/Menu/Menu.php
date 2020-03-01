@@ -18,11 +18,6 @@ class Menu implements MenuInterface
     /** @var SplFileObject */
     private $stdout;
 
-    /**
-     * Menu constructor.
-     * @param SplFileObject $stdin
-     * @param SplFileObject $stdout
-     */
     public function __construct(SplFileObject $stdin, SplFileObject $stdout)
     {
         $this->stdin = $stdin;

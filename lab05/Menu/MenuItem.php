@@ -3,15 +3,13 @@ declare(strict_types=1);
 
 namespace Lab05\Menu;
 
-use Lab05\History\CommandInterface;
-
 class MenuItem
 {
     /** @var string */
     private $shortcut;
     /** @var string */
     private $description;
-    /** @var CommandInterface */
+    /** @var MenuCommandInterface */
     private $command;
 
     public function __construct(string $shortcut, string $description, MenuCommandInterface $command)
