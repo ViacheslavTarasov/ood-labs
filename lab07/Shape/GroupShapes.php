@@ -6,8 +6,8 @@ namespace Lab07\Shape;
 use Lab07\Canvas\CanvasInterface;
 use Lab07\Common\Point;
 use Lab07\Service\PointTransformationService;
+use Lab07\Shape\Style\FillStyle;
 use Lab07\Shape\Style\LineStyleInterface;
-use Lab07\Shape\Style\StyleInterface;
 
 class GroupShapes implements GroupShapesInterface
 {
@@ -40,6 +40,10 @@ class GroupShapes implements GroupShapesInterface
     public function insertShape(ShapeInterface $shape, int $position): void
     {
         if ($position > $this->getShapeCount()) {
+            throw new \InvalidArgumentException('Invalid position');
+        }
+
+        if ($position < 0) {
             throw new \InvalidArgumentException('Invalid position');
         }
         array_splice($this->shapes, $position, 0, [$shape]);
@@ -90,6 +94,10 @@ class GroupShapes implements GroupShapesInterface
             }
         }
 
+        if (null === $minX) {
+            return null;
+        }
+
         return new Frame(new Point($minX, $minY), $maxX - $minX, $maxY - $minY);
     }
 
@@ -118,7 +126,7 @@ class GroupShapes implements GroupShapesInterface
         }
     }
 
-    public function getLineStyle(): LineStyleInterface
+    public function getLineStyle(): ?LineStyleInterface
     {
         $style = null;
         foreach ($this->shapes as $shape) {
@@ -142,7 +150,7 @@ class GroupShapes implements GroupShapesInterface
         }
     }
 
-    public function getFillStyle(): StyleInterface
+    public function getFillStyle(): ?FillStyle
     {
         $style = null;
         foreach ($this->shapes as $shape) {
@@ -159,7 +167,7 @@ class GroupShapes implements GroupShapesInterface
         return $style;
     }
 
-    public function setFillStyle(StyleInterface $style): void
+    public function setFillStyle(FillStyle $style): void
     {
         foreach ($this->shapes as $shape) {
             $shape->setFillStyle($style);
