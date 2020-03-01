@@ -19,7 +19,6 @@ abstract class Shape implements ShapeInterface
         $this->fillStyle = $fillStyle;
     }
 
-
     public function getLineStyle(): LineStyleInterface
     {
         return $this->lineStyle;

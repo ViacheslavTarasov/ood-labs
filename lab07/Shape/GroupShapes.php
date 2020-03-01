@@ -6,8 +6,8 @@ namespace Lab07\Shape;
 use Lab07\Canvas\CanvasInterface;
 use Lab07\Common\Point;
 use Lab07\Service\PointTransformationService;
-use Lab07\Shape\Style\FillStyle;
 use Lab07\Shape\Style\LineStyleInterface;
+use Lab07\Shape\Style\StyleInterface;
 
 class GroupShapes implements GroupShapesInterface
 {
@@ -150,7 +150,7 @@ class GroupShapes implements GroupShapesInterface
         }
     }
 
-    public function getFillStyle(): ?FillStyle
+    public function getFillStyle(): ?StyleInterface
     {
         $style = null;
         foreach ($this->shapes as $shape) {
@@ -167,7 +167,7 @@ class GroupShapes implements GroupShapesInterface
         return $style;
     }
 
-    public function setFillStyle(FillStyle $style): void
+    public function setFillStyle(StyleInterface $style): void
     {
         foreach ($this->shapes as $shape) {
             $shape->setFillStyle($style);
