@@ -30,8 +30,8 @@ class App
 
     private function paintPicture(CanvasPainter $painter): void
     {
-        $triangle = new Triangle(new Point(100, 200), new Point(100, 400), new Point(300, 350));
-        $rectangle = new Rectangle(new Point(250, 250), 200, 300);
+        $triangle = new Triangle(new Point(100, 200), new Point(100, 400), new Point(300, 350), '#FFAA00');
+        $rectangle = new Rectangle(new Point(250, 250), 200, 300, '#336699');
         $painter->draw($triangle);
         $painter->draw($rectangle);
     }

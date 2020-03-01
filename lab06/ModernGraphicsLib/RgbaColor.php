@@ -8,13 +8,13 @@ class RgbaColor
     public const MIN_VALUE = 0;
     public const MAX_VALUE = 1;
 
-    /** @var int */
+    /** @var float */
     private $r;
-    /** @var int */
+    /** @var float */
     private $g;
-    /** @var int */
+    /** @var float */
     private $b;
-    /** @var int */
+    /** @var float */
     private $alpha;
 
     public function __construct(float $r, float $g, float $b, float $alpha)
