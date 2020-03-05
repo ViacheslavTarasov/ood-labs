@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Lab07\Shape;
 
-use Lab07\Common\Point;
-
 class Frame
 {
     /** @var Point */

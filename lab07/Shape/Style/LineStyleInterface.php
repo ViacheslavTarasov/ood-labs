@@ -7,5 +7,5 @@ interface LineStyleInterface extends StyleInterface
 {
     public function setThickness(int $thickness): void;
 
-    public function getThickness(): int;
+    public function getThickness(): ?int;
 }

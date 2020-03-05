@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lab07\Shape\Style;
 
-use Lab07\Common\RgbaColor;
+use Lab07\Shape\RgbaColor;
 
 abstract class Style implements StyleInterface
 {

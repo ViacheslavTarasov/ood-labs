@@ -5,12 +5,12 @@ namespace Lab07\App;
 
 use Lab07\Canvas\PngCanvas;
 use Lab07\Canvas\TextCanvas;
-use Lab07\Common\Point;
-use Lab07\Common\RgbaColor;
 use Lab07\Shape\Ellipse;
 use Lab07\Shape\Frame;
 use Lab07\Shape\GroupShapes;
+use Lab07\Shape\Point;
 use Lab07\Shape\Polygon;
+use Lab07\Shape\RgbaColor;
 use Lab07\Shape\ShapeInterface;
 use Lab07\Shape\Style\FillStyle;
 use Lab07\Shape\Style\LineStyle;
@@ -27,7 +27,6 @@ class App
         $textCanvas = new TextCanvas(new \SplFileObject('php://stdout', 'w'));
         $pngCanvas = new PngCanvas($slide->getWidth(), $slide->getHeight());
 
-
         $home = $this->getHomeGroupShapes();
         $sun = $this->getSunShape();
         $slide->insertShape($home, 0);
@@ -39,17 +38,23 @@ class App
 
         $pngCanvas->save(self::IMAGE_DIR . 'result1.png');
 
-        $sun->setFillStyle(new FillStyle(new RgbaColor(255, 100, 0)));
+        $sun->getFillStyle()->setColor(new RgbaColor(255, 100, 0));
         $frame = $sun->getFrame();
         $sun->setFrame(new Frame(new Point(10, 10), 2 * $frame->getWidth(), 2 * $frame->getHeight()));
+
+        $slide->draw($textCanvas);
         $slide->draw($pngCanvas);
         $pngCanvas->save(self::IMAGE_DIR . 'result2.png');
 
         $homeFrame = $home->getFrame();
         $home->setFrame(new Frame(new Point(300, 100), $homeFrame->getWidth() - 50, $homeFrame->getHeight() - 50));
-        $home->setLineStyle(new LineStyle(new RgbaColor(150, 0, 0), true, 5));
-        $home->setFillStyle(new FillStyle(new RgbaColor(100, 150, 0), true));
 
+        $home->getLineStyle()->setColor(new RgbaColor(150, 0, 0));
+        $home->getLineStyle()->setThickness(5);
+
+        $home->getFillStyle()->setColor(new RgbaColor(100, 150, 0));
+
+        $slide->draw($textCanvas);
         $slide->draw($pngCanvas);
         $pngCanvas->save(self::IMAGE_DIR . 'result3.png');
     }
@@ -66,7 +71,7 @@ class App
     {
         $group = new GroupShapes();
 
-        $wallLineStyle = new LineStyle(new RgbaColor(100, 200, 200), true, 2);
+        $wallLineStyle = new LineStyle(new RgbaColor(100, 200, 200), true, 10);
         $wallFillStyle = new FillStyle(new RgbaColor(50, 70, 200));
         $wall = new Polygon($wallLineStyle, $wallFillStyle, [
             new Point(200, 300), new Point(400, 300),

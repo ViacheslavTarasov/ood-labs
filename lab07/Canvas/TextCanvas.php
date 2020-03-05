@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Lab07\Canvas;
 
-use Lab07\Common\Point;
-use Lab07\Common\RgbaColor;
+use Lab07\Shape\Point;
+use Lab07\Shape\RgbaColor;
 
 class TextCanvas implements CanvasInterface
 {
     /** @var \SplFileObject */
     private $outStream;
+    /** @var int */
     private $lineThickness = 1;
     /** @var RgbaColor */
     private $lineColor;
@@ -26,6 +27,8 @@ class TextCanvas implements CanvasInterface
     public function reset(): void
     {
         $this->outStream->ftruncate(0);
+        $text = 'reset canvas' . PHP_EOL;
+        $this->outStream->fwrite($text);
     }
 
 
@@ -62,20 +65,25 @@ class TextCanvas implements CanvasInterface
         $this->outStream->fwrite($text);
     }
 
-
-    public function setFillColor(RgbaColor $fillColor): void
+    public function setFillColor(RgbaColor $color): void
     {
-        $this->fillColor = $fillColor;
+        $this->fillColor = $color;
+        $text = "set fill color  - {$this->colorToString($this->fillColor)}" . PHP_EOL;
+        $this->outStream->fwrite($text);
     }
 
     public function setLineColor(RgbaColor $color): void
     {
         $this->lineColor = $color;
+        $text = "set line color  - {$this->colorToString($this->lineColor)}" . PHP_EOL;
+        $this->outStream->fwrite($text);
     }
 
     public function setLineThickness(int $lineThickness): void
     {
         $this->lineThickness = $lineThickness;
+        $text = "set line thickness  - {$this->lineThickness}" . PHP_EOL;
+        $this->outStream->fwrite($text);
     }
 
     private function colorToString(RgbaColor $color): string

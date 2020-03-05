@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Lab07\Shape;
 
 use Lab07\Canvas\CanvasInterface;
-use Lab07\Common\Point;
-use Lab07\Service\PointTransformationService;
+use Lab07\Shape\Style\GroupFillStyle;
+use Lab07\Shape\Style\GroupLineStyle;
 use Lab07\Shape\Style\LineStyleInterface;
 use Lab07\Shape\Style\StyleInterface;
 
@@ -19,10 +19,16 @@ class GroupShapes implements GroupShapesInterface
      * @var ShapeInterface[]
      */
     private $shapes = [];
+    /** @var GroupFillStyle */
+    private $fillStyle;
+    /** @var GroupLineStyle */
+    private $lineStyle;
 
     public function __construct()
     {
         $this->pointTransformationService = new PointTransformationService();
+        $this->fillStyle = new GroupFillStyle($this->shapes);
+        $this->lineStyle = new GroupLineStyle($this->shapes);
     }
 
     public function draw(CanvasInterface $canvas): void
@@ -126,57 +132,18 @@ class GroupShapes implements GroupShapesInterface
         }
     }
 
-    public function getLineStyle(): ?LineStyleInterface
+    public function getLineStyle(): LineStyleInterface
     {
-        $style = null;
-        foreach ($this->shapes as $shape) {
-            if (!$shape->getLineStyle()) {
-                return null;
-            }
-
-            if (!$style) {
-                $style = $shape->getLineStyle();
-            } elseif ($style != $shape->getLineStyle()) {
-                return null;
-            }
-        }
-        return $style;
+        return $this->lineStyle;
     }
 
-    public function setLineStyle(LineStyleInterface $style): void
+    public function getFillStyle(): StyleInterface
     {
-        foreach ($this->shapes as $shape) {
-            $shape->setLineStyle($style);
-        }
-    }
-
-    public function getFillStyle(): ?StyleInterface
-    {
-        $style = null;
-        foreach ($this->shapes as $shape) {
-            if (!$shape->getFillStyle()) {
-                return null;
-            }
-
-            if (!$style) {
-                $style = $shape->getFillStyle();
-            } elseif ($style != $shape->getFillStyle()) {
-                return null;
-            }
-        }
-        return $style;
-    }
-
-    public function setFillStyle(StyleInterface $style): void
-    {
-        foreach ($this->shapes as $shape) {
-            $shape->setFillStyle($style);
-        }
+        return $this->fillStyle;
     }
 
     public function getGroup(): ?GroupShapesInterface
     {
         return $this;
     }
-
 }

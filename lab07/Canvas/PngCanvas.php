@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Lab07\Canvas;
 
-use Lab07\Common\Point;
-use Lab07\Common\RgbaColor;
+use Lab07\Shape\Point;
+use Lab07\Shape\RgbaColor;
 
 class PngCanvas implements CanvasInterface
 {
@@ -113,7 +113,7 @@ class PngCanvas implements CanvasInterface
     }
 
     /**
-     * @param Point[] $points
+     * @param \Lab07\Shape\Point[] $points
      * @return array
      */
     private function convertPointsArray(array $points): array

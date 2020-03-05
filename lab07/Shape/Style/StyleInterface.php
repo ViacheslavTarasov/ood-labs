@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lab07\Shape\Style;
 
-use Lab07\Common\RgbaColor;
+use Lab07\Shape\RgbaColor;
 
 interface StyleInterface
 {
@@ -15,5 +15,5 @@ interface StyleInterface
 
     public function setColor(RgbaColor $color): void;
 
-    public function getColor(): RgbaColor;
+    public function getColor(): ?RgbaColor;
 }

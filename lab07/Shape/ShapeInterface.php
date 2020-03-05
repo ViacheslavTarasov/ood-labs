@@ -13,13 +13,9 @@ interface ShapeInterface extends CanvasDrawableInterface
 
     public function setFrame(Frame $frame): void;
 
-    public function getLineStyle(): ?LineStyleInterface;
+    public function getLineStyle(): LineStyleInterface;
 
-    public function setLineStyle(LineStyleInterface $style): void;
-
-    public function getFillStyle(): ?StyleInterface;
-
-    public function setFillStyle(StyleInterface $style): void;
+    public function getFillStyle(): StyleInterface;
 
     public function getGroup(): ?GroupShapesInterface;
 }

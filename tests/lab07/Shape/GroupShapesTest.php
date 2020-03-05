@@ -2,16 +2,17 @@
 declare(strict_types=1);
 
 use Lab07\Canvas\CanvasInterface;
-use Lab07\Common\Point;
-use Lab07\Common\RgbaColor;
 use Lab07\Shape\Frame;
 use Lab07\Shape\GroupShapes;
+use Lab07\Shape\Point;
+use Lab07\Shape\RgbaColor;
 use Lab07\Shape\ShapeInterface;
 use Lab07\Shape\Style\FillStyle;
 use Lab07\Shape\Style\LineStyle;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/** @TODO переделать тесты */
 class GroupShapesTest extends TestCase
 {
     /** @var GroupShapes */
@@ -136,17 +137,6 @@ class GroupShapesTest extends TestCase
         $this->groupShapes->draw($canvas);
     }
 
-    public function testSetLineStyleCallsSetLineStyleForEveryShapeWithSameLineStyle(): void
-    {
-        $lineStyle = $this->getLineStyle();
-        for ($i = 0; $i < 5; $i++) {
-            $mockShape = $this->createMock(ShapeInterface::class);
-            $mockShape->expects($this->once())->method('setLineStyle')->with($lineStyle);
-            $this->groupShapes->insertShape($mockShape, $i);
-        }
-        $this->groupShapes->setLineStyle($lineStyle);
-    }
-
     public function testGetLineStyleReturnsNullWhenShapesNotAdded(): void
     {
         $this->assertNull($this->groupShapes->getLineStyle());
@@ -217,17 +207,6 @@ class GroupShapesTest extends TestCase
         $this->groupShapes->insertShape($shape2, 1);
 
         $this->assertNull($this->groupShapes->getLineStyle());
-    }
-
-    public function testSetFillStyleCallsSetFillStyleForEveryShapeWithSameFillStyle(): void
-    {
-        $fillStyle = $this->getFillStyle();
-        for ($i = 0; $i < 5; $i++) {
-            $mockShape = $this->createMock(ShapeInterface::class);
-            $mockShape->expects($this->once())->method('setFillStyle')->with($fillStyle);
-            $this->groupShapes->insertShape($mockShape, $i);
-        }
-        $this->groupShapes->setFillStyle($fillStyle);
     }
 
     public function testGetFillStyleReturnsNullWhenShapesNotAdded(): void

@@ -1,10 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab07\Service;
-
-use Lab07\Common\Point;
-use Lab07\Shape\Frame;
+namespace Lab07\Shape;
 
 class PointTransformationService
 {
