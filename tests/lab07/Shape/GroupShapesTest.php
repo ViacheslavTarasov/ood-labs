@@ -5,14 +5,10 @@ use Lab07\Canvas\CanvasInterface;
 use Lab07\Shape\Frame;
 use Lab07\Shape\GroupShapes;
 use Lab07\Shape\Point;
-use Lab07\Shape\RgbaColor;
 use Lab07\Shape\ShapeInterface;
-use Lab07\Shape\Style\FillStyle;
-use Lab07\Shape\Style\LineStyle;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/** @TODO переделать тесты */
 class GroupShapesTest extends TestCase
 {
     /** @var GroupShapes */
@@ -137,150 +133,6 @@ class GroupShapesTest extends TestCase
         $this->groupShapes->draw($canvas);
     }
 
-    public function testGetLineStyleReturnsNullWhenShapesNotAdded(): void
-    {
-        $this->assertNull($this->groupShapes->getLineStyle());
-    }
-
-    public function testGetLineStyleReturnsShapesLineStyleWhenOneShapeAdded(): void
-    {
-        $lineStyle = $this->getLineStyle();
-        $shape = $this->createMock(ShapeInterface::class);
-        $shape->method('getLineStyle')->willReturn($lineStyle);
-
-        $this->groupShapes->insertShape($shape, 0);
-        $this->assertEquals($lineStyle, $this->groupShapes->getLineStyle());
-    }
-
-    public function testGetLineStyleReturnsShapesLineStyleWhenShapesAddedWithSameLineStile(): void
-    {
-        $lineStyle1 = $this->getLineStyle();
-        $shape1 = $this->createMockShapeWithLineStyle($lineStyle1);
-
-        $lineStyle2 = $this->getLineStyle();
-        $shape2 = $this->createMockShapeWithLineStyle($lineStyle2);
-
-        $this->groupShapes->insertShape($shape1, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertEquals($lineStyle1, $this->groupShapes->getLineStyle());
-    }
-
-    public function testGetLineStyleReturnsNullWhenAddedShapeAndGroupShapeWithDifferentLineStiles(): void
-    {
-        $lineStyle1 = $this->getLineStyle(123);
-        $lineStyle2 = $this->getLineStyle(255);
-
-        $groupShapes = $this->createMock(GroupShapes::class);
-        $groupShapes->method('getLineStyle')->willReturn($lineStyle1);
-
-        $shape2 = $this->createMockShapeWithLineStyle($lineStyle2);
-
-        $this->groupShapes->insertShape($groupShapes, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertNull($this->groupShapes->getLineStyle());
-    }
-
-    public function testGetLineStyleReturnsNullWhenShapesAddedWithDifferentLineStile(): void
-    {
-        $lineStyle1 = $this->getLineStyle(123);
-        $shape1 = $this->createMockShapeWithLineStyle($lineStyle1);
-
-        $lineStyle2 = $this->getLineStyle(321);
-        $shape2 = $this->createMockShapeWithLineStyle($lineStyle2);
-
-        $this->groupShapes->insertShape($shape1, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertNull($this->groupShapes->getLineStyle());
-    }
-
-    public function testGetLineStyleReturnsNullWhenAddedEmptyGroupShape(): void
-    {
-        $emptyGroupShapes = $this->createMock(GroupShapes::class);
-
-        $lineStyle = $this->getLineStyle();
-        $shape2 = $this->createMockShapeWithLineStyle($lineStyle);
-
-        $this->groupShapes->insertShape($emptyGroupShapes, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertNull($this->groupShapes->getLineStyle());
-    }
-
-    public function testGetFillStyleReturnsNullWhenShapesNotAdded(): void
-    {
-        $this->assertNull($this->groupShapes->getFillStyle());
-    }
-
-    public function testGetFillStyleReturnsShapesFillStyleWhenOneShapeAdded(): void
-    {
-        $fillStyle = $this->getFillStyle();
-        $shape = $this->createMock(ShapeInterface::class);
-        $shape->method('getFillStyle')->willReturn($fillStyle);
-
-        $this->groupShapes->insertShape($shape, 0);
-        $this->assertEquals($fillStyle, $this->groupShapes->getFillStyle());
-    }
-
-    public function testGetFillStyleReturnsShapesFillStyleWhenShapesAddedWithSameLineStile(): void
-    {
-        $fillStyle1 = $this->getFillStyle();
-        $shape1 = $this->createMockShapeWithFillStyle($fillStyle1);
-
-        $fillStyle2 = $this->getFillStyle();
-        $shape2 = $this->createMockShapeWithFillStyle($fillStyle2);
-
-        $this->groupShapes->insertShape($shape1, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertEquals($fillStyle1, $this->groupShapes->getFillStyle());
-    }
-
-    public function testGetFillStyleReturnsNullWhenAddedShapeAndGroupShapeWithDifferentLineStiles(): void
-    {
-        $fillStyle1 = $this->getFillStyle(123);
-        $fillStyle2 = $this->getFillStyle(255);
-
-        $groupShapes = $this->createMock(GroupShapes::class);
-        $groupShapes->method('getFillStyle')->willReturn($fillStyle1);
-
-        $shape2 = $this->createMockShapeWithFillStyle($fillStyle2);
-
-        $this->groupShapes->insertShape($groupShapes, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertNull($this->groupShapes->getFillStyle());
-    }
-
-    public function testGetFillStyleReturnsNullWhenShapesAddedWithDifferentLineStile(): void
-    {
-        $fillStyle1 = $this->getFillStyle(123);
-        $shape1 = $this->createMockShapeWithFillStyle($fillStyle1);
-
-        $fillStyle2 = $this->getFillStyle(321);
-        $shape2 = $this->createMockShapeWithFillStyle($fillStyle2);
-
-        $this->groupShapes->insertShape($shape1, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertNull($this->groupShapes->getFillStyle());
-    }
-
-    public function testGetFillStyleReturnsNullWhenAddedEmptyGroupShape(): void
-    {
-        $emptyGroupShapes = $this->createMock(GroupShapes::class);
-
-        $fillStyle = $this->getFillStyle();
-        $shape2 = $this->createMockShapeWithFillStyle($fillStyle);
-
-        $this->groupShapes->insertShape($emptyGroupShapes, 0);
-        $this->groupShapes->insertShape($shape2, 1);
-
-        $this->assertNull($this->groupShapes->getFillStyle());
-    }
-
     public function testGetFrameReturnsNullWhenShapesNotAdded(): void
     {
         $this->assertNull($this->groupShapes->getFrame());
@@ -393,32 +245,6 @@ class GroupShapesTest extends TestCase
         $shape->method('getFrame')->willReturn($frame);
 
         return $shape;
-    }
-
-    private function createMockShapeWithLineStyle(LineStyle $lineStyle): ShapeInterface
-    {
-        $shape = $this->createMock(ShapeInterface::class);
-        $shape->method('getLineStyle')->willReturn($lineStyle);
-
-        return $shape;
-    }
-
-    private function createMockShapeWithFillStyle(FillStyle $fillStyle): ShapeInterface
-    {
-        $shape = $this->createMock(ShapeInterface::class);
-        $shape->method('getFillStyle')->willReturn($fillStyle);
-
-        return $shape;
-    }
-
-    private function getLineStyle(int $r = 100, int $g = 200, int $b = 255, bool $enabled = true, int $thickness = 1): LineStyle
-    {
-        return new LineStyle(new RgbaColor($r, $g, $b), $enabled, $thickness);
-    }
-
-    private function getFillStyle(int $r = 100, int $g = 200, int $b = 255, bool $enabled = true): FillStyle
-    {
-        return new FillStyle(new RgbaColor($r, $g, $b), $enabled);
     }
 
     protected function setUp(): void
