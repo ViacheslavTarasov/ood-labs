@@ -24,7 +24,6 @@ class ModernGraphicsRendererAdapter implements CanvasInterface
     {
         $this->start = new Point(0, 0);
         $this->renderer = $modernGraphicsRenderer;
-        $this->renderer->beginDraw();
         $this->color = HexToRgbaConverter::createRgbaFromHexString(self::DEFAULT_COLOR_HEX);
     }
 

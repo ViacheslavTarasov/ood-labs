@@ -46,7 +46,9 @@ class App
     private function paintPictureOnModernGraphicsRenderer(): void
     {
         $modernRenderer = new ModernGraphicsRenderer($this->stdout);
+        $modernRenderer->beginDraw();
         $modernCanvas = new ModernGraphicsRendererAdapter($modernRenderer);
+        $modernRenderer->endDraw();
         $painter = new CanvasPainter($modernCanvas);
         $this->paintPicture($painter);
     }
