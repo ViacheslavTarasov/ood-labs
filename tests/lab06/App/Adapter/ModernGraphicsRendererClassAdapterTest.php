@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use Lab06\App\Adapter\ModernGraphicsRendererClassAdapter;
 use Lab06\ModernGraphicsLib\HexToRgbaConverter;
-use Lab06\ModernGraphicsLib\Point;
 use Lab06\ModernGraphicsLib\RgbaColor;
 use PHPUnit\Framework\TestCase;
 
@@ -22,98 +21,27 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
     /** @var RgbaColor */
     private $color;
 
-    public function testStdoutIsEmptyAfterInit(): void
+    public function testNoLinesDrawnAfterInit(): void
     {
-        $this->assertEquals('', $this->stdout->fread(1));
-        $this->assertTrue($this->stdout->eof());
+        $this->assertOnlyDrawTagInStdout();
     }
 
-    public function testBeginDrawWritesInStdout(): void
-    {
-        $this->rendererAdapter->beginDraw();
-        $this->stdout->rewind();
-        $this->assertEquals('<draw>' . PHP_EOL, $this->stdout->fgets());
-        $this->assertTrue($this->isStdoutEof());
-    }
-
-    public function testThrowsExceptionTwoCallBeginDraw(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->rendererAdapter->beginDraw();
-        $this->rendererAdapter->beginDraw();
-    }
-
-    public function testThrowsExceptionEndDrawBeforeBeginDraw(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->rendererAdapter->endDraw();
-    }
-
-    public function testBeginDrawAndEndDrawWritesInStdout(): void
-    {
-        $this->rendererAdapter->beginDraw();
-        $this->rendererAdapter->endDraw();
-        $this->stdout->rewind();
-        $this->assertEquals('<draw>' . PHP_EOL, $this->stdout->fgets());
-        $this->assertEquals('</draw>' . PHP_EOL, $this->stdout->fgets());
-        $this->assertTrue($this->isStdoutEof());
-    }
-
-    public function testThrowsExceptionTwoCallEndDraw(): void
-    {
-        $this->rendererAdapter->beginDraw();
-        $this->rendererAdapter->endDraw();
-        $this->expectException(LogicException::class);
-        $this->rendererAdapter->endDraw();
-    }
-
-    public function testThrowsExceptionDrawLineBeforeBeginDraw(): void
-    {
-        $p1 = new Point(self::FROM_X, self::FROM_Y);
-        $p2 = new Point(self::TO_X, self::TO_Y);
-
-        $this->expectException(LogicException::class);
-        $this->rendererAdapter->drawLine($p1, $p2, $this->color);
-    }
-
-    public function testDrawLineWritesLineInStdOut(): void
-    {
-        $p1 = new Point(self::FROM_X, self::FROM_Y);
-        $p2 = new Point(self::TO_X, self::TO_Y);
-        $this->rendererAdapter->beginDraw();
-        $this->rendererAdapter->drawLine($p1, $p2, $this->color);
-
-        $this->checkLineAssertion(self::FROM_X, self::FROM_Y, self::TO_X, self::TO_Y, $this->color);
-    }
-
-    public function testNothingWrittenAfterMoveTo(): void
+    public function testMoveToChangesCurrentPointWithoutDrawingALine(): void
     {
         $this->rendererAdapter->moveTo(self::FROM_X, self::FROM_Y);
-        $this->stdout->rewind();
-        $this->assertEquals('', $this->stdout->fread(1));
-        $this->assertTrue($this->stdout->eof());
+        $this->assertOnlyDrawTagInStdout();
     }
 
-    public function testThrowsExceptionLineToWithoutBeginDraw(): void
+    public function testLineToConnectsDefaultPointWithNewPoint(): void
     {
-        $this->expectException(LogicException::class);
-        $this->rendererAdapter->lineTo(10, 20);
-    }
-
-    public function testLineToWithoutCallsMoveToWritesInStdoutLineFromDefaultStartPoint(): void
-    {
-        $this->rendererAdapter->beginDraw();
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
-
         $this->checkLineAssertion(0, 0, self::TO_X, self::TO_Y, $this->color);
     }
 
-    public function testMoveToAndLineToWritesCorrectlyTextInStdout(): void
+    public function tesMoveToAndLineToConnectsCurrentPointWithNewPoint(): void
     {
-        $this->rendererAdapter->beginDraw();
         $this->rendererAdapter->moveTo(self::FROM_X, self::FROM_Y);
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
-
         $this->checkLineAssertion(self::FROM_X, self::FROM_Y, self::TO_X, self::TO_Y, $this->color);
     }
 
@@ -122,7 +50,6 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
         $color = HexToRgbaConverter::createRgbaFromHexString(self::COLOR_HEX);
         $this->rendererAdapter->setColor(self::COLOR_HEX);
 
-        $this->rendererAdapter->beginDraw();
         $this->rendererAdapter->moveTo(self::FROM_X, self::FROM_Y);
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
 
@@ -133,6 +60,7 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
     {
         $this->stdout = new SplTempFileObject();
         $this->rendererAdapter = new ModernGraphicsRendererClassAdapter($this->stdout);
+        $this->rendererAdapter->beginDraw();
         $this->color = HexToRgbaConverter::createRgbaFromHexString(ModernGraphicsRendererClassAdapter::DEFAULT_COLOR_HEX);
     }
 
@@ -144,6 +72,13 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
     private function isStdoutEof(): bool
     {
         return '' === $this->stdout->fread(1) && $this->stdout->eof();
+    }
+
+    private function assertOnlyDrawTagInStdout(): void
+    {
+        $this->stdout->rewind();
+        $this->assertEquals('<draw>' . PHP_EOL, $this->stdout->fgets());
+        $this->assertTrue($this->isStdoutEof());
     }
 
     private function checkLineAssertion(int $fromX, int $fromY, int $toX, int $toY, RgbaColor $color): void
