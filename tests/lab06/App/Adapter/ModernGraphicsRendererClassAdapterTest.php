@@ -21,8 +21,6 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
     private $stdout;
     /** @var RgbaColor */
     private $color;
-    /** @var HexToRgbaConverter */
-    private $hexToRgbaConverter;
 
     public function testStdoutIsEmptyAfterInit(): void
     {
@@ -121,7 +119,7 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
 
     public function testSetColorShouldChangeColorLine(): void
     {
-        $color = $this->hexToRgbaConverter->createRgbaFromHexString(self::COLOR_HEX);
+        $color = HexToRgbaConverter::createRgbaFromHexString(self::COLOR_HEX);
         $this->rendererAdapter->setColor(self::COLOR_HEX);
 
         $this->rendererAdapter->beginDraw();
@@ -135,8 +133,7 @@ class ModernGraphicsRendererClassAdapterTest extends TestCase
     {
         $this->stdout = new SplTempFileObject();
         $this->rendererAdapter = new ModernGraphicsRendererClassAdapter($this->stdout);
-        $this->hexToRgbaConverter = new HexToRgbaConverter();
-        $this->color = $this->hexToRgbaConverter->createRgbaFromHexString(ModernGraphicsRendererClassAdapter::DEFAULT_COLOR_HEX);
+        $this->color = HexToRgbaConverter::createRgbaFromHexString(ModernGraphicsRendererClassAdapter::DEFAULT_COLOR_HEX);
     }
 
     protected function tearDown(): void

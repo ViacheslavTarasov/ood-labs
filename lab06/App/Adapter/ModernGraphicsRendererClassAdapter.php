@@ -17,8 +17,6 @@ class ModernGraphicsRendererClassAdapter extends ModernGraphicsRenderer implemen
 
     /** @var Point */
     private $start;
-    /** @var HexToRgbaConverter */
-    private $hexToRgbaConverter;
     /** @var RgbaColor */
     private $color;
 
@@ -26,8 +24,7 @@ class ModernGraphicsRendererClassAdapter extends ModernGraphicsRenderer implemen
     {
         parent::__construct($stdout);
         $this->start = new Point(0, 0);
-        $this->hexToRgbaConverter = new HexToRgbaConverter();
-        $this->color = $this->hexToRgbaConverter->createRgbaFromHexString(self::DEFAULT_COLOR_HEX);
+        $this->color = HexToRgbaConverter::createRgbaFromHexString(self::DEFAULT_COLOR_HEX);
     }
 
     public function moveTo(int $x, int $y): void
@@ -44,6 +41,6 @@ class ModernGraphicsRendererClassAdapter extends ModernGraphicsRenderer implemen
 
     public function setColor(string $hexColor): void
     {
-        $this->color = $this->hexToRgbaConverter->createRgbaFromHexString($hexColor);
+        $this->color = HexToRgbaConverter::createRgbaFromHexString($hexColor);
     }
 }
