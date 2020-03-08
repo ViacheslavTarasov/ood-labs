@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab07\Shape;
+namespace Lab07\Color;
 
 class RgbaColor
 {

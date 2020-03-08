@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Lab07\Canvas;
 
+use Lab07\Color\RgbaColor;
 use Lab07\Shape\Point;
-use Lab07\Shape\RgbaColor;
 
 class TextCanvas implements CanvasInterface
 {
@@ -30,7 +30,6 @@ class TextCanvas implements CanvasInterface
         $text = 'reset canvas' . PHP_EOL;
         $this->outStream->fwrite($text);
     }
-
 
     public function drawLine(Point $from, Point $to): void
     {

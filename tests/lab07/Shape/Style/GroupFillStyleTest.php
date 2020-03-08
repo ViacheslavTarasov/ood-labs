@@ -2,123 +2,131 @@
 declare(strict_types=1);
 
 
-use Lab07\Shape\RgbaColor;
-use Lab07\Shape\ShapeInterface;
-use Lab07\Shape\Style\FillStyle;
-use Lab07\Shape\Style\GroupFillStyle;
+use Lab07\Color\RgbaColor;
+use Lab07\Style\FillStyle;
+use Lab07\Style\FillStyleIterable;
+use Lab07\Style\GroupFillStyle;
 use PHPUnit\Framework\TestCase;
 
 class GroupFillStyleTest extends TestCase
 {
-    public function testIsEnabledReturnsTrueWhenShapesIsEmpty(): void
+    public function testIsEnabledReturnsTrueWhenFillStyleIteratorIsEmpty(): void
     {
-        $groupFillStyle = $this->getGroupFillStyleWithEmptyShapes();
+        $groupFillStyle = $this->getGroupFillStyleWithEmptyFillStyleIterator();
         $this->assertTrue($groupFillStyle->isEnabled());
     }
 
-    public function testIsEnabledReturnsTrueWhenShapesFillStyleIsEnabled(): void
+    public function testIsEnabledReturnsTrueWhenFillStyleIsEnabled(): void
     {
         $isEnabled = true;
-        $groupFillStyle = $this->getGroupFillStyleWithSameShapesFillStyle(new RgbaColor(1, 2, 3), $isEnabled);
+        $groupFillStyle = $this->getGroupFillStyleWithSameFillStyle(new RgbaColor(1, 2, 3), $isEnabled);
         $this->assertTrue($groupFillStyle->isEnabled());
     }
 
-    public function testIsEnabledReturnsFalseWhenShapesFillStyleIsDisabled(): void
+    public function testIsEnabledReturnsFalseWhenFillStylesIsDisabled(): void
     {
         $isEnabled = false;
-        $groupFillStyle = $this->getGroupFillStyleWithSameShapesFillStyle(new RgbaColor(1, 2, 3), $isEnabled);
+        $groupFillStyle = $this->getGroupFillStyleWithSameFillStyle(new RgbaColor(1, 2, 3), $isEnabled);
         $this->assertFalse($groupFillStyle->isEnabled());
     }
 
-
-    public function testIsEnabledReturnsFalseWhenShapesWithDifferentFilStyleProperties(): void
+    public function testIsEnabledReturnsFalseWhenFilStyleWithDifferentProperties(): void
     {
-        $groupFillStyle = $this->getGroupFillStyleWithDifferentShapesFillStyle();
+        $groupFillStyle = $this->getGroupFillStyleWithDifferentFillStyles();
         $this->assertFalse($groupFillStyle->isEnabled());
     }
 
     public function testEnableCallsEnableForEveryFillStyle(): void
     {
-        $shapes = [];
+        $styles = [];
         for ($i = 0; $i < 5; $i++) {
             $mockStyle = $this->createMock(FillStyle::class);
             $mockStyle->expects($this->once())->method('enable');
-            $mockShape = $this->createMockShapeWithFillStyle($mockStyle);
-            $shapes[] = $mockShape;
+            $styles[] = $mockStyle;
         }
-        $groupStyle = new GroupFillStyle($shapes);
+        $fillStyleIterable = $this->getFillStyleIterator($styles);
+        $groupStyle = new GroupFillStyle($fillStyleIterable);
         $groupStyle->enable();
     }
 
     public function testSetColorCallsSetColorForEveryFillStyle(): void
     {
-        $shapes = [];
         $color = new RgbaColor(1, 2, 3, 10);
+        $styles = [];
         for ($i = 0; $i < 5; $i++) {
             $mockStyle = $this->createMock(FillStyle::class);
             $mockStyle->expects($this->once())->method('setColor')->with($color);
-            $mockShape = $this->createMockShapeWithFillStyle($mockStyle);
-            $shapes[] = $mockShape;
+            $styles[] = $mockStyle;
         }
-        $groupStyle = new GroupFillStyle($shapes);
+        $fillStyleIterable = $this->getFillStyleIterator($styles);
+        $groupStyle = new GroupFillStyle($fillStyleIterable);
         $groupStyle->setColor($color);
     }
 
-    public function testGetColorReturnsNullWhenShapesIsEmpty(): void
+    public function testGetColorReturnsNullWhenFillStyleIteratorIsEmpty(): void
     {
-        $groupFillStyle = $this->getGroupFillStyleWithEmptyShapes();
+        $groupFillStyle = $this->getGroupFillStyleWithEmptyFillStyleIterator();
         $this->assertNull($groupFillStyle->getColor());
     }
 
-    public function testGetColorReturnsColorWhenShapesFillStylesWithSameColor(): void
+    public function testGetColorReturnsColorWhenFillStylesWithSameColor(): void
     {
         $color = new RgbaColor(1, 2, 3);
-        $groupFillStyle = $this->getGroupFillStyleWithSameShapesFillStyle($color, true);
+        $groupFillStyle = $this->getGroupFillStyleWithSameFillStyle($color, true);
         $this->assertEquals($color, $groupFillStyle->getColor());
     }
 
-    public function testGetColorReturnsNullWhenShapesFillStylesWithDifferentColors(): void
+    public function testGetColorReturnsNullWhenFillStylesWithDifferentColors(): void
     {
-        $groupFillStyle = $this->getGroupFillStyleWithDifferentShapesFillStyle();
+        $groupFillStyle = $this->getGroupFillStyleWithDifferentFillStyles();
         $this->assertNull($groupFillStyle->getColor());
     }
 
 
-    private function getGroupFillStyleWithDifferentShapesFillStyle(): GroupFillStyle
+    private function getGroupFillStyleWithDifferentFillStyles(): GroupFillStyle
     {
-        $fillStyle1 = new FillStyle(new RgbaColor(1, 2, 3), true);
-        $fillStyle2 = new FillStyle(new RgbaColor(3, 2, 1), false);
-
-        $shapes = [
-            $this->createMockShapeWithFillStyle($fillStyle1),
-            $this->createMockShapeWithFillStyle($fillStyle2),
+        $styles = [
+            new FillStyle(new RgbaColor(1, 2, 3), true),
+            new FillStyle(new RgbaColor(3, 2, 1), false)
         ];
-        return new GroupFillStyle($shapes);
+        $fillStyleIterable = $this->getFillStyleIterator($styles);
+        return new GroupFillStyle($fillStyleIterable);
     }
 
-    private function getGroupFillStyleWithSameShapesFillStyle(RgbaColor $color, bool $enabled): GroupFillStyle
+    private function getGroupFillStyleWithSameFillStyle(RgbaColor $color, bool $enabled): GroupFillStyle
     {
-        $fillStyle1 = new FillStyle($color, $enabled);
-        $fillStyle2 = new FillStyle($color, $enabled);
-
-        $shapes = [
-            $this->createMockShapeWithFillStyle($fillStyle1),
-            $this->createMockShapeWithFillStyle($fillStyle2),
+        $styles = [
+            new FillStyle($color, $enabled),
+            new FillStyle($color, $enabled)
         ];
-        return new GroupFillStyle($shapes);
+        $fillStyleIterable = $this->getFillStyleIterator($styles);
+        return new GroupFillStyle($fillStyleIterable);
     }
 
-    private function getGroupFillStyleWithEmptyShapes(): GroupFillStyle
+    private function getGroupFillStyleWithEmptyFillStyleIterator(): GroupFillStyle
     {
-        $shapes = [];
-        return new GroupFillStyle($shapes);
+        $fillStyleIterator = $this->getFillStyleIterator([]);
+        return new GroupFillStyle($fillStyleIterator);
     }
 
-    private function createMockShapeWithFillStyle(FillStyle $fillStyle): ShapeInterface
+    private function getFillStyleIterator(array $fillStyles): FillStyleIterable
     {
-        $shape = $this->createMock(ShapeInterface::class);
-        $shape->method('getFillStyle')->willReturn($fillStyle);
+        return new class($fillStyles) implements FillStyleIterable
+        {
+            /** @var FillStyle[] */
+            private $styles;
 
-        return $shape;
+            public function __construct(array $fillStyles)
+            {
+                $this->styles = $fillStyles;
+            }
+
+            public function iterateFillStyle(\Closure $closure): void
+            {
+                foreach ($this->styles as $style) {
+                    $closure($style);
+                }
+            }
+        };
     }
 }

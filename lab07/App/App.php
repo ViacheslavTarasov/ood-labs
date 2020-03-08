@@ -5,16 +5,16 @@ namespace Lab07\App;
 
 use Lab07\Canvas\PngCanvas;
 use Lab07\Canvas\TextCanvas;
+use Lab07\Color\RgbaColor;
 use Lab07\Shape\Ellipse;
 use Lab07\Shape\Frame;
 use Lab07\Shape\GroupShapes;
 use Lab07\Shape\Point;
 use Lab07\Shape\Polygon;
-use Lab07\Shape\RgbaColor;
 use Lab07\Shape\ShapeInterface;
-use Lab07\Shape\Style\FillStyle;
-use Lab07\Shape\Style\LineStyle;
 use Lab07\Slide\Slide;
+use Lab07\Style\FillStyle;
+use Lab07\Style\LineStyle;
 
 class App
 {

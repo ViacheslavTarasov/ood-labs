@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Lab07\Shape;
 
 use Lab07\Canvas\CanvasDrawableInterface;
-use Lab07\Shape\Style\LineStyleInterface;
-use Lab07\Shape\Style\StyleInterface;
+use Lab07\Style\LineStyleInterface;
+use Lab07\Style\StyleInterface;
 
 interface ShapeInterface extends CanvasDrawableInterface
 {

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab07\Shape\Style;
+namespace Lab07\Style;
 
-use Lab07\Shape\RgbaColor;
+use Lab07\Color\RgbaColor;
 
 abstract class Style implements StyleInterface
 {

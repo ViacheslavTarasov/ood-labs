@@ -4,12 +4,14 @@ declare(strict_types=1);
 namespace Lab07\Shape;
 
 use Lab07\Canvas\CanvasInterface;
-use Lab07\Shape\Style\GroupFillStyle;
-use Lab07\Shape\Style\GroupLineStyle;
-use Lab07\Shape\Style\LineStyleInterface;
-use Lab07\Shape\Style\StyleInterface;
+use Lab07\Style\FillStyleIterable;
+use Lab07\Style\GroupFillStyle;
+use Lab07\Style\GroupLineStyle;
+use Lab07\Style\LineStyleInterface;
+use Lab07\Style\LineStyleIterable;
+use Lab07\Style\StyleInterface;
 
-class GroupShapes implements GroupShapesInterface
+class GroupShapes implements GroupShapesInterface, FillStyleIterable, LineStyleIterable
 {
     /**
      * @var PointTransformationService
@@ -27,8 +29,8 @@ class GroupShapes implements GroupShapesInterface
     public function __construct()
     {
         $this->pointTransformationService = new PointTransformationService();
-        $this->fillStyle = new GroupFillStyle($this->shapes);
-        $this->lineStyle = new GroupLineStyle($this->shapes);
+        $this->fillStyle = new GroupFillStyle($this);
+        $this->lineStyle = new GroupLineStyle($this);
     }
 
     public function draw(CanvasInterface $canvas): void
@@ -145,5 +147,25 @@ class GroupShapes implements GroupShapesInterface
     public function getGroup(): ?GroupShapesInterface
     {
         return $this;
+    }
+
+    public function iterateFillStyle(\Closure $closure): void
+    {
+        array_map(static function (ShapeInterface $shape) use ($closure) {
+            $style = $shape->getFillStyle();
+            if ($style) {
+                $closure($style);
+            }
+        }, $this->shapes);
+    }
+
+    public function iterateLineStyle(\Closure $closure): void
+    {
+        array_map(static function (ShapeInterface $shape) use ($closure) {
+            $style = $shape->getLineStyle();
+            if ($style) {
+                $closure($style);
+            }
+        }, $this->shapes);
     }
 }

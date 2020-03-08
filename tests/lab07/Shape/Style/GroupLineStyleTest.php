@@ -1,142 +1,149 @@
 <?php
 declare(strict_types=1);
 
-use Lab07\Shape\RgbaColor;
-use Lab07\Shape\ShapeInterface;
-use Lab07\Shape\Style\GroupLineStyle;
-use Lab07\Shape\Style\LineStyle;
+use Lab07\Color\RgbaColor;
+use Lab07\Style\GroupLineStyle;
+use Lab07\Style\LineStyle;
+use Lab07\Style\LineStyleIterable;
 use PHPUnit\Framework\TestCase;
 
 class GroupLineStyleTest extends TestCase
 {
-    public function testGetThicknessReturnsNullWhenShapesIsEmpty(): void
+    public function testIsEnabledReturnsTrueWhenLineStyleIteratorIsEmpty(): void
     {
-        $groupLineStyle = $this->getGroupLineStyleWithEmptyShapes();
-        $this->assertNull($groupLineStyle->getColor());
-    }
-
-    public function testGetThicknessReturnsColorWhenShapesLineStylesWithSameColor(): void
-    {
-        $thickness = 3;
-        $groupLineStyle = $this->getGroupLineStyleWithSameShapesLineStyle(new RgbaColor(1, 2, 3), true, $thickness);
-        $this->assertEquals($thickness, $groupLineStyle->getThickness());
-    }
-
-    public function testGetThicknessReturnsNullWhenShapesLineStylesWithDifferentColors(): void
-    {
-        $groupLineStyle = $this->getGroupLineStyleWithDifferentShapesLineStyle();
-        $this->assertNull($groupLineStyle->getThickness());
-    }
-
-    public function testIsEnabledReturnsTrueWhenShapesIsEmpty(): void
-    {
-        $groupLineStyle = $this->getGroupLineStyleWithEmptyShapes();
+        $groupLineStyle = $this->getGroupLineStyleWithEmptyLineStyleIterator();
         $this->assertTrue($groupLineStyle->isEnabled());
     }
 
-    public function testIsEnabledReturnsTrueWhenShapesLineStyleIsEnabled(): void
+    public function testIsEnabledReturnsTrueWhenLineStyleIsEnabled(): void
     {
         $isEnabled = true;
-        $groupLineStyle = $this->getGroupLineStyleWithSameShapesLineStyle(new RgbaColor(1, 2, 3), $isEnabled);
+        $groupLineStyle = $this->getGroupLineStyleWithSameLineStyle(new RgbaColor(1, 2, 3), $isEnabled);
         $this->assertTrue($groupLineStyle->isEnabled());
     }
 
-    public function testIsEnabledReturnsFalseWhenShapesLineStyleIsDisabled(): void
+    public function testIsEnabledReturnsFalseWhenLineStylesIsDisabled(): void
     {
         $isEnabled = false;
-        $groupLineStyle = $this->getGroupLineStyleWithSameShapesLineStyle(new RgbaColor(1, 2, 3), $isEnabled);
+        $groupLineStyle = $this->getGroupLineStyleWithSameLineStyle(new RgbaColor(1, 2, 3), $isEnabled);
         $this->assertFalse($groupLineStyle->isEnabled());
     }
 
-
-    public function testIsEnabledReturnsFalseWhenShapesWithDifferentFilStyleProperties(): void
+    public function testIsEnabledReturnsFalseWhenFilStyleWithDifferentProperties(): void
     {
-        $groupLineStyle = $this->getGroupLineStyleWithDifferentShapesLineStyle();
+        $groupLineStyle = $this->getGroupLineStyleWithDifferentLineStyles();
         $this->assertFalse($groupLineStyle->isEnabled());
     }
 
     public function testEnableCallsEnableForEveryLineStyle(): void
     {
-        $shapes = [];
+        $styles = [];
         for ($i = 0; $i < 5; $i++) {
             $mockStyle = $this->createMock(LineStyle::class);
             $mockStyle->expects($this->once())->method('enable');
-            $mockShape = $this->createMockShapeWithLineStyle($mockStyle);
-            $shapes[] = $mockShape;
+            $styles[] = $mockStyle;
         }
-        $groupStyle = new GroupLineStyle($shapes);
+        $lineStyleIterable = $this->getLineStyleIterator($styles);
+        $groupStyle = new GroupLineStyle($lineStyleIterable);
         $groupStyle->enable();
     }
 
     public function testSetColorCallsSetColorForEveryLineStyle(): void
     {
-        $shapes = [];
         $color = new RgbaColor(1, 2, 3, 10);
+        $styles = [];
         for ($i = 0; $i < 5; $i++) {
             $mockStyle = $this->createMock(LineStyle::class);
             $mockStyle->expects($this->once())->method('setColor')->with($color);
-            $mockShape = $this->createMockShapeWithLineStyle($mockStyle);
-            $shapes[] = $mockShape;
+            $styles[] = $mockStyle;
         }
-        $groupStyle = new GroupLineStyle($shapes);
+        $lineStyleIterable = $this->getLineStyleIterator($styles);
+        $groupStyle = new GroupLineStyle($lineStyleIterable);
         $groupStyle->setColor($color);
     }
 
-    public function testGetColorReturnsNullWhenShapesIsEmpty(): void
+    public function testGetColorReturnsNullWhenLineStyleIteratorIsEmpty(): void
     {
-        $groupLineStyle = $this->getGroupLineStyleWithEmptyShapes();
+        $groupLineStyle = $this->getGroupLineStyleWithEmptyLineStyleIterator();
         $this->assertNull($groupLineStyle->getColor());
     }
 
-    public function testGetColorReturnsColorWhenShapesLineStylesWithSameColor(): void
+    public function testGetColorReturnsColorWhenLineStylesWithSameColor(): void
     {
         $color = new RgbaColor(1, 2, 3);
-        $groupLineStyle = $this->getGroupLineStyleWithSameShapesLineStyle($color, true);
+        $groupLineStyle = $this->getGroupLineStyleWithSameLineStyle($color, true);
         $this->assertEquals($color, $groupLineStyle->getColor());
     }
 
-    public function testGetColorReturnsNullWhenShapesLineStylesWithDifferentColors(): void
+    public function testGetColorReturnsNullWhenLineStylesWithDifferentColors(): void
     {
-        $groupLineStyle = $this->getGroupLineStyleWithDifferentShapesLineStyle();
+        $groupLineStyle = $this->getGroupLineStyleWithDifferentLineStyles();
         $this->assertNull($groupLineStyle->getColor());
     }
 
-
-    private function getGroupLineStyleWithDifferentShapesLineStyle(): GroupLineStyle
+    public function testGetThicknessReturnsNullWhenLineStyleIteratorIsEmpty(): void
     {
-        $lineStyle1 = new LineStyle(new RgbaColor(1, 2, 3), true, 1);
-        $lineStyle2 = new LineStyle(new RgbaColor(3, 2, 1), false, 2);
+        $groupLineStyle = $this->getGroupLineStyleWithEmptyLineStyleIterator();
+        $this->assertNull($groupLineStyle->getColor());
+    }
 
-        $shapes = [
-            $this->createMockShapeWithLineStyle($lineStyle1),
-            $this->createMockShapeWithLineStyle($lineStyle2),
+    public function testGetThicknessReturnsColorWhenLineStylesWithSameThickness(): void
+    {
+        $thickness = 3;
+        $groupLineStyle = $this->getGroupLineStyleWithSameLineStyle(new RgbaColor(1, 2, 3), true, $thickness);
+        $this->assertEquals($thickness, $groupLineStyle->getThickness());
+    }
+
+    public function testGetThicknessReturnsNullWhenShapesLineStylesWithDifferentColors(): void
+    {
+        $groupLineStyle = $this->getGroupLineStyleWithDifferentLineStyles();
+        $this->assertNull($groupLineStyle->getThickness());
+    }
+
+    private function getGroupLineStyleWithDifferentLineStyles(): GroupLineStyle
+    {
+        $styles = [
+            new LineStyle(new RgbaColor(1, 2, 3), true, 2),
+            new LineStyle(new RgbaColor(3, 2, 1), false, 3)
         ];
-        return new GroupLineStyle($shapes);
+        $lineStyleIterable = $this->getLineStyleIterator($styles);
+        return new GroupLineStyle($lineStyleIterable);
     }
 
-    private function getGroupLineStyleWithSameShapesLineStyle(RgbaColor $color, bool $enabled, $thickness = 1): GroupLineStyle
+    private function getGroupLineStyleWithSameLineStyle(RgbaColor $color, bool $enabled, int $thickness = 1): GroupLineStyle
     {
-        $lineStyle1 = new LineStyle($color, $enabled, $thickness);
-        $lineStyle2 = new LineStyle($color, $enabled, $thickness);
-
-        $shapes = [
-            $this->createMockShapeWithLineStyle($lineStyle1),
-            $this->createMockShapeWithLineStyle($lineStyle2),
+        $styles = [
+            new LineStyle($color, $enabled, $thickness),
+            new LineStyle($color, $enabled, $thickness)
         ];
-        return new GroupLineStyle($shapes);
+        $lineStyleIterable = $this->getLineStyleIterator($styles);
+        return new GroupLineStyle($lineStyleIterable);
     }
 
-    private function getGroupLineStyleWithEmptyShapes(): GroupLineStyle
+    private function getGroupLineStyleWithEmptyLineStyleIterator(): GroupLineStyle
     {
-        $shapes = [];
-        return new GroupLineStyle($shapes);
+        $lineStyleIterator = $this->getLineStyleIterator([]);
+        return new GroupLineStyle($lineStyleIterator);
     }
 
-    private function createMockShapeWithLineStyle(LineStyle $lineStyle): ShapeInterface
+    private function getLineStyleIterator(array $lineStyles): LineStyleIterable
     {
-        $shape = $this->createMock(ShapeInterface::class);
-        $shape->method('getLineStyle')->willReturn($lineStyle);
+        return new class($lineStyles) implements LineStyleIterable
+        {
+            /** @var LineStyle[] */
+            private $styles;
 
-        return $shape;
+            public function __construct(array $lineStyles)
+            {
+                $this->styles = $lineStyles;
+            }
+
+            public function iterateLineStyle(\Closure $closure): void
+            {
+                foreach ($this->styles as $style) {
+                    $closure($style);
+                }
+            }
+        };
     }
 }
