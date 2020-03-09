@@ -36,7 +36,7 @@ class ModernGraphicsRendererAdapterTest extends TestCase
         $this->assertOnlyDrawTagInStdout();
     }
 
-    public function testLineToConnectsDefaultPointWithNewPoint(): void
+    public function testDefaultPointHasCoordinatesZeroAndZero(): void
     {
         $this->rendererAdapter->lineTo(self::TO_X, self::TO_Y);
         $this->checkLineAssertion(0, 0, self::TO_X, self::TO_Y, $this->color);

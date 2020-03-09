@@ -48,8 +48,8 @@ class App
         $modernRenderer = new ModernGraphicsRenderer($this->stdout);
         $modernRenderer->beginDraw();
         $modernCanvas = new ModernGraphicsRendererAdapter($modernRenderer);
-        $modernRenderer->endDraw();
         $painter = new CanvasPainter($modernCanvas);
         $this->paintPicture($painter);
+        $modernRenderer->endDraw();
     }
 }

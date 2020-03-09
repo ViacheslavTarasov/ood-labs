@@ -24,10 +24,16 @@ class Rectangle implements CanvasDrawableInterface
     public function draw(CanvasInterface $canvas): void
     {
         $canvas->setColor($this->hexColor);
-        $canvas->moveTo($this->topLeft->getX(), $this->topLeft->getY());
-        $canvas->lineTo($this->bottomRight->getX(), $this->topLeft->getY());
-        $canvas->lineTo($this->bottomRight->getX(), $this->bottomRight->getY());
-        $canvas->lineTo($this->topLeft->getX(), $this->bottomRight->getY());
-        $canvas->lineTo($this->topLeft->getX(), $this->topLeft->getY());
+
+        $left = $this->topLeft->getX();
+        $top = $this->topLeft->getY();
+        $right = $this->bottomRight->getX();
+        $bottom = $this->bottomRight->getY();
+
+        $canvas->moveTo($left, $top);
+        $canvas->lineTo($right, $top);
+        $canvas->lineTo($right, $bottom);
+        $canvas->lineTo($left, $bottom);
+        $canvas->lineTo($left, $top);
     }
 }
