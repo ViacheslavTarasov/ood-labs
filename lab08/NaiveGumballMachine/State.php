@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab08\MultiGumballMachine\Context;
+namespace Lab08\NaiveGumballMachine;
 
 class State
 {

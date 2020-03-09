@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Lab08\GumballMachine\Context\PrivateGumballMachineInterface;
-use Lab08\GumballMachine\State\NoQuarterState;
+use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
+use Lab08\MultiGumballMachine\State\NoQuarterState;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,8 +23,8 @@ class NoQuarterStateTest extends TestCase
     public function testInsertQuarterSetHasQuarterStateAndAddsQuarter(): void
     {
         $this->gumballMachine->expects($this->once())->method('setHasQuarterState');
+        $this->gumballMachine->expects($this->once())->method('addQuarter');
         $this->noQuarterState->insertQuarter();
-        $this->assertEquals(NoQuarterState::INSERT_QUARTER_TEXT, $this->getFirstLineFromStdout());
     }
 
     public function testEjectQuarterNotReturnsQuarter(): void
@@ -43,6 +43,29 @@ class NoQuarterStateTest extends TestCase
     {
         $this->noQuarterState->dispense();
         $this->assertEquals(NoQuarterState::DISPENSE_TEXT, $this->getFirstLineFromStdout());
+    }
+
+    public function testRefillResetsGumballsCount(): void
+    {
+        $newGumballsCount = 10;
+        $this->gumballMachine->expects($this->once())->method('setBallCount')->with($newGumballsCount);
+        $this->noQuarterState->refill($newGumballsCount);
+    }
+
+    public function testRefillSetSoldOutStateIfNewGumballsCountIsZero(): void
+    {
+        $newGumballsCount = 0;
+        $this->gumballMachine->method('getBallCount')->willReturn($newGumballsCount);
+        $this->gumballMachine->expects($this->once())->method('setSoldOutState');
+        $this->noQuarterState->refill($newGumballsCount);
+    }
+
+    public function testRefillDoesNotSetsSoldOutStateIfNewGumballsCountMoreThanZero(): void
+    {
+        $newGumballsCount = 1;
+        $this->gumballMachine->method('getBallCount')->willReturn($newGumballsCount);
+        $this->gumballMachine->expects($this->never())->method('setSoldOutState');
+        $this->noQuarterState->refill($newGumballsCount);
     }
 
     protected function setUp(): void

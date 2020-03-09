@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab08\GumballMachine\Context;
+namespace Lab08\MultiGumballMachine\Context;
 
 interface GumballMachineInterface
 {
@@ -11,5 +11,7 @@ interface GumballMachineInterface
 
     public function turnCrank(): void;
 
-    public function getBallCount(): int;
+    public function refill(int $count): void;
+
+    public function about(): void;
 }

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Lab08\GumballMachine\Context\PrivateGumballMachineInterface;
-use Lab08\GumballMachine\State\HasQuarterState;
+use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
+use Lab08\MultiGumballMachine\State\HasQuarterState;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,15 +22,23 @@ class HasQuarterStateTest extends TestCase
 
     public function testInsertedQuarter(): void
     {
+        $this->gumballMachine->expects($this->once())->method('addQuarter');
         $this->hasQuarterState->insertQuarter();
-        $this->assertEquals(HasQuarterState::INSERT_QUARTER_TEXT, $this->getFirstLineFromStdout());
+    }
+
+    public function testNotInsertedQuarterWhenMaxQuartersCountReached(): void
+    {
+        $this->gumballMachine->method('isMaxQuarterCountReached')->willReturn(true);
+        $this->gumballMachine->expects($this->never())->method('addQuarter');
+        $this->hasQuarterState->insertQuarter();
+        $this->assertEquals(HasQuarterState::CANT_INSERT_QUARTER_TEXT, $this->getFirstLineFromStdout());
     }
 
     public function testEjectQuarterReturnsQuarterAndSetsNoQuarterState(): void
     {
+        $this->gumballMachine->expects($this->once())->method('returnQuartersCount');
         $this->gumballMachine->expects($this->once())->method('setNoQuarterState');
         $this->hasQuarterState->ejectQuarter();
-        $this->assertEquals(HasQuarterState::EJECT_QUARTER_TEXT, $this->getFirstLineFromStdout());
     }
 
     public function testTurnCrankSetsSoldAndSaysTurned(): void
@@ -44,6 +52,29 @@ class HasQuarterStateTest extends TestCase
     {
         $this->hasQuarterState->dispense();
         $this->assertEquals(HasQuarterState::DISPENSE_TEXT, $this->getFirstLineFromStdout());
+    }
+
+    public function testRefillResetsGumballsCount(): void
+    {
+        $newGumballsCount = 10;
+        $this->gumballMachine->expects($this->once())->method('setBallCount')->with($newGumballsCount);
+        $this->hasQuarterState->refill($newGumballsCount);
+    }
+
+    public function testRefillSetSoldOutStateIfNewGumballsCountIsZero(): void
+    {
+        $newGumballsCount = 0;
+        $this->gumballMachine->method('getBallCount')->willReturn($newGumballsCount);
+        $this->gumballMachine->expects($this->once())->method('setSoldOutState');
+        $this->hasQuarterState->refill($newGumballsCount);
+    }
+
+    public function testRefillDoesNotSetsSoldOutStateIfNewGumballsCountMoreThanZero(): void
+    {
+        $newGumballsCount = 1;
+        $this->gumballMachine->method('getBallCount')->willReturn($newGumballsCount);
+        $this->gumballMachine->expects($this->never())->method('setSoldOutState');
+        $this->hasQuarterState->refill($newGumballsCount);
     }
 
     protected function setUp(): void

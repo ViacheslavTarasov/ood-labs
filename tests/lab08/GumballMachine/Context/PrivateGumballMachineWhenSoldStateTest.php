@@ -5,7 +5,7 @@ use Lab08\GumballMachine\Context\PrivateGumballMachine;
 use Lab08\GumballMachine\State\SoldState;
 use PHPUnit\Framework\TestCase;
 
-class PrivateGumballMachineWhenSoldState extends TestCase
+class PrivateGumballMachineWhenSoldStateTest extends TestCase
 {
     private const COUNT = 3;
 
@@ -14,22 +14,22 @@ class PrivateGumballMachineWhenSoldState extends TestCase
     /** @var SplTempFileObject */
     private $stdout;
 
-    public function testEqualsMessageWhenTurnCrank(): void
+    public function testTurnCrankNotReleasedGumball(): void
     {
         $this->gumballMachine->turnCrank();
-        $this->assertEquals(SoldState::TURN_CRANK_TEXT, $this->getFirstLineFromStdout());
+        $this->assertEquals(SoldState::TURN_CRANK_TEXT, $this->getLineFromStdout());
     }
 
-    public function testEqualsMessageWhenInsertQuarter(): void
+    public function testQuarterNotInserted(): void
     {
         $this->gumballMachine->insertQuarter();
-        $this->assertEquals(SoldState::INSERT_QUARTER_TEXT, $this->getFirstLineFromStdout());
+        $this->assertEquals(SoldState::INSERT_QUARTER_TEXT, $this->getLineFromStdout());
     }
 
-    public function testEqualsMessageWhenEjectQuarter(): void
+    public function testQuarterNotEjected(): void
     {
         $this->gumballMachine->ejectQuarter();
-        $this->assertEquals(SoldState::EJECT_QUARTER_TEXT, $this->getFirstLineFromStdout());
+        $this->assertEquals(SoldState::EJECT_QUARTER_TEXT, $this->getLineFromStdout());
     }
 
     protected function setUp(): void
@@ -39,7 +39,7 @@ class PrivateGumballMachineWhenSoldState extends TestCase
         $this->gumballMachine->setSoldState();
     }
 
-    private function getFirstLineFromStdout(): string
+    private function getLineFromStdout(): string
     {
         $this->stdout->rewind();
         return $this->stdout->fgets();

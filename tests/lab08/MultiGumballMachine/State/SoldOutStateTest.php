@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Lab08\GumballMachine\Context\PrivateGumballMachineInterface;
-use Lab08\GumballMachine\State\SoldOutState;
+use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
+use Lab08\MultiGumballMachine\State\SoldOutState;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -42,6 +42,41 @@ class SoldOutStateTest extends TestCase
     {
         $this->soldOutState->dispense();
         $this->assertEquals(SoldOutState::DISPENSE_TEXT, $this->getFirstLineFromStdout());
+    }
+
+    public function testRefillResetsGumballsCount(): void
+    {
+        $newGumballsCount = 10;
+        $this->gumballMachine->expects($this->once())->method('setBallCount')->with($newGumballsCount);
+        $this->soldOutState->refill($newGumballsCount);
+    }
+
+    public function testRefillSetsHasQuarterStateIfNewGumballsCountMoreThanZeroAndQuartersCountMoreThanZero(): void
+    {
+        $newGumballsCount = 1;
+        $quartersCount = 1;
+        $this->gumballMachine->method('getBallCount')->willReturn($quartersCount);
+        $this->gumballMachine->method('getQuarterCount')->willReturn(1);
+        $this->gumballMachine->expects($this->once())->method('setHasQuarterState');
+        $this->soldOutState->refill($newGumballsCount);
+    }
+
+    public function testRefillSetsNoQuarterStateIfNewGumballsCountMoreThanZeroAndQuartersCountIsZero(): void
+    {
+        $newGumballsCount = 1;
+        $quartersCount = 0;
+        $this->gumballMachine->method('getBallCount')->willReturn($newGumballsCount);
+        $this->gumballMachine->method('getQuarterCount')->willReturn($quartersCount);
+        $this->gumballMachine->expects($this->once())->method('setNoQuarterState');
+        $this->soldOutState->refill($newGumballsCount);
+    }
+
+    public function testRefillDoesNotSetsSoldOutStateIfNewGumballsCountMoreThanZero(): void
+    {
+        $newGumballsCount = 1;
+        $this->gumballMachine->method('getBallCount')->willReturn($newGumballsCount);
+        $this->gumballMachine->expects($this->never())->method('setSoldOutState');
+        $this->soldOutState->refill($newGumballsCount);
     }
 
     protected function setUp(): void

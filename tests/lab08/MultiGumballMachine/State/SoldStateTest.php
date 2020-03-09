@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Lab08\GumballMachine\Context\PrivateGumballMachineInterface;
-use Lab08\GumballMachine\State\SoldState;
+use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
+use Lab08\MultiGumballMachine\State\SoldState;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,6 +56,14 @@ class SoldStateTest extends TestCase
         $this->mockGumballMachine->expects($this->once())->method('getBallCount')->willReturn(1);
         $this->mockGumballMachine->expects($this->once())->method('setNoQuarterState');
         $this->soldState->dispense();
+    }
+
+    public function testRefillDoesNotResetGumballsCount(): void
+    {
+        $newGumballsCount = 10;
+        $this->mockGumballMachine->expects($this->never())->method('setBallCount');
+        $this->soldState->refill($newGumballsCount);
+        $this->assertEquals(SoldState::REFILL_TEXT, $this->getFirstLineFromStdout());
     }
 
     protected function setUp(): void

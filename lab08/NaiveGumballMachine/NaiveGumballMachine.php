@@ -1,11 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Lab08\MultiGumballMachine\Context;
+namespace Lab08\NaiveGumballMachine;
 
 class NaiveGumballMachine
 {
     public const MAX_QUARTERS = 5;
+    public const TO_STRING_TEMPLATE =
+        'Mighty Gumball, Inc.' . PHP_EOL .
+        'Inventory: %d gumball%s' . PHP_EOL .
+        'Machine is %s';
 
     /** @var \SplFileObject */
     private $stdout;
@@ -82,7 +86,7 @@ class NaiveGumballMachine
         }
     }
 
-    public function dispense(): void
+    private function dispense(): void
     {
         switch ($this->state) {
             case State::SOLD_OUT:
@@ -95,6 +99,7 @@ class NaiveGumballMachine
             case State::SOLD:
                 $this->stdout->fwrite("A gumball comes rolling out the slot" . PHP_EOL);
                 $this->count--;
+                $this->quarters--;
                 if ($this->count === 0) {
                     $this->stdout->fwrite("Oops, out of gumballs" . PHP_EOL);
                     $this->state = State::SOLD_OUT;
@@ -107,10 +112,44 @@ class NaiveGumballMachine
 
     public function refill(int $count): void
     {
-        $this->count += $count;
+        if ($count < 0) {
+            throw new \InvalidArgumentException('invalid gumballs count');
+        }
+
+        if ($this->state === State::SOLD) {
+            $this->stdout->fwrite("Please wait, refill unavailable while the machine gumball release" . PHP_EOL);
+            return;
+        }
+
+        $this->count = $count;
         if (!$this->count) {
             $this->state = State::SOLD_OUT;
+        } else {
+            $this->state = $this->quarters ? State::HAS_QUARTER : State::NO_QUARTER;
         }
+        $this->stdout->fwrite("Refill gumballs: " . $count . PHP_EOL);
+    }
+
+    public function toString(): string
+    {
+        $state = 'delivering a gumball';
+        switch ($this->state) {
+            case State::SOLD_OUT:
+                $state = 'sold out';
+                break;
+            case State::NO_QUARTER:
+                $state = 'waiting for quarter';
+                break;
+            case State::HAS_QUARTER:
+                $state = 'waiting for turn of crank';
+                break;
+        }
+
+        return sprintf(self::TO_STRING_TEMPLATE,
+                $this->count,
+                $this->count ? 's' : '',
+                $state) . PHP_EOL;
+
     }
 
     private function addQuarter(): void
@@ -125,7 +164,7 @@ class NaiveGumballMachine
 
     private function ejectAllQuarters(): void
     {
-        $this->stdout->fwrite("Quarters returned" . $this->quarters . PHP_EOL);
+        $this->stdout->fwrite("Quarters returned: " . $this->quarters . PHP_EOL);
         $this->quarters = 0;
     }
 

@@ -17,18 +17,18 @@ class PrivateGumballMachineTest extends TestCase
     /** @var SplTempFileObject */
     private $stdout;
 
-    public function testThrowsExceptionWhenInstantiateMachineWithNegativeBallsCount(): void
+    public function testCreteMachineWithNegativeBallsCountThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new PrivateGumballMachine($this->stdout, -1);
     }
 
-    public function testGetCountBallsEqualsInitCount(): void
+    public function testGetCountBallsEqualsInitiallyCount(): void
     {
         $this->assertEquals(self::COUNT, $this->gumballMachine->getBallCount());
     }
 
-    public function testCountBallsDecreasesAndWriteInStdoutWhenReleaseBall(): void
+    public function testReleaseBallDecreasesBallsCountAndWriteInStdout(): void
     {
         $this->gumballMachine->releaseBall();
         $this->assertEquals(self::COUNT - 1, $this->gumballMachine->getBallCount());
@@ -41,7 +41,7 @@ class PrivateGumballMachineTest extends TestCase
         $this->assertEquals(PrivateGumballMachine::RELEASE_TEXT, $this->stdout->fgets());
     }
 
-    public function testCountGumballsDoNotDecreasesWhenReleaseIfNoGumballs(): void
+    public function testReleaseBallDoesNotDecreaseCountGumballsWhenNoGumballs(): void
     {
         $this->emptyGumballMachine->releaseBall();
         $this->assertEquals(0, $this->emptyGumballMachine->getBallCount());
@@ -50,13 +50,11 @@ class PrivateGumballMachineTest extends TestCase
         $this->assertEquals(0, $this->emptyGumballMachine->getBallCount());
     }
 
-    public function testMessagesEqualsWhenFullCircle(): void
+    public function testWorksSuccessFullyFullCycle(): void
     {
         $this->gumballMachine->insertQuarter();
         $this->gumballMachine->turnCrank();
         $this->gumballMachine->insertQuarter();
-
-        $this->assertEquals(0, $this->emptyGumballMachine->getBallCount());
 
         $this->stdout->rewind();
         $this->assertEquals(NoQuarterState::INSERT_QUARTER_TEXT, $this->stdout->fgets());

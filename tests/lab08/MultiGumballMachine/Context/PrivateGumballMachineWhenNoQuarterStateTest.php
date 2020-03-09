@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Lab08\GumballMachine\Context\PrivateGumballMachine;
-use Lab08\GumballMachine\State\NoQuarterState;
+use Lab08\MultiGumballMachine\Context\PrivateGumballMachine;
+use Lab08\MultiGumballMachine\State\NoQuarterState;
 use PHPUnit\Framework\TestCase;
 
 class PrivateGumballMachineWhenNoQuarterStateTest extends TestCase
@@ -14,13 +14,6 @@ class PrivateGumballMachineWhenNoQuarterStateTest extends TestCase
     /** @var SplTempFileObject */
     private $stdout;
 
-    public function testGumballNotReleasedWhenTurnCrank(): void
-    {
-        $this->gumballMachine->turnCrank();
-        $this->assertEquals(self::COUNT, $this->gumballMachine->getBallCount());
-        $this->assertEquals(NoQuarterState::TURN_CRANK_TEXT, $this->getLineFromStdout());
-    }
-
     public function testQuarterInserted(): void
     {
         $this->gumballMachine->insertQuarter();
@@ -31,6 +24,20 @@ class PrivateGumballMachineWhenNoQuarterStateTest extends TestCase
     {
         $this->gumballMachine->ejectQuarter();
         $this->assertEquals(NoQuarterState::EJECT_QUARTER_TEXT, $this->getLineFromStdout());
+    }
+
+    public function testGumballNotReleasedWhenTurnCrank(): void
+    {
+        $this->gumballMachine->turnCrank();
+        $this->assertEquals(self::COUNT, $this->gumballMachine->getBallCount());
+        $this->assertEquals(NoQuarterState::TURN_CRANK_TEXT, $this->getLineFromStdout());
+    }
+
+    public function testRefillChangesGumballsCount(): void
+    {
+        $newGumballsCount = 123;
+        $this->gumballMachine->refill($newGumballsCount);
+        $this->assertEquals($newGumballsCount, $this->gumballMachine->getBallCount());
     }
 
     protected function setUp(): void
