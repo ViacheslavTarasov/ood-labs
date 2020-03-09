@@ -9,10 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 class GroupLineStyleTest extends TestCase
 {
-    public function testIsEnabledReturnsTrueWhenLineStyleIteratorIsEmpty(): void
+    public function testIsEnabledReturnsNullWhenLineStyleIteratorIsEmpty(): void
     {
         $groupLineStyle = $this->getGroupLineStyleWithEmptyLineStyleIterator();
-        $this->assertTrue($groupLineStyle->isEnabled());
+        $this->assertNull($groupLineStyle->isEnabled());
     }
 
     public function testIsEnabledReturnsTrueWhenLineStyleIsEnabled(): void
@@ -29,10 +29,10 @@ class GroupLineStyleTest extends TestCase
         $this->assertFalse($groupLineStyle->isEnabled());
     }
 
-    public function testIsEnabledReturnsFalseWhenFilStyleWithDifferentProperties(): void
+    public function testIsEnabledReturnsNullWhenFilStyleWithDifferentProperties(): void
     {
         $groupLineStyle = $this->getGroupLineStyleWithDifferentLineStyles();
-        $this->assertFalse($groupLineStyle->isEnabled());
+        $this->assertNull($groupLineStyle->isEnabled());
     }
 
     public function testEnableCallsEnableForEveryLineStyle(): void
@@ -68,7 +68,7 @@ class GroupLineStyleTest extends TestCase
         $this->assertNull($groupLineStyle->getColor());
     }
 
-    public function testGetColorReturnsColorWhenLineStylesWithSameColor(): void
+    public function testGetColorReturnsExpectedColorWhenLineStylesWithSameColor(): void
     {
         $color = new RgbaColor(1, 2, 3);
         $groupLineStyle = $this->getGroupLineStyleWithSameLineStyle($color, true);
@@ -87,14 +87,14 @@ class GroupLineStyleTest extends TestCase
         $this->assertNull($groupLineStyle->getColor());
     }
 
-    public function testGetThicknessReturnsColorWhenLineStylesWithSameThickness(): void
+    public function testGetThicknessReturnsExpectedValueWhenLineStylesWithSameThickness(): void
     {
         $thickness = 3;
         $groupLineStyle = $this->getGroupLineStyleWithSameLineStyle(new RgbaColor(1, 2, 3), true, $thickness);
         $this->assertEquals($thickness, $groupLineStyle->getThickness());
     }
 
-    public function testGetThicknessReturnsNullWhenShapesLineStylesWithDifferentColors(): void
+    public function testGetThicknessReturnsNullWhenShapesLineStylesWithDifferentThickness(): void
     {
         $groupLineStyle = $this->getGroupLineStyleWithDifferentLineStyles();
         $this->assertNull($groupLineStyle->getThickness());

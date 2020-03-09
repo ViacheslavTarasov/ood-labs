@@ -13,13 +13,7 @@ use Lab07\Style\StyleInterface;
 
 class GroupShapes implements GroupShapesInterface, FillStyleIterable, LineStyleIterable
 {
-    /**
-     * @var PointTransformationService
-     */
-    private $pointTransformationService;
-    /**
-     * @var ShapeInterface[]
-     */
+    /** @var ShapeInterface[] */
     private $shapes = [];
     /** @var GroupFillStyle */
     private $fillStyle;
@@ -28,7 +22,6 @@ class GroupShapes implements GroupShapesInterface, FillStyleIterable, LineStyleI
 
     public function __construct()
     {
-        $this->pointTransformationService = new PointTransformationService();
         $this->fillStyle = new GroupFillStyle($this);
         $this->lineStyle = new GroupLineStyle($this);
     }
@@ -124,8 +117,8 @@ class GroupShapes implements GroupShapesInterface, FillStyleIterable, LineStyleI
             $leftTop = $shapeFrame->getLeftTop();
             $rightBottom = new Point($leftTop->getX() + $shapeFrame->getWidth(), $leftTop->getY() + $shapeFrame->getHeight());
 
-            $newLeftTop = $this->pointTransformationService->transform($leftTop, $oldFrame, $frame);
-            $newRightBottom = $this->pointTransformationService->transform($rightBottom, $oldFrame, $frame);
+            $newLeftTop = PointTransformationService::transform($leftTop, $oldFrame, $frame);
+            $newRightBottom = PointTransformationService::transform($rightBottom, $oldFrame, $frame);
 
             $width = $newRightBottom->getX() - $newLeftTop->getX();
             $height = $newRightBottom->getY() - $newLeftTop->getY();

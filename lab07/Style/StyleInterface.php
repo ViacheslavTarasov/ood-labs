@@ -7,7 +7,7 @@ use Lab07\Color\RgbaColor;
 
 interface StyleInterface
 {
-    public function isEnabled(): bool;
+    public function isEnabled(): ?bool;
 
     public function enable(): void;
 

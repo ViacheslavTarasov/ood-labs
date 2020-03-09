@@ -10,10 +10,10 @@ use PHPUnit\Framework\TestCase;
 
 class GroupFillStyleTest extends TestCase
 {
-    public function testIsEnabledReturnsTrueWhenFillStyleIteratorIsEmpty(): void
+    public function testIsEnabledReturnsNullWhenFillStyleIteratorIsEmpty(): void
     {
         $groupFillStyle = $this->getGroupFillStyleWithEmptyFillStyleIterator();
-        $this->assertTrue($groupFillStyle->isEnabled());
+        $this->assertNull($groupFillStyle->isEnabled());
     }
 
     public function testIsEnabledReturnsTrueWhenFillStyleIsEnabled(): void
@@ -30,10 +30,10 @@ class GroupFillStyleTest extends TestCase
         $this->assertFalse($groupFillStyle->isEnabled());
     }
 
-    public function testIsEnabledReturnsFalseWhenFilStyleWithDifferentProperties(): void
+    public function testIsEnabledReturnsNullWhenFilStyleWithDifferentProperties(): void
     {
         $groupFillStyle = $this->getGroupFillStyleWithDifferentFillStyles();
-        $this->assertFalse($groupFillStyle->isEnabled());
+        $this->assertNull($groupFillStyle->isEnabled());
     }
 
     public function testEnableCallsEnableForEveryFillStyle(): void

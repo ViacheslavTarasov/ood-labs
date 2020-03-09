@@ -9,18 +9,11 @@ use Lab07\Style\StyleInterface;
 
 class Polygon extends Shape
 {
-    /**
-     * @var PointTransformationService
-     */
-    private $pointTransformationService;
     /** @var Point[] */
     private $vertices;
-    /** @var Frame */
-    private $frame;
 
     public function __construct(LineStyleInterface $lineStyle, StyleInterface $fillStyle, array $vertices)
     {
-        $this->pointTransformationService = new PointTransformationService();
         $this->setVerticesOrException($vertices);
         parent::__construct($lineStyle, $fillStyle);
     }
@@ -43,10 +36,6 @@ class Polygon extends Shape
 
     public function getFrame(): ?Frame
     {
-        if ($this->frame !== null) {
-            return $this->frame;
-        }
-
         $verticesX = $this->getVerticesX();
         $verticesY = $this->getVerticesY();
 
@@ -62,9 +51,8 @@ class Polygon extends Shape
     {
         $oldFrame = $this->getFrame();
         foreach ($this->vertices as $key => $vertex) {
-            $this->vertices[$key] = $this->pointTransformationService->transform($vertex, $oldFrame, $frame);
+            $this->vertices[$key] = PointTransformationService::transform($vertex, $oldFrame, $frame);
         }
-        $this->frame = $frame;
     }
 
     private function getVerticesX(): array

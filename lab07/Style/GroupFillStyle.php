@@ -15,11 +15,16 @@ class GroupFillStyle implements StyleInterface
         $this->fillStyleIterable = $fillStyleIterable;
     }
 
-    public function isEnabled(): bool
+    public function isEnabled(): ?bool
     {
-        $isEnabled = true;
-        $this->fillStyleIterable->iterateFillStyle(function (StyleInterface $style) use (&$isEnabled) {
-            $isEnabled = $isEnabled && $style->isEnabled();
+        $isEnabled = null;
+        $first = true;
+        $this->fillStyleIterable->iterateFillStyle(function (StyleInterface $style) use (&$isEnabled, &$first) {
+            if ($first) {
+                $isEnabled = $style->isEnabled();
+                $first = null;
+            }
+            $isEnabled = $isEnabled !== $style->isEnabled() ? null : $style->isEnabled();
         });
         return $isEnabled;
     }
@@ -48,23 +53,13 @@ class GroupFillStyle implements StyleInterface
     public function getColor(): ?RgbaColor
     {
         $color = null;
-        $ready = false;
-        $this->fillStyleIterable->iterateFillStyle(function (StyleInterface $style) use (&$color, &$ready) {
-            if ($ready) {
-                return;
-            }
-            if ($style->getColor() === null) {
-                $ready = true;
-                $color = null;
-            }
-            if ($color === null) {
+        $first = true;
+        $this->fillStyleIterable->iterateFillStyle(function (StyleInterface $style) use (&$color, &$first) {
+            if ($first) {
                 $color = $style->getColor();
+                $first = false;
             }
-            if ($color != $style->getColor()) {
-                $ready = true;
-                $color = null;
-            }
-
+            $color = $color != $style->getColor() ? null : $color;
         });
         return $color;
     }

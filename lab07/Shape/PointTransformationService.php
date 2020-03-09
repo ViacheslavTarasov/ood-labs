@@ -5,7 +5,7 @@ namespace Lab07\Shape;
 
 class PointTransformationService
 {
-    public function transform(Point $point, Frame $oldFrame, Frame $newFrame): Point
+    public static function transform(Point $point, Frame $oldFrame, Frame $newFrame): Point
     {
         $xTransform = $newFrame->getWidth() / $oldFrame->getWidth();
         $newX = $xTransform * ($point->getX() - $oldFrame->getLeftTop()->getX()) + $newFrame->getLeftTop()->getX();
