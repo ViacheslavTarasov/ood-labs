@@ -7,10 +7,10 @@ use Lab07\Color\RgbaColor;
 
 class GroupFillStyle implements StyleInterface
 {
-    /** @var FillStyleIterable */
+    /** @var FillStyleIterableInterface */
     private $fillStyleIterable;
 
-    public function __construct(FillStyleIterable $fillStyleIterable)
+    public function __construct(FillStyleIterableInterface $fillStyleIterable)
     {
         $this->fillStyleIterable = $fillStyleIterable;
     }
@@ -22,7 +22,7 @@ class GroupFillStyle implements StyleInterface
         $this->fillStyleIterable->iterateFillStyle(function (StyleInterface $style) use (&$isEnabled, &$first) {
             if ($first) {
                 $isEnabled = $style->isEnabled();
-                $first = null;
+                $first = false;
             }
             $isEnabled = $isEnabled !== $style->isEnabled() ? null : $style->isEnabled();
         });

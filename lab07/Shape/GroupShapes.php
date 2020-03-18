@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace Lab07\Shape;
 
 use Lab07\Canvas\CanvasInterface;
-use Lab07\Style\FillStyleIterable;
+use Lab07\Style\FillStyleIterableInterface;
 use Lab07\Style\GroupFillStyle;
 use Lab07\Style\GroupLineStyle;
 use Lab07\Style\LineStyleInterface;
-use Lab07\Style\LineStyleIterable;
+use Lab07\Style\LineStyleIterableInterface;
 use Lab07\Style\StyleInterface;
 
-class GroupShapes implements GroupShapesInterface, FillStyleIterable, LineStyleIterable
+class GroupShapes implements GroupShapesInterface, FillStyleIterableInterface, LineStyleIterableInterface
 {
     /** @var ShapeInterface[] */
     private $shapes = [];
@@ -50,8 +50,16 @@ class GroupShapes implements GroupShapesInterface, FillStyleIterable, LineStyleI
         array_splice($this->shapes, $position, 0, [$shape]);
     }
 
-    public function getShapeAtIndex(int $index): ?ShapeInterface
+    /**
+     * @param int $index
+     * @return ShapeInterface
+     * @throws NotFoundException
+     */
+    public function getShapeAtIndex(int $index): ShapeInterface
     {
+        if (!isset($this->shapes[$index])) {
+            throw new NotFoundException('Shape not found');
+        }
         return $this->shapes[$index] ?? null;
     }
 

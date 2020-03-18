@@ -9,7 +9,12 @@ interface ShapesInterface
 
     public function insertShape(ShapeInterface $shape, int $position): void;
 
-    public function getShapeAtIndex(int $index): ?ShapeInterface;
+    /**
+     * @param int $index
+     * @return ShapeInterface
+     * @throws NotFoundException
+     */
+    public function getShapeAtIndex(int $index): ShapeInterface;
 
     public function removeShapeAtIndex(int $index): void;
 }

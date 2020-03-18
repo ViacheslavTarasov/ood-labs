@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Lab07\Color\RgbaColor;
 use Lab07\Style\FillStyle;
-use Lab07\Style\FillStyleIterable;
+use Lab07\Style\FillStyleIterableInterface;
 use Lab07\Style\GroupFillStyle;
 use PHPUnit\Framework\TestCase;
 
@@ -109,9 +109,9 @@ class GroupFillStyleTest extends TestCase
         return new GroupFillStyle($fillStyleIterator);
     }
 
-    private function getFillStyleIterator(array $fillStyles): FillStyleIterable
+    private function getFillStyleIterator(array $fillStyles): FillStyleIterableInterface
     {
-        return new class($fillStyles) implements FillStyleIterable
+        return new class($fillStyles) implements FillStyleIterableInterface
         {
             /** @var FillStyle[] */
             private $styles;

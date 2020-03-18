@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Lab07\Canvas\CanvasInterface;
 use Lab07\Shape\Frame;
 use Lab07\Shape\GroupShapes;
+use Lab07\Shape\NotFoundException;
 use Lab07\Shape\Point;
 use Lab07\Shape\ShapeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -49,10 +50,10 @@ class GroupShapesTest extends TestCase
         $this->groupShapes->insertShape($mockShape, 1);
     }
 
-    public function testGetShapeAtIndexReturnsNullWhenShapeNotAdded(): void
+    public function testGetShapeAtIndexThrowsExceptionWhenShapeNotAdded(): void
     {
+        $this->expectException(NotFoundException::class);
         $this->assertNull($this->groupShapes->getShapeAtIndex(0));
-        $this->assertNull($this->groupShapes->getShapeAtIndex(1));
     }
 
     public function testGetShapeAtIndexReturnsRightShape(): void
@@ -145,15 +146,6 @@ class GroupShapesTest extends TestCase
         $this->assertNull($this->groupShapes->getFrame());
     }
 
-    public function testGetFrameReturnsSameFrameAsAddedShape(): void
-    {
-        $frame = $this->getFrame(10, 20, 100, 200);
-        $shape = $this->createMockShapeWithFrame($frame);
-        $this->groupShapes->insertShape($shape, 0);
-
-        $this->assertEquals($frame, $this->groupShapes->getFrame());
-    }
-
     public function testGetFrameReturnsFrameCoveringAllFramesOfAddedShapes(): void
     {
         $frame1 = $this->getFrame(10, 15, 100, 150);
@@ -168,6 +160,24 @@ class GroupShapesTest extends TestCase
         $this->groupShapes->insertShape($shape2, 1);
 
         $this->assertEquals($expectedFrame, $this->groupShapes->getFrame());
+    }
+
+    public function testShouldNotAffectFrameOfTheGroupIfAddedShapeWithNullFrame(): void
+    {
+        $frame = $this->getFrame(10, 20, 100, 200);
+        $shape1 = $this->createMockShapeWithFrame($frame);
+        $shape2 = $this->createMockShapeWithFrame(null);
+        $this->groupShapes->insertShape($shape1, 0);
+        $this->groupShapes->insertShape($shape2, 1);
+
+        $this->assertEquals($frame, $this->groupShapes->getFrame());
+    }
+
+    public function testSetFrameDoesNotChangeFrameWhenEmptyGroup(): void
+    {
+        $frame = $this->getFrame(10, 20, 100, 200);
+        $this->groupShapes->setFrame($frame);
+        $this->assertEquals(null, $this->groupShapes->getFrame());
     }
 
     public function testSetFrameCallsSetFrameForEveryAddedShape(): void
@@ -236,10 +246,10 @@ class GroupShapesTest extends TestCase
     }
 
     /**
-     * @param Frame $frame
+     * @param Frame|null $frame
      * @return ShapeInterface|MockObject
      */
-    private function createMockShapeWithFrame(Frame $frame): ShapeInterface
+    private function createMockShapeWithFrame(?Frame $frame): ShapeInterface
     {
         $shape = $this->createMock(ShapeInterface::class);
         $shape->method('getFrame')->willReturn($frame);

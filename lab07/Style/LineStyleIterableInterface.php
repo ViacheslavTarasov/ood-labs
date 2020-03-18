@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Lab07\Style;
 
-interface LineStyleIterable
+interface LineStyleIterableInterface
 {
     public function iterateLineStyle(\Closure $closure): void;
 }

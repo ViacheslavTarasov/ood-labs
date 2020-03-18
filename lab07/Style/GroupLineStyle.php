@@ -8,10 +8,10 @@ use Lab07\Color\RgbaColor;
 class GroupLineStyle implements LineStyleInterface
 {
 
-    /** @var LineStyleIterable */
+    /** @var LineStyleIterableInterface */
     private $lineStyleIterable;
 
-    public function __construct(LineStyleIterable $lineStyleIterable)
+    public function __construct(LineStyleIterableInterface $lineStyleIterable)
     {
         $this->lineStyleIterable = $lineStyleIterable;
     }
@@ -23,7 +23,7 @@ class GroupLineStyle implements LineStyleInterface
         $this->lineStyleIterable->iterateLineStyle(function (LineStyleInterface $style) use (&$isEnabled, &$first) {
             if ($first) {
                 $isEnabled = $style->isEnabled();
-                $first = null;
+                $first = false;
             }
             $isEnabled = $isEnabled !== $style->isEnabled() ? null : $style->isEnabled();
         });

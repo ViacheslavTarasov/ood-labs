@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Lab07\Color\RgbaColor;
 use Lab07\Style\GroupLineStyle;
 use Lab07\Style\LineStyle;
-use Lab07\Style\LineStyleIterable;
+use Lab07\Style\LineStyleIterableInterface;
 use PHPUnit\Framework\TestCase;
 
 class GroupLineStyleTest extends TestCase
@@ -126,9 +126,9 @@ class GroupLineStyleTest extends TestCase
         return new GroupLineStyle($lineStyleIterator);
     }
 
-    private function getLineStyleIterator(array $lineStyles): LineStyleIterable
+    private function getLineStyleIterator(array $lineStyles): LineStyleIterableInterface
     {
-        return new class($lineStyles) implements LineStyleIterable
+        return new class($lineStyles) implements LineStyleIterableInterface
         {
             /** @var LineStyle[] */
             private $styles;

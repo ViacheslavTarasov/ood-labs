@@ -5,6 +5,7 @@ namespace Lab07\Slide;
 
 use Lab07\Canvas\CanvasDrawableInterface;
 use Lab07\Canvas\CanvasInterface;
+use Lab07\Shape\NotFoundException;
 use Lab07\Shape\ShapeInterface;
 use Lab07\Shape\ShapesInterface;
 
@@ -56,8 +57,11 @@ class Slide implements CanvasDrawableInterface, ShapesInterface
         array_splice($this->shapes, $position, 0, [$shape]);
     }
 
-    public function getShapeAtIndex(int $index): ?ShapeInterface
+    public function getShapeAtIndex(int $index): ShapeInterface
     {
+        if (!isset($this->shapes[$index])) {
+            throw new NotFoundException('Shape not found');
+        }
         return $this->shapes[$index] ?? null;
     }
 
