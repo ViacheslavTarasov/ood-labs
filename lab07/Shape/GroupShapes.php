@@ -57,18 +57,29 @@ class GroupShapes implements GroupShapesInterface, FillStyleIterableInterface, L
      */
     public function getShapeAtIndex(int $index): ShapeInterface
     {
-        if (!isset($this->shapes[$index])) {
-            throw new NotFoundException('Shape not found');
-        }
+        $this->checkShapeIssetOrException($index);
         return $this->shapes[$index] ?? null;
     }
 
+    /**
+     * @param int $index
+     * @throws NotFoundException
+     */
     public function removeShapeAtIndex(int $index): void
     {
+        $this->checkShapeIssetOrException($index);
+        array_splice($this->shapes, $index, 1);
+    }
+
+    /**
+     * @param int $index
+     * @throws NotFoundException
+     */
+    private function checkShapeIssetOrException(int $index): void
+    {
         if (!isset($this->shapes[$index])) {
-            throw new \InvalidArgumentException('Invalid index');
+            throw new NotFoundException('Shape not found');
         }
-        unset($this->shapes[$index]);
     }
 
     public function getFrame(): ?Frame

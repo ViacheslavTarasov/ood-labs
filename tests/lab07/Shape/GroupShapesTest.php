@@ -77,27 +77,27 @@ class GroupShapesTest extends TestCase
         $this->groupShapes->insertShape($this->createMock(ShapeInterface::class), 0);
         $this->groupShapes->insertShape($this->createMock(ShapeInterface::class), 0);
 
-        $this->groupShapes->removeShapeAtIndex(0);
+        $this->groupShapes->removeShapeAtIndex(1);
         $this->assertEquals(1, $this->groupShapes->getShapeCount());
 
-        $this->groupShapes->removeShapeAtIndex(1);
+        $this->groupShapes->removeShapeAtIndex(0);
         $this->assertEquals(0, $this->groupShapes->getShapeCount());
     }
 
     public function testRemoveAtIndexThrowsExceptionWhenShapesNotAdded(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(NotFoundException::class);
         $this->groupShapes->removeShapeAtIndex(0);
     }
 
     public function testRemoveAtIndexThrowsExceptionWhenInvalidIndex(): void
     {
         $this->groupShapes->insertShape($this->createMock(ShapeInterface::class), 0);
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(NotFoundException::class);
         $this->groupShapes->removeShapeAtIndex(1);
     }
 
-    public function testRemoveAtIndexDoesNotRemoveOtherShapes(): void
+    public function testRemoveAtIndexDoesNotRemoveOtherShapesAndNextShapesAreShifted(): void
     {
         $mockShape1 = $this->createMock(ShapeInterface::class);
         $mockShape2 = $this->createMock(ShapeInterface::class);
@@ -111,16 +111,7 @@ class GroupShapesTest extends TestCase
 
         $this->assertEquals(2, $this->groupShapes->getShapeCount());
         $this->assertTrue($mockShape1 === $this->groupShapes->getShapeAtIndex(0));
-        $this->assertTrue($mockShape2 === $this->groupShapes->getShapeAtIndex(2));
-    }
-
-
-    public function testTwoCallsRemoveShapeAtIndexWithSameIndexThrowsException(): void
-    {
-        $this->groupShapes->insertShape($this->createMock(ShapeInterface::class), 0);
-        $this->expectException(InvalidArgumentException::class);
-        $this->groupShapes->removeShapeAtIndex(0);
-        $this->groupShapes->removeShapeAtIndex(0);
+        $this->assertTrue($mockShape2 === $this->groupShapes->getShapeAtIndex(1));
     }
 
     public function testDrawCallsDrawForEveryShapeWithCanvas(): void
@@ -173,7 +164,7 @@ class GroupShapesTest extends TestCase
         $this->assertEquals($frame, $this->groupShapes->getFrame());
     }
 
-    public function testSetFrameDoesNotChangeFrameWhenEmptyGroup(): void
+    public function testSetFrameDoesNotResizeEmptyGroup(): void
     {
         $frame = $this->getFrame(10, 20, 100, 200);
         $this->groupShapes->setFrame($frame);

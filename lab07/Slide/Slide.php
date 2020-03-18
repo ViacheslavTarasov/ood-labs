@@ -57,19 +57,35 @@ class Slide implements CanvasDrawableInterface, ShapesInterface
         array_splice($this->shapes, $position, 0, [$shape]);
     }
 
+    /**
+     * @param int $index
+     * @return ShapeInterface
+     * @throws NotFoundException
+     */
     public function getShapeAtIndex(int $index): ShapeInterface
+    {
+        $this->checkShapeIssetOrException($index);
+        return $this->shapes[$index] ?? null;
+    }
+
+    /**
+     * @param int $index
+     * @throws NotFoundException
+     */
+    public function removeShapeAtIndex(int $index): void
+    {
+        $this->checkShapeIssetOrException($index);
+        array_splice($this->shapes, $index, 1);
+    }
+
+    /**
+     * @param int $index
+     * @throws NotFoundException
+     */
+    private function checkShapeIssetOrException(int $index): void
     {
         if (!isset($this->shapes[$index])) {
             throw new NotFoundException('Shape not found');
         }
-        return $this->shapes[$index] ?? null;
-    }
-
-    public function removeShapeAtIndex(int $index): void
-    {
-        if (!isset($this->shapes[$index])) {
-            throw new \InvalidArgumentException('Invalid index');
-        }
-        unset($this->shapes[$index]);
     }
 }
