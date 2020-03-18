@@ -20,7 +20,7 @@ class HasQuarterStateTest extends TestCase
         $this->assertEquals(HasQuarterState::TO_STRING_TEXT, $this->hasQuarterState->toString());
     }
 
-    public function testInsertedQuarter(): void
+    public function testQuarterCantBeInserted(): void
     {
         $this->hasQuarterState->insertQuarter();
         $this->assertEquals(HasQuarterState::INSERT_QUARTER_TEXT, $this->getFirstLineFromStdout());
@@ -40,7 +40,7 @@ class HasQuarterStateTest extends TestCase
         $this->assertEquals(HasQuarterState::TURN_CRANK_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testNotDispensed(): void
+    public function testDispenseIsProhibited(): void
     {
         $this->hasQuarterState->dispense();
         $this->assertEquals(HasQuarterState::DISPENSE_TEXT, $this->getFirstLineFromStdout());

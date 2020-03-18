@@ -20,13 +20,14 @@ class HasQuarterStateTest extends TestCase
         $this->assertEquals(HasQuarterState::TO_STRING_TEXT, $this->hasQuarterState->toString());
     }
 
-    public function testInsertedQuarter(): void
+    public function testQuarterCanBeInsertedIdQuarterCountLessThanMaxQuarters(): void
     {
+        $this->gumballMachine->method('isMaxQuarterCountReached')->willReturn(false);
         $this->gumballMachine->expects($this->once())->method('addQuarter');
         $this->hasQuarterState->insertQuarter();
     }
 
-    public function testNotInsertedQuarterWhenMaxQuartersCountReached(): void
+    public function testQuarterCantBeInsertedWhenMaxQuartersCountReached(): void
     {
         $this->gumballMachine->method('isMaxQuarterCountReached')->willReturn(true);
         $this->gumballMachine->expects($this->never())->method('addQuarter');
@@ -48,7 +49,7 @@ class HasQuarterStateTest extends TestCase
         $this->assertEquals(HasQuarterState::TURN_CRANK_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testNotDispensed(): void
+    public function testDispenseIsProhibited(): void
     {
         $this->hasQuarterState->dispense();
         $this->assertEquals(HasQuarterState::DISPENSE_TEXT, $this->getFirstLineFromStdout());

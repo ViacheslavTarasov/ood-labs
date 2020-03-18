@@ -27,19 +27,19 @@ class NoQuarterStateTest extends TestCase
         $this->assertEquals(NoQuarterState::INSERT_QUARTER_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testEjectQuarterNotReturnsQuarter(): void
+    public function testQuarterCantBeEjected(): void
     {
         $this->noQuarterState->ejectQuarter();
         $this->assertEquals(NoQuarterState::EJECT_QUARTER_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testTurnCrankSaysNotQuarter(): void
+    public function testTurningCrankHasNoEffect(): void
     {
         $this->noQuarterState->turnCrank();
         $this->assertEquals(NoQuarterState::TURN_CRANK_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testNotDispensed(): void
+    public function testDispenseIsProhibited(): void
     {
         $this->noQuarterState->dispense();
         $this->assertEquals(NoQuarterState::DISPENSE_TEXT, $this->getFirstLineFromStdout());

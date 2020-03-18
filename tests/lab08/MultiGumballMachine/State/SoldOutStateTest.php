@@ -38,7 +38,7 @@ class SoldOutStateTest extends TestCase
         $this->assertEquals(SoldOutState::TURN_CRANK_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testNotDispensed(): void
+    public function testDispenseIsProhibited(): void
     {
         $this->soldOutState->dispense();
         $this->assertEquals(SoldOutState::DISPENSE_TEXT, $this->getFirstLineFromStdout());

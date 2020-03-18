@@ -20,19 +20,19 @@ class SoldStateTest extends TestCase
         $this->assertEquals(SoldState::TO_STRING_TEXT, $this->soldState->toString());
     }
 
-    public function testNotInsertedQuarter(): void
+    public function testQuarterInsertionIsNotAllowed(): void
     {
         $this->soldState->insertQuarter();
         $this->assertEquals(SoldState::INSERT_QUARTER_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testNotEjectedQuarter(): void
+    public function testQuarterCantBeEjected(): void
     {
         $this->soldState->ejectQuarter();
         $this->assertEquals(SoldState::EJECT_QUARTER_TEXT, $this->getFirstLineFromStdout());
     }
 
-    public function testTurnCrankDoesNotReleaseGumballTwice(): void
+    public function testTurningCrankDoesNotReleaseGumball(): void
     {
         $this->soldState->turnCrank();
         $this->assertEquals(SoldState::TURN_CRANK_TEXT, $this->getFirstLineFromStdout());
@@ -44,7 +44,7 @@ class SoldStateTest extends TestCase
         $this->soldState->dispense();
     }
 
-    public function testDispenseSetsSoldOutStateWhenSoldLastGumball(): void
+    public function testDispenseSetsSoldOutStateAfterSellingLastGumball(): void
     {
         $this->mockGumballMachine->expects($this->once())->method('getBallCount')->willReturn(0);
         $this->mockGumballMachine->expects($this->once())->method('setSoldOutState');
