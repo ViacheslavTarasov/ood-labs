@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Lab08\MultiGumballMachine\State;
 
-use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
-
 class SoldState implements StateInterface
 {
     public const INSERT_QUARTER_TEXT = 'Please wait, we\'re already giving you a gumball' . PHP_EOL;

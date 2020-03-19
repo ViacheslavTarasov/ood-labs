@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Lab08\MultiGumballMachine\State;
 
-use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
-
 class NoQuarterState implements StateInterface
 {
     public const INSERT_QUARTER_TEXT = 'You inserted a quarter' . PHP_EOL;

@@ -6,11 +6,12 @@ namespace Lab08\GumballMachine\Context;
 use InvalidArgumentException;
 use Lab08\GumballMachine\State\HasQuarterState;
 use Lab08\GumballMachine\State\NoQuarterState;
+use Lab08\GumballMachine\State\PrivateGumballMachineInterface;
 use Lab08\GumballMachine\State\SoldOutState;
 use Lab08\GumballMachine\State\SoldState;
 use Lab08\GumballMachine\State\StateInterface;
 
-class PrivateGumballMachine implements PrivateGumballMachineInterface
+class PrivateGumballMachine implements PrivateGumballMachineInterface, GumballMachineInterface
 {
     public const RELEASE_TEXT = 'A gumball comes rolling out the slot' . PHP_EOL;
 

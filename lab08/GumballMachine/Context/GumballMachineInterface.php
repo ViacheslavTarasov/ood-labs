@@ -10,6 +10,4 @@ interface GumballMachineInterface
     public function ejectQuarter(): void;
 
     public function turnCrank(): void;
-
-    public function getBallCount(): int;
 }

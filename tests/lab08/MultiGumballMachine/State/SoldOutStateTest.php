@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
+use Lab08\MultiGumballMachine\State\PrivateGumballMachineInterface;
 use Lab08\MultiGumballMachine\State\SoldOutState;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SoldOutStateTest extends TestCase
 {
-    /** @var PrivateGumballMachineInterface|MockObject */
+    /** @var \Lab08\MultiGumballMachine\State\PrivateGumballMachineInterface|MockObject */
     private $gumballMachine;
     /** @var SoldOutState */
     private $soldOutState;

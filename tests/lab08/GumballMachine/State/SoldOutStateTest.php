@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Lab08\GumballMachine\Context\PrivateGumballMachineInterface;
+use Lab08\GumballMachine\State\PrivateGumballMachineInterface;
 use Lab08\GumballMachine\State\SoldOutState;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

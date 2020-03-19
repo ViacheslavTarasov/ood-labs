@@ -5,14 +5,11 @@ namespace Lab08\MultiGumballMachine\Context;
 
 class GumballMachine implements GumballMachineInterface
 {
-    /** @var \SplFileObject */
-    private $stdout;
     /** @var PrivateGumballMachine */
     private $privateGumballMachine;
 
     public function __construct(\SplFileObject $stdout, int $count)
     {
-        $this->stdout = $stdout;
         $this->privateGumballMachine = new PrivateGumballMachine($stdout, $count);
     }
 
@@ -38,6 +35,6 @@ class GumballMachine implements GumballMachineInterface
 
     public function about(): void
     {
-        $this->stdout->fwrite($this->privateGumballMachine->toString());
+        $this->privateGumballMachine->about();
     }
 }

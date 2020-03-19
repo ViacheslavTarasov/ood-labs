@@ -6,11 +6,12 @@ namespace Lab08\MultiGumballMachine\Context;
 use InvalidArgumentException;
 use Lab08\MultiGumballMachine\State\HasQuarterState;
 use Lab08\MultiGumballMachine\State\NoQuarterState;
+use Lab08\MultiGumballMachine\State\PrivateGumballMachineInterface;
 use Lab08\MultiGumballMachine\State\SoldOutState;
 use Lab08\MultiGumballMachine\State\SoldState;
 use Lab08\MultiGumballMachine\State\StateInterface;
 
-class PrivateGumballMachine implements PrivateGumballMachineInterface
+class PrivateGumballMachine implements PrivateGumballMachineInterface, GumballMachineInterface
 {
     public const MAX_QUARTERS = 5;
     public const RELEASE_TEXT = 'A gumball comes rolling out the slot' . PHP_EOL;
@@ -153,5 +154,10 @@ class PrivateGumballMachine implements PrivateGumballMachineInterface
             $this->quartersCount,
             $this->currentState->toString()
         );
+    }
+
+    public function about(): void
+    {
+        $this->stdout->fwrite($this->toString());
     }
 }

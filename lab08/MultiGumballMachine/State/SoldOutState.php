@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Lab08\MultiGumballMachine\State;
 
-use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
-
 class SoldOutState implements StateInterface
 {
     public const INSERT_QUARTER_TEXT = 'You can\'t insert a quarter, the machine is sold out' . PHP_EOL;

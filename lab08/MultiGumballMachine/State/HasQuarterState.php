@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Lab08\MultiGumballMachine\State;
 
-use Lab08\MultiGumballMachine\Context\PrivateGumballMachineInterface;
-
 class HasQuarterState implements StateInterface
 {
     public const CANT_INSERT_QUARTER_TEXT = 'You can\'t insert another quarter' . PHP_EOL;
