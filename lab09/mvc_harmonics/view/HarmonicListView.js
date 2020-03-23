@@ -26,7 +26,7 @@ export let HarmonicListView = class HarmonicListView {
             let selected = index.toString() === selectedIndex.toString();
             html += `
                 <option value="${index}" ${selected ? 'selected' : ''}>
-                    ${item.amplitude} * ${item.func} (${item.frequency} + ${item.phase}) 
+                    ${item.amplitude} * ${item.func} (${item.frequency} * x + ${item.phase}) 
                 </option>
             `;
         });
