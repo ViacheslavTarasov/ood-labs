@@ -23,14 +23,13 @@ export let AppView = class AppView {
         this._initEventListeners();
     }
 
+    _onDeleteBtn() {
+        this._controller.deleteSelected();
+    }
+
     _initEventListeners() {
         this._elements.newBtn.addEventListener('click', this.showAddForm.bind(this));
-        // this._views.harmonicListView.bindChange(this.onListChange);
-        // this._listView.bindChange(this.onListChange);
-
-
-        this._el.querySelector('#delete-selected').addEventListener('click', this.onDelete);
-        // this._el.querySelector('#harmonics-list').addEventListener('change', this.onChange);
+        this._elements.deleteBtn.addEventListener('click', this._onDeleteBtn.bind(this));
     }
 
 
@@ -44,12 +43,14 @@ export let AppView = class AppView {
             harmonicListView: new HarmonicListView(this._elements.harmonicList, this._controller, this._model),
             // addHarmonicView: new AddHarmonicView(this._elements.addHarmonic, this._controller, this._controller.createNewHarmonic()),
             // editHarmonicView: new EditHarmonicView(this._elements.editHarmonic, this._controller, this._controller.getSelectedHarmonic()),
-            chartHarmonicView: new ChartHarmonicView(this._elements.harmonicChart, this._controller, this._controller.getSelectedHarmonic()),
-            tableHarmonicView: new TableHarmonicView(this._elements.harmonicTable, this._controller, this._controller.getSelectedHarmonic())
+            chartHarmonicView: new ChartHarmonicView(this._elements.harmonicChart, this._controller.createChartController(), this._model),
+            tableHarmonicView: new TableHarmonicView(this._elements.harmonicTable, this._controller.createChartController(), this._model),
         }
     }
 
     render() {
         this._views.harmonicListView.render();
+        this._views.chartHarmonicView.render();
+        this._views.tableHarmonicView.render();
     }
 };

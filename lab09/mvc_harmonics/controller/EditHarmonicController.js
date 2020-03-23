@@ -10,26 +10,47 @@ export let EditHarmonicController = class EditHarmonicController extends EventEm
     };
 
     changeAmplitude(value) {
-        this._getHarmonic().amplitude = value;
+        let item = this._getSelected();
+        item.amplitude = value;
+        this._updateSelected(item);
     }
 
     changeFunc(value) {
-        this._getHarmonic().func = value;
+        let item = this._getSelected();
+        item.func = value;
+        this._updateSelected(item);
     }
 
     changeFrequency(value) {
-        this._getHarmonic().frequency = value;
+        let item = this._getSelected();
+        item.frequency = value;
+        this._updateSelected(item);
     }
 
     changePhase(value) {
-        this._getHarmonic().phase = value;
+        let item = this._getSelected();
+        item.phase = value;
+        this._updateSelected(item);
     }
 
     showEditForm() {
         this._view.render();
     }
 
-    _getHarmonic() {
+    resetModel(model) {
+        this._model = model;
+        this._view.resetModel(this._model)
+    }
+
+    _initEventListeners() {
+
+    }
+
+    _getSelected() {
         return this._model.getAtIndex(this._model.selectedIndex);
+    }
+
+    _updateSelected(harmonicDto) {
+        this._model.updateItemAt(this._model.selectedIndex, harmonicDto)
     }
 };

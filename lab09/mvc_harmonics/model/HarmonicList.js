@@ -31,7 +31,7 @@ export let HarmonicList = class HarmonicList extends EventEmitter {
     }
 
     removeItemAt(index) {
-        const item = this._items.splice(index, 1)[0];
+        const item = this._items.splice(index, 1);
         this.emit(HarmonicListEvents.ITEM_REMOVED, item);
         if (index === this._selectedIndex) {
             this.selectedIndex = -1;

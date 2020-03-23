@@ -1,5 +1,5 @@
 import {AddHarmonicResultView} from "./AddHarmonicResultView.js";
-import {HarmonicDto} from "../model/HarmonicDto.js";
+import {DataTransformer} from "../model/DataTrasformer.js";
 
 export let AddHarmonicView = class AddHarmonicView {
     constructor(el, controller, harmonic) {
@@ -59,7 +59,7 @@ export let AddHarmonicView = class AddHarmonicView {
     }
 
     render() {
-        let data = HarmonicDto.fromModel(this._harmonic);
+        let data = DataTransformer.createDtoFromHarmonic(this._harmonic);
 
         this._el.innerHTML = template(data);
         this._initListeners();

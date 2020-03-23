@@ -1,4 +1,4 @@
-import {HarmonicDto} from "../model/HarmonicDto.js";
+import {DataTransformer} from "../model/DataTrasformer.js";
 
 export let EditHarmonicView = class EditHarmonicView {
     constructor(el, controller, model) {
@@ -13,7 +13,7 @@ export let EditHarmonicView = class EditHarmonicView {
 
     render() {
         let harmonic = this._model.getAtIndex(this._model.selectedIndex);
-        let data = harmonic ? HarmonicDto.fromModel(this._model.getAtIndex(this._model.selectedIndex)) : undefined;
+        let data = harmonic ? DataTransformer.createDtoFromHarmonic(this._model.getAtIndex(this._model.selectedIndex)) : undefined;
         this._el.innerHTML = template(data);
         this._initListeners();
     }

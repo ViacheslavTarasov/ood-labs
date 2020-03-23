@@ -15,15 +15,6 @@ export let HarmonicListView = class HarmonicListView {
         }.bind(this)
     }
 
-    // setData(listItems) {
-    //     this._items = listItems;
-    //     this.render();
-    // }
-    //
-    // bindChange(handler) {
-    //     this._el.addEventListener('change', handler);
-    // }
-
     _selectItem(event) {
         this._controller.selectItem(event.target.value);
     };
@@ -32,7 +23,7 @@ export let HarmonicListView = class HarmonicListView {
         let html = '';
         let selectedIndex = this._model.selectedIndex;
         this._model.getItems().forEach(function (item, index) {
-            let selected = index === selectedIndex;
+            let selected = index.toString() === selectedIndex.toString();
             html += `
                 <option value="${index}" ${selected ? 'selected' : ''}>
                     ${item.amplitude} * ${item.func} (${item.frequency} + ${item.phase}) 
