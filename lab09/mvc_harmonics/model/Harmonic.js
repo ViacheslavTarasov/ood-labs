@@ -29,6 +29,9 @@ export let Harmonic = class Harmonic extends EventEmitter {
     }
 
     set func(value) {
+        if (value !== 'sin' && value !== 'cos') {
+            throw new Error('invalid harmonic function');
+        }
         this._func = value;
         this.emit(HarmonicEvents.UPDATED, this)
     }
